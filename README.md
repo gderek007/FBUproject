@@ -1,9 +1,4 @@
 # FoundAR
-Android app that uses augmented reality tagging to locate lost items
-Group Project - README Template
-===
-
-# FoundAR
 
 ## Table of Contents
 1. [Overview](#Overview)
