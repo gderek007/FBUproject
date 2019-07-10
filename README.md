@@ -64,7 +64,7 @@ Android app that uses augmented reality tagging to locate lost items
 ### [BONUS] Digital Wireframes & Mockups
 
 ### [BONUS] Interactive Prototype
-https://marvelapp.com/779ec0j/screen/59136156
+https://marvelapp.com/779ec0j/screen/59136154
 
 ## Schema 
 [This section will be completed in Unit 9]
