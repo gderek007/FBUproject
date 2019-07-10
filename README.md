@@ -61,7 +61,7 @@ Android app that uses augmented reality tagging to locate lost items
 
 https://marvelapp.com/779ec0j/screen/59136154
 
-https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FPw2RYAVa3cl1oWv9Y8AbwhvO%2FUntitled%3Fnode-id%3D0%253A1
+https://www.figma.com/proto/Pw2RYAVa3cl1oWv9Y8AbwhvO/Untitled?node-id=2%3A16&scaling=scale-down
 
 ## Schema 
 [This section will be completed in Unit 9]
