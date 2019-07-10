@@ -58,12 +58,7 @@ Android app that uses augmented reality tagging to locate lost items
 
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
 
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
 https://marvelapp.com/779ec0j/screen/59136154
 
 ## Schema 
