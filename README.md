@@ -1,4 +1,4 @@
-# FoundAR
+# ScienceVision
 
 ## Table of Contents
 1. [Overview](#Overview)
