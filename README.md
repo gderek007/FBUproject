@@ -78,6 +78,7 @@ https://marvelapp.com/1gjjdh8g
 
 ### Models
 <img src ='https://i.imgur.com/hc7xiOH.png\'/>
+
 **Users**
 * username (string)
 * password (string)
