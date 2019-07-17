@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "582913581943",
+    "firebase_url": "https://science-vision-a7d1c.firebaseio.com",
+    "project_id": "science-vision-a7d1c",
+    "storage_bucket": "science-vision-a7d1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582913581943:android:ad3432f32441b2a2",
+        "android_client_info": {
+          "package_name": "com.example.sciencevision"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582913581943-u5rkq8dtftkucdln7v70hoo522l1t1mv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRyxfCCMYBkUm9w8NK0PvvJVK9gVC7Eu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582913581943-u5rkq8dtftkucdln7v70hoo522l1t1mv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
