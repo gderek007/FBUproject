@@ -5,19 +5,18 @@
 1. [Product Spec](#Product-Spec)
 1. [Wireframes](#Wireframes)
 2. [Schema](#Schema)
-
 ## Overview
 ### Description
-Android app that uses augmented reality tagging to locate lost items
+Android app that uses image recognition to provide children with education science material based on their scans.
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
-- **Category:** Augmented Reality, Lifestyle
-- **Mobile:** Super Mobile because of Augmented Reality
-- **Story:** Oh no! I lost my charger and can't find it anywhere. Let me scan around the house to try and find an AR tag that is associated with it. 
-- **Market:** All people.
-- **Habit:** You would AR tag all your items and use it whenever you lose items.  
-- **Scope:** AR Core, Computer vision, Databases, 
+- **Category:** Science Education
+- **Mobile:** Super Mobile because it deals with the environment surrounding the user
+- **Story:** Kid is bored, and bothering parent with lots of questions that the parent can't answer. Kid opens app and holds camera up to an object in their house. They learn how science is important to the object's purpose, and a fun hands-on experiment demonstrating scientific properties of the object. Kid is inspired to learn more about science!
+- **Market:** Kids ages 7-12 (potentially also parents and teachers)
+- **Habit:**  Social aspect, badges
+- **Scope:** Computer vision, Databases, API to make text simpler and fit to read for children
 
 ## Product Spec
 
@@ -25,49 +24,81 @@ Android app that uses augmented reality tagging to locate lost items
 
 **Required Must-have Stories**
 
-* User can add a tag for an item
-* User can pan around their house and see AR tags for any scanned items that are within the frame. 
+* User can add a scan an item and recieve inforamtion
+* User can send a link to the experiment info
+* User can view history of searches
+* User can bookmark favorite experiments
+* User can report potentially unsafe content
 
 **Optional Nice-to-have Stories**
+* Custom Camera
+* Suggested items
+* Users can share photos of their experiments
+* Users can earn badges for completing experiments
+* Users (science teachers?) can submit their own experiment ideas
 
-* User can see a list of their scanned items
-* Last seen feature, where it remembers where you last scanned your item
-* When you find something, there's a fun celebration
+
 
 ### 2. Screen Archetypes
 
-* Add item screen
-    * User can add a tag for an item
-* Search screen
-    * User can pan around their house and see AR tags for any scanned items that are within the frame. 
-* Item list screen
-    * User can see a list of their scanned items
+* Sign Up Page
+    * User can sign up or log in
+* Scanning 
+    * Scans an item to identify what it is
+* Item Detail View
+    * report feedback form, add ideas from experiments and say if something isn't safe
+* Profile
+    * Badges, favorite experiments, all items scanned
+* Social feed
+    * A social feed that keeps the user coming back by showing some sort of readings
+
+
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
+3 tabs:
+* Scanning
+* Profile
+* Social
 
-* My items tab
-* Search tab
 
 **Flow Navigation** (Screen to Screen)
-
-* My items -> add item
-* add item -> my items
-
-
+* Sign up -> Profile (which has the 3 tabs)
+* Scanning -> Item Detail
+* Profile -> Item Detail
+* Social -> Profile
+* Social -> Item Detail
 
 ## Wireframes
-
-https://marvelapp.com/779ec0j/screen/59136154
-
-https://www.figma.com/proto/Pw2RYAVa3cl1oWv9Y8AbwhvO/Untitled?node-id=2%3A16&scaling=scale-down
+Wireframes:
+https://marvelapp.com/1gjjdh8g
 
 ## Schema 
-[This section will be completed in Unit 9]
+
 ### Models
-[Add table of models]
+<img src ='https://i.imgur.com/hc7xiOH.png\'/>
+
+**Users**
+* username (string)
+* password (string)
+* badges (enum?)
+* findings
+
+**Findings**
+Items found
+* image (Parse file)
+* name (String)
+* fun fact (String)
+* experiments (URI link to experiment, could later become its own type)
+
 ### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+- 1. Signup/Login Activity
+    - Create: Parse create a new user
+    - Read: Parse logging in to user's profile
+- 2. Scanning
+    - Read: MLKit return item name
+    - Read: Google search return fun fact, experiment, image?
+    - Create: Parse create a new finding
+- 3. Profile, Social
+    - Read: Parse return findings
