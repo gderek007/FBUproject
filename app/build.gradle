@@ -25,6 +25,8 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.12'
     //Parse Database
     implementation 'com.parse:parse-android:1.17.3'
+    implementation 'com.parse.bolts:bolts-android:1.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     //Pretty Time
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     //Glide
