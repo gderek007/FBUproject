@@ -26,10 +26,17 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.sciencevision.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.parse.ParseUser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -107,7 +114,7 @@ public class FindingFragment extends Fragment {
         File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(TAG, "failed to create directory");
         }
 
@@ -127,6 +134,37 @@ public class FindingFragment extends Fragment {
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(roatatedImage);
+                FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(roatatedImage);
+
+                // CLOUD : THIS COST MONEY DONT BE DUMB
+//                FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
+
+                // ON-DEVICE : THIS IS FREE, USE A LOT
+                FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+
+
+
+                labeler.processImage(firebaseVisionImage)
+                        .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+                            @Override
+                            public void onSuccess(List<FirebaseVisionImageLabel> labels) {
+                                // Task completed successfully
+                                for (FirebaseVisionImageLabel label: labels) {
+                                    String text = label.getText();
+                                    String entityId = label.getEntityId();
+                                    float confidence = label.getConfidence();
+                                    Log.d("FindingFragment", String.format("object: %s confidence: %.2f \n",text, confidence));
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                e.printStackTrace();
+                                Log.d("FindingFragment", e.toString());
+                            }
+                        });
+
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", LENGTH_SHORT).show();
             }
