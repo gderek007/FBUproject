@@ -48,7 +48,7 @@ public class Findings extends ParseObject {
     public String getKeyExperiment(){
         return getString(KEY_EXPERIMENT);
     }
-    public void setKeyExperiment(String experiment){
+    public void setExperiment(String experiment){
         put(KEY_EXPERIMENT,experiment);
     }
     public String getNiceTime(){
