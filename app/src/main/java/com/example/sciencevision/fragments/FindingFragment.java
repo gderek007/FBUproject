@@ -161,7 +161,7 @@ public class FindingFragment extends Fragment {
                                     float confidence = label.getConfidence();
                                     Log.d("FindingFragment", String.format("object: %s confidence: %.2f \n",text, confidence));
                                 }
-                                createFinding(User,labels.get(0).getText(),"Fun Fact goes here",new ParseFile(photoFile),"Experiment goes here");
+                                createFinding(User,labels.get(0).getText(),"Item Description","Fun Fact goes here",new ParseFile(photoFile),"Experiment goes here");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
