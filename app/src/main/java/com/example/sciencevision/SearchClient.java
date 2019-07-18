@@ -8,6 +8,14 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -55,6 +63,40 @@ public class SearchClient {
             }
         });
 
+    }
+
+    private Set<String> getDataFromGoogle(String query) {
+
+        Set<String> result = new HashSet<String>();
+        String request = "https://www.google.com/search?q=" + query + "&num=20";
+        System.out.println("Sending request..." + request);
+
+        try {
+
+            // need http protocol, set this as a Google bot agent :)
+            Document doc = Jsoup
+                    .connect(request)
+                    .userAgent(
+                            "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+                    .timeout(5000).get();
+
+            // get all links
+            Elements links = doc.select("a[href]");
+            for (Element link : links) {
+
+                String temp = link.attr("href");
+                if(temp.startsWith("/url?q=")){
+                    //use regex to get domain name
+                    result.add(temp);
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 
