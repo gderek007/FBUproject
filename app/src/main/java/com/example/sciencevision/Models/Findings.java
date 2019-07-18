@@ -15,6 +15,7 @@ public class Findings extends ParseObject {
     //Values that are in the Parse Database
     private static final String KEY_USER= "User";
     private static final String KEY_NAME= "ItemName";
+    private static final String KEY_DESCRIPTION= "ItemDescription";
     private static final String KEY_FACT= "FunFact";
     private static final String KEY_IMAGE= "ItemImage";
     private static final String KEY_EXPERIMENT="Experiment";
@@ -32,6 +33,12 @@ public class Findings extends ParseObject {
     }
     public void setItemName(String itemName){
         put(KEY_NAME,itemName);
+    }
+    public String getDescription(){
+        return getString(KEY_DESCRIPTION);
+    }
+    public void setDescription(String itemDescription){
+        put(KEY_DESCRIPTION,itemDescription);
     }
     public String getKeyFact(){
         return getString(KEY_FACT);
