@@ -1,7 +1,9 @@
 package com.example.sciencevision;
 
 
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -65,39 +67,6 @@ public class SearchClient {
         });
     }
 
-    private Set<String> getDataFromGoogle(String query) {
-
-        Set<String> result = new HashSet<String>();
-        String request = "https://www.google.com/search?q=" + query + "&num=20";
-        System.out.println("Sending request..." + request);
-
-        try {
-
-            // need http protocol, set this as a Google bot agent :)
-            Document doc = Jsoup
-                    .connect(request)
-                    .userAgent(
-                            "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-                    .timeout(5000).get();
-
-            // get all links
-            Elements links = doc.select("a[href]");
-            for (Element link : links) {
-
-                String temp = link.attr("href");
-                if(temp.startsWith("/url?q=")){
-                    //use regex to get domain name
-                    result.add(temp);
-                }
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
 
 }
