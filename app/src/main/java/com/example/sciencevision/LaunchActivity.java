@@ -33,7 +33,6 @@ public class LaunchActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
 
         SearchClient client = new SearchClient();
-        client.ge
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
