@@ -192,7 +192,7 @@ public class FindingFragment extends Fragment {
     public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment){
         final Findings newfinding = new Findings();
         newfinding.setUser(User);
-        newfinding.setItemName(ItemName);
+        newfinding.setName(ItemName);
         newfinding.setDescription(ItemDescription);
         newfinding.setFunFact(FunFact);
         newfinding.setImage(ItemImage);

@@ -28,10 +28,10 @@ public class Findings extends ParseObject {
     public void setUser(ParseUser user){
         put(KEY_USER,user);
     }
-    public String getItemName(){
+    public String getName(){
         return getString(KEY_NAME);
     }
-    public void setItemName(String itemName){
+    public void setName(String itemName){
         put(KEY_NAME,itemName);
     }
     public String getDescription(){
@@ -40,7 +40,7 @@ public class Findings extends ParseObject {
     public void setDescription(String itemDescription){
         put(KEY_DESCRIPTION,itemDescription);
     }
-    public String getKeyFact(){
+    public String getFact(){
         return getString(KEY_FACT);
     }
     public void setFunFact(String funFact){
@@ -52,7 +52,7 @@ public class Findings extends ParseObject {
     public void setImage(ParseFile image){
         put(KEY_IMAGE,image);
     }
-    public String getKeyExperiment(){
+    public String getExperiment(){
         return getString(KEY_EXPERIMENT);
     }
     public void setExperiment(String experiment){
@@ -70,7 +70,7 @@ public class Findings extends ParseObject {
             super(Findings.class);
         }
         public Query withUser(){
-            include("user");
+            include("User");
             return this;
         }
     }
