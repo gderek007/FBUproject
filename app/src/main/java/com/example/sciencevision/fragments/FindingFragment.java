@@ -162,7 +162,6 @@ public class FindingFragment extends Fragment {
                                 // This function sets the text of the TextView given as the parameter
                                 // to be the definition of the object in the image.
                                 searchClient.getWiki( User,labels.get(0).getText(),"FunFact",new ParseFile(photoFile),"Experiment",tvDescription);
-//                                createFinding(User,labels.get(0).getText(),tvDescription.getText().toString(),"Fun Fact",new ParseFile(photoFile),"Experiment");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -179,7 +178,7 @@ public class FindingFragment extends Fragment {
         }
     }
     //Adds a new Finding to the database
-    public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment){
+    private void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment){
         final Findings newfinding = new Findings();
         newfinding.setUser(User);
         newfinding.setItemName(ItemName);
