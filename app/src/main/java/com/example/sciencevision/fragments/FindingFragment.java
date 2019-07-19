@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
+import com.example.sciencevision.SearchClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -58,6 +60,8 @@ public class FindingFragment extends Fragment {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     private File photoFile;
+    private TextView tvDescription;
+    SearchClient searchClient;
     public ParseUser User = ParseUser.getCurrentUser();
 
 
@@ -80,7 +84,8 @@ public class FindingFragment extends Fragment {
 
         btnTakePicture = view.findViewById(R.id.btnTakePicture);
         ivPostImage = view.findViewById(R.id.ivPostImage);
-
+        tvDescription = view.findViewById(R.id.tvDescription);
+        searchClient = new SearchClient();
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,19 +154,14 @@ public class FindingFragment extends Fragment {
                 FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
 
 
-
                 labeler.processImage(firebaseVisionImage)
                         .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
                             @Override
                             public void onSuccess(List<FirebaseVisionImageLabel> labels) {
                                 // Task completed successfully
-                                for (FirebaseVisionImageLabel label: labels) {
-                                    String text = label.getText();
-                                    String entityId = label.getEntityId();
-                                    float confidence = label.getConfidence();
-                                    Log.d("FindingFragment", String.format("object: %s confidence: %.2f \n",text, confidence));
-                                }
-                                createFinding(User,labels.get(0).getText(),"Item Description","Fun Fact goes here",new ParseFile(photoFile),"Experiment goes here");
+                                // This function sets the text of the TextView given as the parameter
+                                // to be the definition of the object in the image.
+                                searchClient.getWiki(labels.get(0).getText(), tvDescription);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

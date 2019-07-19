@@ -1,9 +1,9 @@
 package com.example.sciencevision;
 
 
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
+
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -11,14 +11,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -30,7 +23,7 @@ public class SearchClient {
         client = new AsyncHttpClient();
     }
 
-    public void getWiki(String searchLabel) {
+    public void getWiki(final String searchLabel, final TextView textView) {
         // create the url
         String url = API_BASE_URL;
 
@@ -55,7 +48,10 @@ public class SearchClient {
                     String finalresponse = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page).getString("extract");
                     //Easy Solution for grabbing the first sentence
                     String firstsentence = finalresponse.substring(0, finalresponse.indexOf(".") + 1);
-                    Log.d("Search Client", firstsentence);
+
+                    Log.d("Search Client", searchLabel + ": " + firstsentence);
+                    textView.setText(String.format(searchLabel + ": " + firstsentence));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -66,6 +62,7 @@ public class SearchClient {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
+
     }
 
 
