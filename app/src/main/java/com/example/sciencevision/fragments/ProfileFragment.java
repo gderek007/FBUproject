@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +66,8 @@ public class ProfileFragment extends Fragment {
         protected void onPostExecute(Set<String> results) {
             for(String s : results) {
                 Log.d(ProfileFragment.class.getSimpleName(),s);
-
+                TextView tvText = (TextView) getView().findViewById(R.id.tvText);
+                tvText.setText(tvText.getText() + s);
             }
         }
 
