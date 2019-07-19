@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -41,9 +42,16 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -162,6 +170,8 @@ public class FindingFragment extends Fragment {
                                 // This function sets the text of the TextView given as the parameter
                                 // to be the definition of the object in the image.
                                 searchClient.getWiki(labels.get(0).getText(), tvDescription);
+                                JsoupTask j = new JsoupTask();
+                                j.execute(labels.get(0).getText());
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -227,6 +237,58 @@ public class FindingFragment extends Fragment {
         Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
         // Return result
         return rotatedBitmap;
+    }
+
+    private class JsoupTask extends AsyncTask<String, Void, Set<String>> {
+
+
+        @Override
+        protected Set<String> doInBackground(String... params) {
+            return getDataFromGoogle(params[0]);
+        }
+
+        protected void onPostExecute(Set<String> results) {
+            for (String s : results) {
+                Log.d(ProfileFragment.class.getSimpleName(), s);
+                //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
+                //tvText.setText(tvText.getText() + s);
+            }
+        }
+
+
+        public Set<String> getDataFromGoogle(String query) {
+
+            Set<String> result = new HashSet<String>();
+            String request = "https://www.google.com/search?q=" + query + "&num=20";
+            System.out.println("Sending request..." + request);
+
+            try {
+                // need http protocol, set this as a Google bot agent :)
+                Document doc = Jsoup
+                        .connect(request)
+                        .ignoreHttpErrors(true)
+                        .userAgent(
+                                "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+                        .timeout(5000).get();
+
+                // get all links
+                Elements links = doc.select("a[href]");
+                for (Element link : links) {
+
+                    String temp = link.attr("href");
+                    if (temp.startsWith("/url?q=")) {
+                        //use regex to get domain name
+                        result.add(temp);
+                    }
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
     }
 
 }
