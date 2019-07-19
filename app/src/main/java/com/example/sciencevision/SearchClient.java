@@ -56,6 +56,7 @@ public class SearchClient {
 
                     Log.d("Search Client", searchLabel + ": " + firstsentence);
                     textView.setText(String.format(searchLabel + ": " + firstsentence));
+                    findings.createFinding(user,searchLabel,firstsentence,FunFact, ItemImage,Experiment);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
