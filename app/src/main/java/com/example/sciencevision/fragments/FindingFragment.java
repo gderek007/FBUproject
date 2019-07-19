@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.sciencevision.DetailActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -69,6 +70,7 @@ public class FindingFragment extends Fragment {
     private TextView tvDescription;
     SearchClient searchClient;
     public ParseUser User = ParseUser.getCurrentUser();
+    String foundExperimentUrl;
 
 
     public FindingFragment() {
@@ -170,6 +172,7 @@ public class FindingFragment extends Fragment {
                                 searchClient.getWiki(User,labels.get(0).getText(),"FunFact",new ParseFile(photoFile),"Experiment",tvDescription);
                                 JsoupTask j = new JsoupTask();
                                 j.execute(labels.get(0).getText());
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -199,6 +202,9 @@ public class FindingFragment extends Fragment {
             public void done(ParseException e) {
                 if (e==null){
                     Log.d("createFinding","New Finding Success");
+                    Intent i = new Intent(getContext(), DetailActivity.class);
+                    i.putExtra(Findings.class.getSimpleName(), newfinding);
+                    getContext().startActivity(i);
                 }
                 else{
                     e.printStackTrace();
@@ -245,8 +251,10 @@ public class FindingFragment extends Fragment {
         }
 
         protected void onPostExecute(Set<String> results) {
+            foundExperimentUrl = "";
             for (String s : results) {
                 Log.d(ProfileFragment.class.getSimpleName(), s);
+                foundExperimentUrl = foundExperimentUrl + s;
                 //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
                 //tvText.setText(tvText.getText() + s);
             }
