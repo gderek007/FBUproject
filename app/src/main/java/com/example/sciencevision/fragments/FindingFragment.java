@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,7 +35,11 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +62,7 @@ public class FindingFragment extends Fragment {
     private File photoFile;
     private TextView tvDescription;
     SearchClient searchClient;
+    public ParseUser User = ParseUser.getCurrentUser();
 
 
     public FindingFragment() {
@@ -135,7 +141,7 @@ public class FindingFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 // by this point we have the camera photo on disk
                 //Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                Bitmap rotatedImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
+                final Bitmap rotatedImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(rotatedImage);
@@ -170,6 +176,29 @@ public class FindingFragment extends Fragment {
                 Toast.makeText(getContext(), "Picture wasn't taken!", LENGTH_SHORT).show();
             }
         }
+    }
+    //Adds a new Finding to the database
+    private void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment){
+        final Findings newfinding = new Findings();
+        newfinding.setUser(User);
+        newfinding.setItemName(ItemName);
+        newfinding.setDescription(ItemDescription);
+        newfinding.setFunFact(FunFact);
+        newfinding.setImage(ItemImage);
+        newfinding.setExperiment(Experiment);
+        newfinding.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e==null){
+                    Log.d("createFinding","New Finding Success");
+                }
+                else{
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {
