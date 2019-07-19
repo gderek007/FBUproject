@@ -1,13 +1,17 @@
 package com.example.sciencevision;
 
 
+import android.content.ClipData;
 import android.util.Log;
 import android.widget.TextView;
 
 
+import com.example.sciencevision.fragments.FindingFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +20,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class SearchClient {
+    private FindingFragment findings= new FindingFragment();
     private AsyncHttpClient client;
     private String API_BASE_URL = "https://simple.wikipedia.org/w/api.php";
 
@@ -23,7 +28,7 @@ public class SearchClient {
         client = new AsyncHttpClient();
     }
 
-    public void getWiki(final String searchLabel, final TextView textView) {
+    public void getWiki(final ParseUser user,final String searchLabel, final String FunFact, final ParseFile ItemImage, final String Experiment, final TextView textView) {
         // create the url
         String url = API_BASE_URL;
 
@@ -50,7 +55,9 @@ public class SearchClient {
                     String firstsentence = finalresponse.substring(0, finalresponse.indexOf(".") + 1);
 
                     Log.d("Search Client", searchLabel + ": " + firstsentence);
+
                     textView.setText(String.format(searchLabel + ": " + firstsentence));
+                    findings.createFinding(user,searchLabel,firstsentence,FunFact,ItemImage,Experiment);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
