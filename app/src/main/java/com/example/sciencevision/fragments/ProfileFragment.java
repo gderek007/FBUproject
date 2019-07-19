@@ -64,8 +64,8 @@ public class ProfileFragment extends Fragment {
         }
 
         protected void onPostExecute(Set<String> results) {
-            for(String s : results) {
-                Log.d(ProfileFragment.class.getSimpleName(),s);
+            for (String s : results) {
+                Log.d(ProfileFragment.class.getSimpleName(), s);
                 TextView tvText = (TextView) getView().findViewById(R.id.tvText);
                 tvText.setText(tvText.getText() + s);
             }
@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment {
                 for (Element link : links) {
 
                     String temp = link.attr("href");
-                    if(temp.startsWith("/url?q=")){
+                    if (temp.startsWith("/url?q=")) {
                         //use regex to get domain name
                         result.add(temp);
                     }

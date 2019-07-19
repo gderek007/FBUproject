@@ -6,4 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
+    <TextView
+        android:id="@+id/tvFoundName"
+        android:layout_width="201dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginLeft="69dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/tvFoundDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvFoundDescription"
+        android:layout_width="253dp"
+        android:layout_height="109dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginLeft="69dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tvFoundExperiment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFoundName" />
+
+    <TextView
+        android:id="@+id/tvFoundExperiment"
+        android:layout_width="264dp"
+        android:layout_height="301dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginLeft="69dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFoundDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>
