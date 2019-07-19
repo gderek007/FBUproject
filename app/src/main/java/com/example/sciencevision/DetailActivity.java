@@ -11,21 +11,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-/*@BindView(R.id.tvFoundName) TextView tvName;
-    @BindView(R.id.tvFoundDescription) TextView tvDescription;
-    @BindView(R.id.tvFoundExperiment) TextView tvExperiment;
-    Findings finding;*/
+    TextView tvName;
+    TextView tvDescription;
+    TextView tvExperiment;
+    Findings finding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        /*ButterKnife.bind(this);
+        tvName = findViewById(R.id.tvFoundName);
+        tvDescription = findViewById(R.id.tvDescription);
+        tvExperiment = findViewById(R.id.tvFoundExperiment);
         finding = (Findings) getIntent().getExtras().get(Findings.class.getSimpleName());
-        tvName.setText(finding.getItemName());
+        tvName.setText(finding.getName());
         tvDescription.setText(finding.getDescription());
-        tvExperiment.setText(finding.getKeyExperiment());*/
+        tvExperiment.setText(finding.getExperiment());
 
     }
 }
