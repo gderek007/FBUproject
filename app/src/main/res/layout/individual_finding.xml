@@ -53,8 +53,8 @@
         android:layout_width="188dp"
         android:layout_height="186dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ItemName"
-        tools:layout_editor_absoluteX="0dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

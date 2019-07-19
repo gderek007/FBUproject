@@ -1,10 +1,12 @@
 package com.example.sciencevision;
 
+import android.content.ClipData;
 
 import android.util.Log;
 import android.widget.TextView;
 
 
+import com.example.sciencevision.fragments.FindingFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class SearchClient {
+    private FindingFragment findings= new FindingFragment();
     private AsyncHttpClient client;
     private String API_BASE_URL = "https://simple.wikipedia.org/w/api.php";
 
