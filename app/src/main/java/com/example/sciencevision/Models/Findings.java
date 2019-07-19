@@ -70,7 +70,7 @@ public class Findings extends ParseObject {
             super(Findings.class);
         }
         public Query withUser(){
-            include("user");
+            include("User");
             return this;
         }
     }
