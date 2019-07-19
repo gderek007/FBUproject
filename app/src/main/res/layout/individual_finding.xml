@@ -7,29 +7,30 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/User"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="User"
+        app:layout_constraintEnd_toStartOf="@+id/Name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/Name"
         android:layout_width="300dp"
         android:layout_height="18dp"
         android:layout_marginStart="36dp"
         android:layout_marginLeft="36dp"
         android:layout_marginTop="4dp"
-        android:text="Name"
+        android:hint="Name"
         app:layout_constraintStart_toEndOf="@+id/User"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/Description"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/Image"
-        app:layout_constraintTop_toBottomOf="@+id/FunFact" />
 
     <TextView
         android:id="@+id/FunFact"
@@ -40,10 +41,24 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="FunFact"
+        android:hint="FunFact"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Image"
         app:layout_constraintTop_toBottomOf="@+id/Name" />
+
+    <TextView
+        android:id="@+id/Description"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Image"
+        app:layout_constraintTop_toBottomOf="@+id/FunFact" />
 
     <ImageView
         android:id="@+id/Image"
@@ -63,23 +78,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="Experiment"
+        android:hint="Experiment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Image"
         app:layout_constraintTop_toBottomOf="@+id/Description" />
 
-    <TextView
-        android:id="@+id/User"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="User"
-        app:layout_constraintEnd_toStartOf="@+id/Name"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
