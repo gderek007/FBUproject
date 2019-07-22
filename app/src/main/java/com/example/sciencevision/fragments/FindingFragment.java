@@ -75,6 +75,7 @@ public class FindingFragment extends Fragment {
     public ParseUser User = ParseUser.getCurrentUser();
     String foundExperimentUrl;
     String firstLabel;
+    Findings f;
 
 
     public FindingFragment() {
@@ -206,9 +207,8 @@ public class FindingFragment extends Fragment {
             public void done(ParseException e) {
                 if (e==null){
                     Log.d("createFinding","New Finding Success");
-                    while (getContext() == null) {
+                    f = newfinding;
 
-                    }
                     /*Intent i = new Intent(getContext(), DetailActivity.class);
                     i.putExtra(Findings.class.getSimpleName(), newfinding);
                     getContext().startActivity(i);*/
@@ -258,14 +258,13 @@ public class FindingFragment extends Fragment {
         }
 
         protected void onPostExecute(Set<String> results) {
-            foundExperimentUrl = "";
-            for (String s : results) {
-                Log.d(ProfileFragment.class.getSimpleName(), s);
-                foundExperimentUrl = foundExperimentUrl + s;
-                //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
-                //tvText.setText(tvText.getText() + s);
+
+            while (f==null) {
+                //System.out.println("Nothing yet");
             }
-            searchClient.getWiki(User,firstLabel,"FunFact",new ParseFile(photoFile),foundExperimentUrl,tvDescription);
+            Intent i = new Intent(getContext(), DetailActivity.class);
+            i.putExtra(Findings.class.getSimpleName(), f);
+            getContext().startActivity(i);
 
         }
 
@@ -294,8 +293,15 @@ public class FindingFragment extends Fragment {
                         //use regex to get domain name
                         result.add(temp);
                     }
-
                 }
+                foundExperimentUrl = "";
+                for (String s : result) {
+                    Log.d(ProfileFragment.class.getSimpleName(), s);
+                    foundExperimentUrl = foundExperimentUrl + s;
+                    //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
+                    //tvText.setText(tvText.getText() + s);
+                }
+                searchClient.getWiki(User,firstLabel,"FunFact",new ParseFile(photoFile),foundExperimentUrl,tvDescription);
 
             } catch (IOException e) {
                 e.printStackTrace();
