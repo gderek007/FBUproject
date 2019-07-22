@@ -47,6 +47,11 @@ public class SearchClient {
         //execute a GET request, expect JSON object response
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
+            public boolean getUseSynchronousMode() {
+                return false;
+            }
+
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     //Gets the page number for the search

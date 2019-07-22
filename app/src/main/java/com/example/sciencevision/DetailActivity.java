@@ -15,8 +15,16 @@ import com.parse.ParseUser;
 import org.w3c.dom.Text;
 import org.xml.sax.helpers.ParserFactory;
 
-public class DetailActivity extends AppCompatActivity {
+import com.example.sciencevision.Models.Findings;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class DetailActivity extends AppCompatActivity {
+    TextView tvName;
+    TextView tvDescription;
+    TextView tvExperiment;
+    Findings finding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,5 +59,15 @@ public class DetailActivity extends AppCompatActivity {
             e.printStackTrace();
 
         }
+        setContentView(R.layout.activity_detail);
+
+        tvName = findViewById(R.id.tvFoundName);
+        tvDescription = findViewById(R.id.tvDescription);
+        tvExperiment = findViewById(R.id.tvFoundExperiment);
+        finding = (Findings) getIntent().getExtras().get(Findings.class.getSimpleName());
+        tvName.setText(finding.getName());
+        tvDescription.setText(finding.getDescription());
+        tvExperiment.setText(finding.getExperiment());
+
     }
 }

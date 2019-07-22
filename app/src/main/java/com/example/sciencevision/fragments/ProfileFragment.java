@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
+import com.parse.ParseUser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
