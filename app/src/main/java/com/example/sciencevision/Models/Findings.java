@@ -40,7 +40,7 @@ public class Findings extends ParseObject {
     public void setDescription(String itemDescription){
         put(KEY_DESCRIPTION,itemDescription);
     }
-    public String getFact(){
+    public String getFunFact(){
         return getString(KEY_FACT);
     }
     public void setFunFact(String funFact){
@@ -63,16 +63,24 @@ public class Findings extends ParseObject {
         PrettyTime time = new PrettyTime();
         return time.format(date).toString();
     }
-
     //Query
     public static class Query extends ParseQuery<Findings> {
         public Query() {
             super(Findings.class);
         }
+    public Query getTop(){
+        setLimit(20);
+        return this;
+    }
+//    public Query
         public Query withUser(){
             include("User");
             return this;
         }
+    public Query getRecent(){
+        getQuery(KEY_CREATED);
+        return this;
+    }
     }
 }
 

@@ -43,7 +43,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         holder.User.setText(user.getUsername());
         holder.Name .setText(findings.getName());
         holder.Description.setText(findings.getDescription());
-        holder.FunFact.setText(findings.getFact());
+        holder.FunFact.setText(findings.getFunFact());
         holder.Experiment.setText(findings.getExperiment());
         Glide.with(context).load(findings.getImage().getUrl()).into(holder.Image);
 

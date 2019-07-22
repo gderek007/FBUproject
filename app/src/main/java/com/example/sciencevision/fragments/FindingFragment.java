@@ -26,6 +26,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.sciencevision.DetailActivity;
+import com.example.sciencevision.LaunchActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -92,7 +94,6 @@ public class FindingFragment extends Fragment {
         ivPostImage = view.findViewById(R.id.ivPostImage);
         tvDescription = view.findViewById(R.id.tvDescription);
         searchClient = new SearchClient();
-
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +168,10 @@ public class FindingFragment extends Fragment {
                                 // Task completed successfully
                                 // This function sets the text of the TextView given as the parameter
                                 // to be the definition of the object in the image.
-                                searchClient.getWiki(User,labels.get(0).getText(),"FunFact",new ParseFile(photoFile),"Experiment",tvDescription);
+//                                searchClient.getWiki(User,labels.get(0).getText(),"FunFact",new ParseFile(photoFile),"Experiment",tvDescription);
+//                                Intent intentDetails = new Intent(getActivity(), DetailActivity.class);
+//                                startActivity(intentDetails);
+
                                 JsoupTask j = new JsoupTask();
                                 j.execute(labels.get(0).getText());
                             }
@@ -185,29 +189,7 @@ public class FindingFragment extends Fragment {
             }
         }
     }
-    //Adds a new Finding to the database
-    public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment){
-        final Findings newfinding = new Findings();
-        newfinding.setUser(User);
-        newfinding.setName(ItemName);
-        newfinding.setDescription(ItemDescription);
-        newfinding.setFunFact(FunFact);
-        newfinding.setImage(ItemImage);
-        newfinding.setExperiment(Experiment);
-        newfinding.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e==null){
-                    Log.d("createFinding","New Finding Success");
-                }
-                else{
-                    e.printStackTrace();
-                }
-            }
-        });
 
-
-    }
 
     public Bitmap rotateBitmapOrientation(String photoFilePath) {
         // Create and configure BitmapFactory
