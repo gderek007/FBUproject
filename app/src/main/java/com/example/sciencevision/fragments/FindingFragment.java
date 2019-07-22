@@ -1,6 +1,8 @@
 package com.example.sciencevision.fragments;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.sciencevision.DetailActivity;
+import com.example.sciencevision.MainActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -69,6 +73,9 @@ public class FindingFragment extends Fragment {
     private TextView tvDescription;
     SearchClient searchClient;
     public ParseUser User = ParseUser.getCurrentUser();
+    String foundExperimentUrl;
+    String firstLabel;
+    Findings f;
 
 
     public FindingFragment() {
@@ -84,10 +91,10 @@ public class FindingFragment extends Fragment {
 
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         btnTakePicture = view.findViewById(R.id.btnTakePicture);
         ivPostImage = view.findViewById(R.id.ivPostImage);
         tvDescription = view.findViewById(R.id.tvDescription);
@@ -167,9 +174,10 @@ public class FindingFragment extends Fragment {
                                 // Task completed successfully
                                 // This function sets the text of the TextView given as the parameter
                                 // to be the definition of the object in the image.
-                                searchClient.getWiki(User,labels.get(0).getText(),"FunFact",new ParseFile(photoFile),"Experiment",tvDescription);
+                                firstLabel = labels.get(0).getText();
                                 JsoupTask j = new JsoupTask();
-                                j.execute(labels.get(0).getText());
+                                j.execute(firstLabel);
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -199,6 +207,11 @@ public class FindingFragment extends Fragment {
             public void done(ParseException e) {
                 if (e==null){
                     Log.d("createFinding","New Finding Success");
+                    f = newfinding;
+
+                    /*Intent i = new Intent(getContext(), DetailActivity.class);
+                    i.putExtra(Findings.class.getSimpleName(), newfinding);
+                    getContext().startActivity(i);*/
                 }
                 else{
                     e.printStackTrace();
@@ -245,11 +258,14 @@ public class FindingFragment extends Fragment {
         }
 
         protected void onPostExecute(Set<String> results) {
-            for (String s : results) {
-                Log.d(ProfileFragment.class.getSimpleName(), s);
-                //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
-                //tvText.setText(tvText.getText() + s);
+
+            while (f==null) {
+                //System.out.println("Nothing yet");
             }
+            Intent i = new Intent(getContext(), DetailActivity.class);
+            i.putExtra(Findings.class.getSimpleName(), f);
+            getContext().startActivity(i);
+
         }
 
 
@@ -277,8 +293,15 @@ public class FindingFragment extends Fragment {
                         //use regex to get domain name
                         result.add(temp);
                     }
-
                 }
+                foundExperimentUrl = "";
+                for (String s : result) {
+                    Log.d(ProfileFragment.class.getSimpleName(), s);
+                    foundExperimentUrl = foundExperimentUrl + s;
+                    //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
+                    //tvText.setText(tvText.getText() + s);
+                }
+                searchClient.getWiki(User,firstLabel,"FunFact",new ParseFile(photoFile),foundExperimentUrl,tvDescription);
 
             } catch (IOException e) {
                 e.printStackTrace();
