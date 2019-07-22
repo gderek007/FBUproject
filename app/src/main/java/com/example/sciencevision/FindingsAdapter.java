@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.sciencevision.DetailActivity;
 import com.example.sciencevision.Models.Findings;
-import com.example.sciencevision.R;
 import com.parse.ParseUser;
 import java.util.List;
 
@@ -66,12 +63,12 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             super(itemView);
             // perform findViewById lookups
             User = (TextView) itemView.findViewById(R.id.User);
-            Name = (TextView) itemView.findViewById(R.id.Name);
-            Image = (ImageView) itemView.findViewById(R.id.Image);
-            Description = (TextView) itemView.findViewById(R.id.Description);
-            FunFact = (TextView) itemView.findViewById(R.id.FunFact);
-            Name = (TextView) itemView.findViewById(R.id.Name);
-            Experiment = (TextView) itemView.findViewById(R.id.Experiment);
+            Name = (TextView) itemView.findViewById(R.id.tvName);
+            Image = (ImageView) itemView.findViewById(R.id.ivImage);
+            Description = (TextView) itemView.findViewById(R.id.tvDescription);
+            FunFact = (TextView) itemView.findViewById(R.id.tvFunFact);
+            Name = (TextView) itemView.findViewById(R.id.tvName);
+            Experiment = (TextView) itemView.findViewById(R.id.tvExperiment);
             itemView.setOnClickListener(this);
         }
 

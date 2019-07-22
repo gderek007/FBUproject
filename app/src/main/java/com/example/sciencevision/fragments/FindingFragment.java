@@ -45,14 +45,18 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import android.os.AsyncTask;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -209,10 +213,6 @@ public class FindingFragment extends Fragment {
                 if (e == null) {
                     Log.d("createFinding", "New Finding Success");
                     f = newfinding;
-
-                    /*Intent i = new Intent(getContext(), DetailActivity.class);
-                    i.putExtra(Findings.class.getSimpleName(), newfinding);
-                    getContext().startActivity(i);*/
                 } else {
                     e.printStackTrace();
                 }
@@ -259,12 +259,12 @@ public class FindingFragment extends Fragment {
 
         protected void onPostExecute(Set<String> results) {
 
-            while (f==null) {
-                //System.out.println("Nothing yet");
-            }
-            Intent i = new Intent(getContext(), DetailActivity.class);
-            i.putExtra(Findings.class.getSimpleName(), f);
-            getContext().startActivity(i);
+//            while (f == null) {
+//                //System.out.println("Nothing yet");
+//            }
+//            Intent i = new Intent(getContext(), DetailActivity.class);
+////            i.putExtra(Findings.class.getSimpleName(), f);
+//            getContext().startActivity(i);
 
         }
 
@@ -301,7 +301,7 @@ public class FindingFragment extends Fragment {
                     //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
                     //tvText.setText(tvText.getText() + s);
                 }
-                searchClient.getWiki(User,firstLabel,"FunFact",new ParseFile(photoFile),foundExperimentUrl,tvDescription);
+                searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
 
             } catch (IOException e) {
                 e.printStackTrace();
