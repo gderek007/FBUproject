@@ -6,12 +6,15 @@ import android.util.Log;
 import android.widget.TextView;
 
 
+import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.fragments.FindingFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +23,6 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class SearchClient {
-    private FindingFragment findings= new FindingFragment();
     private AsyncHttpClient client;
     private String API_BASE_URL = "https://simple.wikipedia.org/w/api.php";
 
@@ -61,7 +63,7 @@ public class SearchClient {
 
                     Log.d("Search Client", searchLabel + ": " + firstsentence);
                     textView.setText(String.format(searchLabel + ": " + firstsentence));
-                    findings.createFinding(user,searchLabel,firstsentence,FunFact, ItemImage,Experiment);
+                    createFinding(user, searchLabel, firstsentence, FunFact, ItemImage, Experiment);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -76,5 +78,25 @@ public class SearchClient {
 
     }
 
+    //Adds a new Finding to the database
+    public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment) {
+        final Findings newfinding = new Findings();
+        newfinding.setUser(User);
+        newfinding.setName(ItemName);
+        newfinding.setDescription(ItemDescription);
+        newfinding.setFunFact(FunFact);
+        newfinding.setImage(ItemImage);
+        newfinding.setExperiment(Experiment);
+        newfinding.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("createFinding", "New Finding Success");
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 }
