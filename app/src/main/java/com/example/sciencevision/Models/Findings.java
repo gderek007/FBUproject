@@ -70,17 +70,18 @@ public class Findings extends ParseObject {
         }
     public Query getTop(){
         setLimit(20);
-        return this;
-    }
-//    public Query
-        public Query withUser(){
-            include("User");
-            return this;
-        }
+        return this; }
+    public Query withUser(){
+            include(KEY_USER);
+            return this; }
     public Query getRecent(){
         getQuery(KEY_CREATED);
         return this;
     }
+//    public Query getUser(){
+//            whereExists("HBgEs258GT");
+//            return this;
+//    }
     }
 }
 

@@ -268,7 +268,6 @@ public class FindingFragment extends Fragment {
 
         }
 
-
         public Set<String> getDataFromGoogle(String query) {
 
             Set<String> result = new HashSet<String>();

@@ -1,6 +1,7 @@
 package com.example.sciencevision;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         final Fragment fragmentSocial = new SocialFragment();
 
         // handle navigation selection
+        bottomNavigationView.setItemBackgroundResource(R.color.skyBlue);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -51,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
                         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+//                        fragment.getView().setBackgroundColor(Color.DKGRAY);
+
+
                         return true;
                     }
                 });
