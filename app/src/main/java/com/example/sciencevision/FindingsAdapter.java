@@ -2,6 +2,7 @@ package com.example.sciencevision;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sciencevision.Models.Findings;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.jar.JarException;
 
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
     private List<Findings> mFindings;
+    private ParseUser user = ParseUser.getCurrentUser();
     Context context;
 
     // pass in the tweets array in the constructor
@@ -39,7 +45,13 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Findings finding = mFindings.get(position);
         //populate the views according to this data
-        holder.tvUser.setText(finding.getUser().getUsername());
+        //try catch needed because of weird bug that returns no User for finding.getUser() when the query has only the User's findings
+        try {
+            holder.tvUser.setText(finding.getUser().getUsername());
+        }
+        catch(java.lang.Exception e){
+            holder.tvUser.setText(user.getUsername());
+        }
         holder.tvName.setText(finding.getName());
         holder.tvDescription.setText(finding.getDescription());
         holder.tvFunFact.setText(finding.getFunFact());
