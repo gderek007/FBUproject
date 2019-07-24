@@ -80,7 +80,9 @@ public class SocialFragment extends Fragment {
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery = findingsQuery.getRecent().withUser();
+
+        findingsQuery.getRecent().withUser();
+
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {

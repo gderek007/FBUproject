@@ -54,7 +54,6 @@ public class ProfileFragment extends Fragment {
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
         tvUser.setText(User.getUsername());
-
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
@@ -65,8 +64,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadTopPosts() {
-        final Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getRecent().withUser();
+        Findings.Query findingsQuery = new Findings.Query();
+        findingsQuery = findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
