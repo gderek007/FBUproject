@@ -1,102 +1,123 @@
 package com.example.sciencevision;
 
-import android.content.ClipData;
-
 import android.util.Log;
-import android.widget.TextView;
 
-
-import com.example.sciencevision.Models.Findings;
-import com.example.sciencevision.fragments.FindingFragment;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-
-import cz.msebera.android.httpclient.Header;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 public class SearchClient {
     private AsyncHttpClient client;
-    private String API_BASE_URL = "https://simple.wikipedia.org/w/api.php";
 
     public SearchClient() {
         client = new AsyncHttpClient();
     }
 
-    public void getWiki(final ParseUser user, final String searchLabel, final String FunFact, final ParseFile ItemImage, final String Experiment, final TextView textView) {
-        // create the url
-        String url = API_BASE_URL;
-
-        //set the request parameters
-        RequestParams params = new RequestParams();
-        params.put("format", "json");
-        params.put("action", "query");
-        params.put("prop", "extracts");
-        params.put("exintro", "");
-        params.put("explaintext", "");
-        params.put("redirects", "1");
-        params.put("titles", searchLabel);
-
-        //execute a GET request, expect JSON object response
-        client.get(url, params, new JsonHttpResponseHandler() {
+    public Callable<String> getWiki(final String searchLabel) {
+        return new Callable<String>() {
             @Override
-            public boolean getUseSynchronousMode() {
-                return false;
+            public String call() throws Exception {
+                HttpURLConnection urlConnection = null;
+                URL url = new URL("https://simple.wikipedia.org/w/api.php?&format=json" +
+                        "&action=query" +
+                        "&prop=extracts" +
+                        "&exintro=" +
+                        "&explaintext=" +
+                        "&redirects=1" +
+                        "&titles=" + searchLabel);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setReadTimeout(10000 /* milliseconds */);
+                urlConnection.setConnectTimeout(15000 /* milliseconds */);
+                urlConnection.setDoOutput(true);
+                urlConnection.connect();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                StringBuilder sb = new StringBuilder();
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                br.close();
+                String jsonString = sb.toString();
+                JSONObject response = new JSONObject(jsonString);
+                String firstSentence = clipSentenceFromJSON(response);
+                Log.d("Search Client", searchLabel + ": " + firstSentence);
+                return firstSentence;
             }
+        };
+    }
 
+    private String clipSentenceFromJSON(JSONObject response) {
+        try {
+            //Gets the page number for the search
+            String page = response.getJSONObject("query").getJSONObject("pages").names().get(0).toString();
+            //Description of what the searchLabel
+            String finalresponse = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page).getString("extract");
+            //Easy Solution for grabbing the first sentence
+            String firstsentence = finalresponse.substring(0, finalresponse.indexOf(".") + 1);
+            return firstsentence;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Callable<String> getDataFromGoogle(final String query) {
+        return new Callable<String>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public String call() throws Exception {
+                List<String> result = new ArrayList<>();
+                String request = "https://www.google.com/search?q=" + query + "&num=5";
+                System.out.println("Sending request..." + request);
+
                 try {
-                    //Gets the page number for the search
-                    String page = response.getJSONObject("query").getJSONObject("pages").names().get(0).toString();
-                    //Description of what the searchLabel
-                    String finalresponse = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page).getString("extract");
-                    //Easy Solution for grabbing the first sentence
-                    String firstsentence = finalresponse.substring(0, finalresponse.indexOf(".") + 1);
+                    // need http protocol, set this as a Google bot agent :)
+                    Document doc = Jsoup
+                            .connect(request)
+                            .ignoreHttpErrors(true)
+                            .userAgent(
+                                    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+                            .timeout(5000).get();
 
-                    Log.d("Search Client", searchLabel + ": " + firstsentence);
-                    textView.setText(String.format(searchLabel + ": " + firstsentence));
-                    createFinding(user, searchLabel, firstsentence, FunFact, ItemImage, Experiment);
+                    Elements links = doc.select("a[href]");
+                    int counter = 0;
+                    for (Element link : links) {
+                        String temp = link.attr("href");
+                        if (temp.startsWith("/url?q=") && counter < 5) {
+                            //use regex to get domain name
+                            result.add(temp);
+                            counter++;
+                        }
+                    }
 
-                } catch (JSONException e) {
+                    for (String s : result) {
+                        Log.d("SearchClient", s);
+                    }
+
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+                return result.toString();
             }
-        });
-
+        };
     }
 
-    //Adds a new Finding to the database
-    public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment) {
-        final Findings newfinding = new Findings();
-        newfinding.setUser(User);
-        newfinding.setName(ItemName);
-        newfinding.setDescription(ItemDescription);
-        newfinding.setFunFact(FunFact);
-        newfinding.setImage(ItemImage);
-        newfinding.setExperiment(Experiment);
-        newfinding.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("createFinding", "New Finding Success");
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
 }
