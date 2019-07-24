@@ -47,9 +47,12 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
 
 import java.io.File;
 import java.io.IOException;
@@ -179,7 +182,7 @@ public class FindingFragment extends Fragment {
                                 // This function sets the text of the TextView given as the parameter
                                 // to be the definition of the object in the image.
                                 firstLabel = labels.get(0).getText();
-                                JsoupTask j = new JsoupTask();
+                                JsoupExperimentTask j = new JsoupExperimentTask();
                                 j.execute(firstLabel);
 
                             }
@@ -249,7 +252,7 @@ public class FindingFragment extends Fragment {
         return rotatedBitmap;
     }
 
-    private class JsoupTask extends AsyncTask<String, Void, Set<String>> {
+    private class JsoupExperimentTask extends AsyncTask<String, Void, Set<String>> {
 
 
         @Override
@@ -270,9 +273,10 @@ public class FindingFragment extends Fragment {
 
 
         public Set<String> getDataFromGoogle(String query) {
-
+            String foundExperimentUrl = "";
+            String foundFunFact;
             Set<String> result = new HashSet<String>();
-            String request = "https://www.google.com/search?q=" + query + "&num=20";
+            String request = "https://www.google.com/search?q=kids+science+experiments+" + query + "&num=20";
             System.out.println("Sending request..." + request);
 
             try {
@@ -283,8 +287,16 @@ public class FindingFragment extends Fragment {
                         .userAgent(
                                 "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
                         .timeout(5000).get();
+                //System.out.println(doc.toString());
+                //getHtmlComments(doc);
+                Elements snippets = doc.select("li");
+                for (Element snippet : snippets) {
+
+                    System.out.println(snippet.toString());
+                }
 
                 // get all links
+
                 Elements links = doc.select("a[href]");
                 for (Element link : links) {
 
@@ -292,16 +304,19 @@ public class FindingFragment extends Fragment {
                     if (temp.startsWith("/url?q=")) {
                         //use regex to get domain name
                         result.add(temp);
+                        foundExperimentUrl = temp;
+                        break;
                     }
                 }
-                foundExperimentUrl = "";
+                System.out.println(foundExperimentUrl);
                 for (String s : result) {
                     Log.d(ProfileFragment.class.getSimpleName(), s);
-                    foundExperimentUrl = foundExperimentUrl + s;
+                    //foundExperimentUrl = foundExperimentUrl + s;
                     //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
                     //tvText.setText(tvText.getText() + s);
                 }
-                searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
+
+                //searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -309,5 +324,94 @@ public class FindingFragment extends Fragment {
 
             return result;
         }
+
+        public void getHtmlComments(Node node) {
+            for (int i = 0; i < node.childNodeSize(); i++) {
+                Node child = node.childNode(i);
+                if (child.nodeName().equals("#comment")) {
+                    Comment comment = (Comment) child;
+                    //child.after(comment.getData());
+                    //if (comment.getData().equals("<!--m-->")) {
+                    //System.out.println(comment.);
+
+                } else {
+                    getHtmlComments(child);
+                }
+            }
+        }
     }
+
+    /*private class JsoupFactTask extends AsyncTask<String, Void, Set<String>> {
+
+
+        @Override
+        protected Set<String> doInBackground(String... params) {
+            return getDataFromGoogle(params[0]);
+        }
+
+        protected void onPostExecute(Set<String> results) {
+
+        }
+
+
+        public Set<String> getDataFromGoogle(String query) {
+            String foundExperimentUrl = "";
+            String foundFunFact;
+            Set<String> result = new HashSet<String>();
+            String request = "https://www.google.com/search?q=" + query + "+fun+facts&num=20";
+            System.out.println("Sending request..." + request);
+
+            try {
+                // need http protocol, set this as a Google bot agent :)
+                Document doc = Jsoup
+                        .connect(request)
+                        .ignoreHttpErrors(true)
+                        .userAgent(
+                                "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+                        .timeout(5000).get();
+                //System.out.println(doc.toString());
+                //getHtmlComments(doc);
+                Elements snippets = doc.select("li");
+                for (Element snippet : snippets) {
+
+                    String temp = link.attr("href");
+                    if (temp.startsWith("/url?q=")) {
+                        //use regex to get domain name
+                        result.add(temp);
+                        foundExperimentUrl = temp;
+                        break;
+                    }
+                }
+                System.out.println(foundExperimentUrl);
+                for (String s : result) {
+                    Log.d(ProfileFragment.class.getSimpleName(), s);
+                    //foundExperimentUrl = foundExperimentUrl + s;
+                    //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
+                    //tvText.setText(tvText.getText() + s);
+                }
+
+                //searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        public void getHtmlComments(Node node) {
+            for (int i = 0; i < node.childNodeSize(); i++) {
+                Node child = node.childNode(i);
+                if (child.nodeName().equals("#comment")) {
+                    Comment comment = (Comment) child;
+                    //child.after(comment.getData());
+                    //if (comment.getData().equals("<!--m-->")) {
+                    //System.out.println(comment.);
+
+                } else {
+                    getHtmlComments(child);
+                }
+            }
+        }
+    }*/
 }
