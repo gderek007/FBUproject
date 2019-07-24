@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
@@ -33,6 +34,7 @@ public class SocialFragment extends Fragment {
     private FindingsAdapter adapter;
     private ArrayList<Findings> arrayFinding;
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public SocialFragment() {
         // Required empty public constructor
@@ -52,9 +54,9 @@ public class SocialFragment extends Fragment {
 
         swipeContainer = view.findViewById(R.id.swipeContainer);
         rvFindings = view.findViewById(R.id.rvFindings);
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         adapter = new FindingsAdapter(arrayFinding);
-        rvFindings.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvFindings.setLayoutManager(linearLayoutManager);
         rvFindings.setAdapter(adapter);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -64,7 +66,15 @@ public class SocialFragment extends Fragment {
             }
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_red_dark);
-
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadMore();
+            }
+        };
+        rvFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
     }
 
@@ -80,12 +90,42 @@ public class SocialFragment extends Fragment {
                     if (objects.size() > 20) {
                         for (int i = objects.size() - 20; i < objects.size(); i++) {
                             arrayFinding.add(0, objects.get(i));
+                            adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
                         }
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
                             arrayFinding.add(0, objects.get(i));
+                            adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
+                        }
+                    }
+                    swipeContainer.setRefreshing(false);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void loadMore() {
+        Findings.Query findingsQuery = new Findings.Query();
+        findingsQuery.getRecent();
+        findingsQuery.findInBackground(new FindCallback<Findings>() {
+            @Override
+            public void done(List<Findings> objects, ParseException e) {
+                //adapter.clear();
+                if (e == null) {
+                    //brute force method to get top 20 posts
+                    if (objects.size() > 20 + arrayFinding.size()) {
+                        for (int i = objects.size() - 20 - arrayFinding.size(); i < objects.size() - 20; i++) {
+                            arrayFinding.add(arrayFinding.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(arrayFinding.size() - 1);
+                        }
+                    } else {
+                        for (int i = 0; i < objects.size(); i++) {
+                            arrayFinding.add(arrayFinding.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(arrayFinding.size() - 1);
                         }
                     }
                     swipeContainer.setRefreshing(false);

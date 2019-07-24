@@ -39,7 +39,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Findings finding = mFindings.get(position);
         //populate the views according to this data
-        holder.tvUser.setText(finding.getUser().getUsername());
+       // holder.tvUser.setText(finding.getUser().getUsername());
         holder.tvName.setText(finding.getName());
         holder.tvDescription.setText(finding.getDescription());
         holder.tvFunFact.setText(finding.getFunFact());

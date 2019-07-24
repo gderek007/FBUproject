@@ -78,6 +78,10 @@ public class Findings extends ParseObject {
         getQuery(KEY_CREATED);
         return this;
     }
+    public Query getOlder(int size){
+        getQuery(KEY_CREATED).orderByAscending(KEY_CREATED);
+        return this;
+    }
 //    public Query getUser(){
 //            whereExists("HBgEs258GT");
 //            return this;
