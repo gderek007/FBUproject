@@ -37,29 +37,5 @@ public class DetailActivity extends AppCompatActivity {
         experiment.setText(newFinding.getExperiment());
         Glide.with(this).load(newFinding.getImage().getUrl()).into(image);
 
-//        ParseUser User = ParseUser.getCurrentUser();
-//        Findings.Query recentPost= new Findings.Query();
-//        try {
-////            Findings newFinding = recentPost.getTop().getFirst();
-//            name.setText(newFinding.getName());
-//            funFact.setText(newFinding.getFunFact());
-//            experiment.setText(newFinding.getExperiment());
-//            Glide.with(this).load(newFinding.getImage().getUrl()).into(image);
-//
-//        }
-//        catch(Exception e)
-//        {
-//            e.printStackTrace();
-//
-//        }
-//        setContentView(R.layout.activity_detail);
-
-//        tvName = findViewById(R.id.tvFoundName);
-//        tvDescription = findViewById(R.id.tvDescription);
-//        tvExperiment = findViewById(R.id.tvFoundExperiment);
-//        tvName.setText(finding.getUser().getUsername());
-//        tvDescription.setText(finding.getDescription());
-//        tvExperiment.setText(finding.getExperiment());
-
     }
 }

@@ -28,7 +28,6 @@
             android:layout_marginBottom="8dp"
             android:clickable="true"
  />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

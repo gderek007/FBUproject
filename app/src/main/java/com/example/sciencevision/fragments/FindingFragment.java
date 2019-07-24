@@ -271,7 +271,6 @@ public class FindingFragment extends Fragment {
 
         }
 
-
         public Set<String> getDataFromGoogle(String query) {
             String foundExperimentUrl = "";
             String foundFunFact;
