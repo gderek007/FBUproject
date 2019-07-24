@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
@@ -32,6 +33,7 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvUserFindings;
     private FindingsAdapter adapter;
     private ArrayList<Findings> findings;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,9 +59,18 @@ public class ProfileFragment extends Fragment {
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
-        rvUserFindings.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvUserFindings.setLayoutManager(linearLayoutManager);
         rvUserFindings.setAdapter(adapter);
-
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadMore();
+            }
+        };
+        rvUserFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
     }
 
@@ -81,6 +92,33 @@ public class ProfileFragment extends Fragment {
                         for (int i = 0; i < objects.size(); i++) {
                             findings.add(0, objects.get(i));
                             rvUserFindings.scrollToPosition(0);
+                        }
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void loadMore() {
+        Findings.Query findingsQuery = new Findings.Query();
+        findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
+        findingsQuery.findInBackground(new FindCallback<Findings>() {
+            @Override
+            public void done(List<Findings> objects, ParseException e) {
+                //adapter.clear();
+                if (e == null) {
+                    //brute force method to get top 20 posts
+                    if (objects.size() > 20 + findings.size()) {
+                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - 20; i++) {
+                            findings.add(findings.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
+                        }
+                    } else {
+                        for (int i = 0; i < objects.size(); i++) {
+                            findings.add(findings.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
                         }
                     }
                 } else {
