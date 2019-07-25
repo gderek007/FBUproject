@@ -1,10 +1,14 @@
 package com.example.sciencevision.Models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -93,6 +97,27 @@ public class Findings extends ParseObject {
         whereEqualTo("User",user);
             return this;
     }
+    }
+
+    public static Findings createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment) {
+        final Findings newFinding = new Findings();
+        newFinding.setUser(User);
+        newFinding.setName(ItemName);
+        newFinding.setDescription(ItemDescription);
+        newFinding.setFunFact(FunFact);
+        newFinding.setImage(ItemImage);
+        newFinding.setExperiment(Experiment);
+        newFinding.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("createFinding", "New Finding Success");
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return newFinding;
     }
 }
 
