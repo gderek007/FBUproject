@@ -1,5 +1,6 @@
 package com.example.sciencevision.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.camerakit.CameraKitView;
 
+import com.example.sciencevision.DetailActivity;
+import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,6 +33,7 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -111,7 +115,7 @@ public class FindingFragment extends Fragment {
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
                 @Override
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
-                    File savedPhoto = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
+                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
                     try {
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
 
@@ -131,21 +135,26 @@ public class FindingFragment extends Fragment {
                                         // This function sets the text of the TextView given as the parameter
                                         // to be the definition of the object in the image.
                                         Toast.makeText(getContext(), labels.get(0).getText(), LENGTH_SHORT).show();
-                                        String query = labels.get(0).getText();
+                                        final String query = labels.get(0).getText();
 
                                         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
-                                        ListenableFuture<String> getDataFromGoogle = service.submit(searchClient.getDataFromGoogle(query));
+                                        ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
+                                        ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
 
                                         List<ListenableFuture<String>> networkCalls = new ArrayList<>();
                                         networkCalls.add(getWiki);
-                                        networkCalls.add(getDataFromGoogle);
+                                        networkCalls.add(getExperiments);
+                                        networkCalls.add(getFunFacts);
 
                                         ListenableFuture<List<String>> successfulNetworkCalls = Futures.successfulAsList(networkCalls);
                                         Futures.addCallback(successfulNetworkCalls, new FutureCallback<List<String>>() {
                                             @Override
                                             public void onSuccess(@NullableDecl List<String> result) {
                                                 Log.d("FINAL", result.toString());
-                                                // TODO: Intent to detail view.
+                                                String description = result.get(0);
+                                                String experiments = result.get(1);
+                                                String funFacts = result.get(2);
+                                                Findings newFinding = Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
                                             }
                                             @Override
                                             public void onFailure(Throwable t) {
