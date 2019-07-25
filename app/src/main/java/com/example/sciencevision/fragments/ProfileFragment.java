@@ -1,10 +1,13 @@
 package com.example.sciencevision.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
+import com.example.sciencevision.LaunchActivity;
+import com.example.sciencevision.MainActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.parse.FindCallback;
@@ -29,6 +34,7 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
     private ParseUser User;
     private TextView tvUser;
+    private ImageButton btnLogout;
     private ImageView ivProfile;
     private RecyclerView rvUserFindings;
     private FindingsAdapter adapter;
@@ -56,6 +62,7 @@ public class ProfileFragment extends Fragment {
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
         tvUser.setText(User.getUsername());
+        btnLogout = view.findViewById(R.id.btnLogout);
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
@@ -70,6 +77,14 @@ public class ProfileFragment extends Fragment {
                 loadMore();
             }
         };
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Intent intent = new Intent(getContext(), LaunchActivity.class);
+                startActivity(intent);
+            }
+        });
         rvUserFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
     }
