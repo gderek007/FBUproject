@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.sciencevision.fragments.FindingFragment;
+import com.example.sciencevision.fragments.FindingFragment2;
 import com.example.sciencevision.fragments.ProfileFragment;
 import com.example.sciencevision.fragments.SocialFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
                         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-//                        fragment.getView().setBackgroundColor(Color.DKGRAY);
 
 
                         return true;
