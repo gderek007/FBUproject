@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
                         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-
-
                         return true;
                     }
                 });

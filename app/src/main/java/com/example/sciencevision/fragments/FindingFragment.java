@@ -1,69 +1,43 @@
 package com.example.sciencevision.fragments;
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import com.camerakit.CameraKitView;
 
-import com.example.sciencevision.DetailActivity;
-import com.example.sciencevision.LaunchActivity;
-import com.example.sciencevision.MainActivity;
-import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Comment;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
-
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
-import android.os.AsyncTask;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
 
 /**
@@ -72,24 +46,18 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class FindingFragment extends Fragment {
 
     private static final String TAG = FindingFragment.class.getSimpleName();
-
-    private Button btnTakePicture;
-    private ImageView ivPostImage;
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
+    private String photoFileName = "photo.jpg";
     private File photoFile;
     private TextView tvDescription;
-    SearchClient searchClient;
-    public ParseUser User = ParseUser.getCurrentUser();
-    String foundExperimentUrl;
-    String firstLabel;
-    Findings f;
-
+    private SearchClient searchClient;
+    private ParseUser currUser;
+    private ListeningExecutorService service;
+    private CameraKitView cameraKitView;
+    private Button btnCapture;
 
     public FindingFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,318 +67,195 @@ public class FindingFragment extends Fragment {
 
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnTakePicture = view.findViewById(R.id.btnTakePicture);
-        ivPostImage = view.findViewById(R.id.ivPostImage);
-        tvDescription = view.findViewById(R.id.tvDescription);
+        cameraKitView = view.findViewById(R.id.camera);
+        btnCapture= view.findViewById(R.id.btnCapture);
         searchClient = new SearchClient();
-        btnTakePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchCamera();
-            }
-        });
+        currUser = ParseUser.getCurrentUser();
+        service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
+        btnCapture.setOnClickListener(photoOnClickListener);
 
-
-    }
-
-    private void launchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference to access to future access
-        photoFile = getPhotoFileUri(photoFileName);
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.example.sciencevision", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(TAG, "failed to create directory");
-        }
-
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-        return file;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // by this point we have the camera photo on disk
-                //Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                final Bitmap rotatedImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
-                ivPostImage.setImageBitmap(rotatedImage);
-                FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(rotatedImage);
-
-                // CLOUD : THIS COST MONEY DONT BE DUMB
-//                FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
-
-                // ON-DEVICE : THIS IS FREE, USE A LOT
-                FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
-
-
-                labeler.processImage(firebaseVisionImage)
-                        .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
-                            @Override
-                            public void onSuccess(List<FirebaseVisionImageLabel> labels) {
-                                // Task completed successfully
-                                // This function sets the text of the TextView given as the parameter
-                                // to be the definition of the object in the image.
-                                firstLabel = labels.get(0).getText();
-                                JsoupExperimentTask j = new JsoupExperimentTask();
-                                j.execute(firstLabel);
-
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                e.printStackTrace();
-                                Log.d("FindingFragment", e.toString());
-                            }
-                        });
-
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", LENGTH_SHORT).show();
-            }
-        }
+    public void onStart() {
+        super.onStart();
+        cameraKitView.onStart();
     }
-
-    //Adds a new Finding to the database
-    public void createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment) {
-        final Findings newfinding = new Findings();
-        newfinding.setUser(User);
-        newfinding.setName(ItemName);
-        newfinding.setDescription(ItemDescription);
-        newfinding.setFunFact(FunFact);
-        newfinding.setImage(ItemImage);
-        newfinding.setExperiment(Experiment);
-        newfinding.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("createFinding", "New Finding Success");
-                    f = newfinding;
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        cameraKitView.onResume();
     }
-
-
-    public Bitmap rotateBitmapOrientation(String photoFilePath) {
-        // Create and configure BitmapFactory
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(photoFilePath, bounds);
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
-        // Read EXIF Data
-        ExifInterface exif = null;
-        try {
-            exif = new ExifInterface(photoFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
-        int rotationAngle = 0;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
-        // Rotate Bitmap
-        Matrix matrix = new Matrix();
-        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
-        // Return result
-        return rotatedBitmap;
+    @Override
+    public void onPause() {
+        cameraKitView.onPause();
+        super.onPause();
     }
+    @Override
+    public void onStop() {
+        cameraKitView.onStop();
+        super.onStop();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    private class JsoupExperimentTask extends AsyncTask<String, Void, Set<String>> {
-
-
+    }
+    private View.OnClickListener photoOnClickListener = new View.OnClickListener() {
         @Override
-        protected Set<String> doInBackground(String... params) {
-            return getDataFromGoogle(params[0]);
+        public void onClick(View v) {
+            cameraKitView.captureImage(new CameraKitView.ImageCallback() {
+                @Override
+                public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
+                    File savedPhoto = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
+
+                        outputStream.write(capturedImage);
+                        //Converts Photofile to Bitmap for Firebase
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(capturedImage, 0, capturedImage.length);
+                        // CLOUD : THIS COST MONEY DONT BE DUMB
+                        // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
+                        // ON-DEVICE : THIS IS FREE, USE A LOT
+                        FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
+                        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+                        labeler.processImage(firebaseVisionImage)
+                                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+                                    @Override
+                                    public void onSuccess(List<FirebaseVisionImageLabel> labels) {
+                                        // Task completed successfully
+                                        // This function sets the text of the TextView given as the parameter
+                                        // to be the definition of the object in the image.
+                                        Toast.makeText(getContext(), labels.get(0).getText(), LENGTH_SHORT).show();
+                                        String query = labels.get(0).getText();
+
+                                        ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
+                                        ListenableFuture<String> getDataFromGoogle = service.submit(searchClient.getDataFromGoogle(query));
+
+                                        List<ListenableFuture<String>> networkCalls = new ArrayList<>();
+                                        networkCalls.add(getWiki);
+                                        networkCalls.add(getDataFromGoogle);
+
+                                        ListenableFuture<List<String>> successfulNetworkCalls = Futures.successfulAsList(networkCalls);
+                                        Futures.addCallback(successfulNetworkCalls, new FutureCallback<List<String>>() {
+                                            @Override
+                                            public void onSuccess(@NullableDecl List<String> result) {
+                                                Log.d("FINAL", result.toString());
+                                                // TODO: Intent to detail view.
+                                            }
+                                            @Override
+                                            public void onFailure(Throwable t) {
+
+                                            }
+                                        }, service);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        e.printStackTrace();
+                                        Log.d(TAG, e.toString());
+                                    }
+                                });
+                        outputStream.close();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                        Log.e("Photo","Error");
+                    }
+                }
+            });
         }
+    };
 
-        protected void onPostExecute(Set<String> results) {
-
-//            while (f == null) {
-//                //System.out.println("Nothing yet");
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        btnTakePicture = view.findViewById(R.id.btnTakePicture);
+//        ivPostImage = view.findViewById(R.id.ivPostImage);
+//        tvDescription = view.findViewById(R.id.tvDescription);
+//        searchClient = new SearchClient();
+//        currUser = ParseUser.getCurrentUser();
+//        service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
+//        btnTakePicture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                launchCamera();
 //            }
-//            Intent i = new Intent(getContext(), DetailActivity.class);
-////            i.putExtra(Findings.class.getSimpleName(), f);
-//            getContext().startActivity(i);
-
-        }
-
-        public Set<String> getDataFromGoogle(String query) {
-            String foundExperimentUrl = "";
-            String foundFunFact;
-            Set<String> result = new HashSet<String>();
-            String request = "https://www.google.com/search?q=kids+science+experiments+" + query + "&num=20";
-            System.out.println("Sending request..." + request);
-
-            try {
-                // need http protocol, set this as a Google bot agent :)
-                Document doc = Jsoup
-                        .connect(request)
-                        .ignoreHttpErrors(true)
-                        .userAgent(
-                                "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-                        .timeout(5000).get();
-                //System.out.println(doc.toString());
-                //getHtmlComments(doc);
-                Elements snippets = doc.select("li");
-                for (Element snippet : snippets) {
-
-                    System.out.println(snippet.toString());
-                }
-
-                // get all links
-
-                Elements links = doc.select("a[href]");
-                for (Element link : links) {
-
-                    String temp = link.attr("href");
-                    if (temp.startsWith("/url?q=")) {
-                        //use regex to get domain name
-                        result.add(temp);
-                        foundExperimentUrl = temp;
-                        break;
-                    }
-                }
-                System.out.println(foundExperimentUrl);
-                for (String s : result) {
-                    Log.d(ProfileFragment.class.getSimpleName(), s);
-                    //foundExperimentUrl = foundExperimentUrl + s;
-                    //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
-                    //tvText.setText(tvText.getText() + s);
-                }
-
-                //searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        public void getHtmlComments(Node node) {
-            for (int i = 0; i < node.childNodeSize(); i++) {
-                Node child = node.childNode(i);
-                if (child.nodeName().equals("#comment")) {
-                    Comment comment = (Comment) child;
-                    //child.after(comment.getData());
-                    //if (comment.getData().equals("<!--m-->")) {
-                    //System.out.println(comment.);
-
-                } else {
-                    getHtmlComments(child);
-                }
-            }
-        }
-    }
-
-    /*private class JsoupFactTask extends AsyncTask<String, Void, Set<String>> {
+//        });
+//
+//
+//    }
+//
+//    private void launchCamera() {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        photoFile = CameraHelper.getPhotoFileUri(photoFileName, getContext(), TAG);
+//        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.example.sciencevision", photoFile);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+//
+//        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+//            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//        }
+//    }
+//
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                final Bitmap rotatedImage = CameraHelper.rotateBitmapOrientation(photoFile.getAbsolutePath());
+//                ivPostImage.setImageBitmap(rotatedImage);
+//
+//
+//                FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(rotatedImage);
+//                // CLOUD : THIS COST MONEY DONT BE DUMB
+//                // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
+//                // ON-DEVICE : THIS IS FREE, USE A LOT
+//                FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+//                labeler.processImage(firebaseVisionImage)
+//                        .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+//                            @Override
+//                            public void onSuccess(List<FirebaseVisionImageLabel> labels) {
+//                                String query = labels.get(0).getText();
+//
+//                                ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
+//                                ListenableFuture<String> getDataFromGoogle = service.submit(searchClient.getDataFromGoogle(query));
+//
+//                                List<ListenableFuture<String>> networkCalls = new ArrayList<>();
+//                                networkCalls.add(getWiki);
+//                                networkCalls.add(getDataFromGoogle);
+//
+//                                ListenableFuture<List<String>> successfulNetworkCalls = Futures.successfulAsList(networkCalls);
+//                                Futures.addCallback(successfulNetworkCalls, new FutureCallback<List<String>>() {
+//                                    @Override
+//                                    public void onSuccess(@NullableDecl List<String> result) {
+//                                        Log.d("FINAL", result.toString());
+//                                        // TODO: Intent to detail view.
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Throwable t) {
+//
+//                                    }
+//                                }, service);
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                e.printStackTrace();
+//                                Log.d("FindingFragment", e.toString());
+//                            }
+//                        });
+//
+//            } else {
+//                Toast.makeText(getContext(), "Picture wasn't taken!", LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 
-        @Override
-        protected Set<String> doInBackground(String... params) {
-            return getDataFromGoogle(params[0]);
-        }
-
-        protected void onPostExecute(Set<String> results) {
-
-        }
-
-
-        public Set<String> getDataFromGoogle(String query) {
-            String foundExperimentUrl = "";
-            String foundFunFact;
-            Set<String> result = new HashSet<String>();
-            String request = "https://www.google.com/search?q=" + query + "+fun+facts&num=20";
-            System.out.println("Sending request..." + request);
-
-            try {
-                // need http protocol, set this as a Google bot agent :)
-                Document doc = Jsoup
-                        .connect(request)
-                        .ignoreHttpErrors(true)
-                        .userAgent(
-                                "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-                        .timeout(5000).get();
-                //System.out.println(doc.toString());
-                //getHtmlComments(doc);
-                Elements snippets = doc.select("li");
-                for (Element snippet : snippets) {
-
-                    String temp = link.attr("href");
-                    if (temp.startsWith("/url?q=")) {
-                        //use regex to get domain name
-                        result.add(temp);
-                        foundExperimentUrl = temp;
-                        break;
-                    }
-                }
-                System.out.println(foundExperimentUrl);
-                for (String s : result) {
-                    Log.d(ProfileFragment.class.getSimpleName(), s);
-                    //foundExperimentUrl = foundExperimentUrl + s;
-                    //TextView tvText = (TextView) getView().findViewById(R.id.tvText);
-                    //tvText.setText(tvText.getText() + s);
-                }
-
-                //searchClient.getWiki(User, firstLabel, "FunFact", new ParseFile(photoFile), foundExperimentUrl, tvDescription);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        public void getHtmlComments(Node node) {
-            for (int i = 0; i < node.childNodeSize(); i++) {
-                Node child = node.childNode(i);
-                if (child.nodeName().equals("#comment")) {
-                    Comment comment = (Comment) child;
-                    //child.after(comment.getData());
-                    //if (comment.getData().equals("<!--m-->")) {
-                    //System.out.println(comment.);
-
-                } else {
-                    getHtmlComments(child);
-                }
-            }
-        }
-    }*/
 }

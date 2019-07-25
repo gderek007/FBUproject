@@ -1,22 +1,14 @@
 package com.example.sciencevision.fragments;
 
 
-import android.content.Context;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.SurfaceTexture;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.params.StreamConfigurationMap;
 
 import android.os.Bundle;
 
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,7 +52,7 @@ public class FindingFragment2 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_finding2, container, false);
+        return inflater.inflate(R.layout.fragment_finding, container, false);
 
     }
 
@@ -111,7 +103,11 @@ public class FindingFragment2 extends Fragment {
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
 
                         outputStream.write(capturedImage);
+                        //Converts Photofile to Bitmap for Firebase
                         Bitmap bitmap = BitmapFactory.decodeByteArray(capturedImage, 0, capturedImage.length);
+                        // CLOUD : THIS COST MONEY DONT BE DUMB
+                        // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
+                        // ON-DEVICE : THIS IS FREE, USE A LOT
                         FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
                         FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
                         labeler.processImage(firebaseVisionImage)
@@ -122,8 +118,6 @@ public class FindingFragment2 extends Fragment {
                                         // This function sets the text of the TextView given as the parameter
                                         // to be the definition of the object in the image.
                                         Toast.makeText(getContext(), labels.get(0).getText(), LENGTH_SHORT).show();
-                                        Log.d("Machine Learning",labels.get(0).getText());
-
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -133,7 +127,6 @@ public class FindingFragment2 extends Fragment {
                                         Log.d("FindingFragment", e.toString());
                                     }
                                 });
-
                         outputStream.close();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
