@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -65,7 +66,8 @@ dependencies {
     implementation "androidx.concurrent:concurrent-listenablefuture-callback:$futures_version"
     // Guava
     api 'com.google.guava:guava:28.0-android'
-    // new stuff
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
 
 
 }
