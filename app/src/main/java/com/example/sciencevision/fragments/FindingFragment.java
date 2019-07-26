@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.camerakit.CameraKitView;
 
 import com.example.sciencevision.DetailActivity;
-import com.example.sciencevision.Models.Finding;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -170,7 +169,6 @@ public class FindingFragment extends Fragment {
                                                 String description = result.get(0);
                                                 String experiments = result.get(1);
                                                 String funFacts = result.get(2);
-<<<<<<< HEAD
                                                 Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
                                                 Findings newFinding = new Findings();
                                                 newFinding.setDescription(description);

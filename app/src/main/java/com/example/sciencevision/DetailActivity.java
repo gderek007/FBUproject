@@ -27,16 +27,21 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        name=findViewById(R.id.tvName);
-        funFact=findViewById(R.id.tvFunFact);
-        description=findViewById(R.id.tvDescription);
-        experiment=findViewById(R.id.tvExperiment);
+        name = findViewById(R.id.tvName);
+        funFact = findViewById(R.id.tvFunFact);
+        description = findViewById(R.id.tvDescription);
+        experiment = findViewById(R.id.tvExperiment);
         image = findViewById(R.id.ivImage);
         Intent intent = getIntent();
         final Findings[] newFinding = new Findings[1];
         try {
             newFinding[0] = (Findings) (intent.getExtras().get("User"));
-        } catch(Exception e) {
+            name.setText(newFinding[0].getName());
+            description.setText(newFinding[0].getDescription());
+            funFact.setText(newFinding[0].getFunFact());
+            experiment.setText(newFinding[0].getExperiment());
+            Glide.with(this).load(newFinding[0].getImage().getUrl()).into(image);
+        } catch (Exception e) {
             Findings.Query findingsQuery = new Findings.Query();
             findingsQuery = findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
             findingsQuery.findInBackground(new FindCallback<Findings>() {
@@ -44,6 +49,11 @@ public class DetailActivity extends AppCompatActivity {
                 public void done(List<Findings> objects, ParseException e) {
                     if (e == null) {
                         newFinding[0] = objects.get(objects.size() - 1);
+                        name.setText(newFinding[0].getName());
+                        description.setText(newFinding[0].getDescription());
+                        funFact.setText(newFinding[0].getFunFact());
+                        experiment.setText(newFinding[0].getExperiment());
+                        Glide.with(getApplicationContext()).load(newFinding[0].getImage().getUrl()).into(image);
                     } else {
                         e.printStackTrace();
                     }
@@ -51,11 +61,7 @@ public class DetailActivity extends AppCompatActivity {
             });
         }
 
-        name.setText(newFinding[0].getName());
-        description.setText(newFinding[0].getDescription());
-        funFact.setText(newFinding[0].getFunFact());
-        experiment.setText(newFinding[0].getExperiment());
-        Glide.with(this).load(newFinding[0].getImage().getUrl()).into(image);
+
 
     }
 }
