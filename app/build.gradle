@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "com.example.sciencevision"
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -68,7 +68,7 @@ dependencies {
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
     // Camera io
-    implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
+    implementation 'com.camerakit:camerakit:1.0.0-beta3.10'
     implementation 'com.camerakit:jpegkit:0.1.0'
     //Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.0'

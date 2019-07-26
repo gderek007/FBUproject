@@ -3,6 +3,7 @@ package com.example.sciencevision.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -16,9 +17,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.camerakit.CameraKitView;
 
 import com.example.sciencevision.DetailActivity;
+import com.example.sciencevision.Models.Finding;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -38,6 +42,7 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -71,6 +76,7 @@ public class FindingFragment extends Fragment {
 
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,6 +86,12 @@ public class FindingFragment extends Fragment {
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
         btnCapture.setOnClickListener(photoOnClickListener);
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
 
@@ -103,23 +115,26 @@ public class FindingFragment extends Fragment {
         cameraKitView.onStop();
         super.onStop();
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    }
     private View.OnClickListener photoOnClickListener = new View.OnClickListener() {
+
         @Override
+
         public void onClick(View v) {
+            Log.d("onClick", "Button Pressed");
+
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
+
                 @Override
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
+                    Log.d("onClick", "enters camera click");
                     final File savedPhoto = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
                     try {
+                        Log.d("onClick", "Photo taken");
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
 
                         outputStream.write(capturedImage);
+                        onStop();
                         //Converts Photofile to Bitmap for Firebase
                         Bitmap bitmap = BitmapFactory.decodeByteArray(capturedImage, 0, capturedImage.length);
                         // CLOUD : THIS COST MONEY DONT BE DUMB
@@ -155,6 +170,7 @@ public class FindingFragment extends Fragment {
                                                 String experiments = result.get(1);
                                                 String funFacts = result.get(2);
                                                 Findings newFinding = Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
+
                                             }
                                             @Override
                                             public void onFailure(Throwable t) {
