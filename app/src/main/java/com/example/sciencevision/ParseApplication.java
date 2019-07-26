@@ -36,7 +36,9 @@ public class ParseApplication extends Application {
                 .applicationId("myScienceVision") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("https://fbu-science-vision.herokuapp.com/parse").build());
+                .server("https://fbu-science-vision.herokuapp.com/parse")
+                .build());
+
 
 
 

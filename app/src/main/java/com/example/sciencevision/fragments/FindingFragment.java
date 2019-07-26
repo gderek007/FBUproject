@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+import org.parceler.Parcels;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -154,7 +155,16 @@ public class FindingFragment extends Fragment {
                                                 String description = result.get(0);
                                                 String experiments = result.get(1);
                                                 String funFacts = result.get(2);
-                                                Findings newFinding = Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
+                                                Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
+                                                Findings newFinding = new Findings();
+                                                newFinding.setDescription(description);
+                                                newFinding.setExperiment(experiments);
+                                                newFinding.setName(query);
+                                                newFinding.setImage(new ParseFile(savedPhoto));
+                                                newFinding.setFunFact(funFacts);
+                                                newFinding.setUser(ParseUser.getCurrentUser());
+                                                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                                                getActivity().startActivity(intent);
                                             }
                                             @Override
                                             public void onFailure(Throwable t) {
