@@ -3,10 +3,13 @@ package com.example.sciencevision.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +35,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
+    private EditText etSearch;
     private ParseUser User;
     private TextView tvUser;
     private ImageButton btnLogout;
@@ -58,6 +62,7 @@ public class ProfileFragment extends Fragment {
         User = ParseUser.getCurrentUser();
 
         tvUser = view.findViewById(R.id.tvUser);
+        etSearch = view.findViewById(R.id.etSearch);
         ivProfile = view.findViewById(R.id.ivProfile);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
@@ -69,6 +74,26 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserFindings.setLayoutManager(linearLayoutManager);
         rvUserFindings.setAdapter(adapter);
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString() == "") {
+                    filter(s.toString());
+                }
+            }
+        });
+
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -96,7 +121,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 adapter.clear();
+                Log.d("Profile", "getting objects1");
                 if (e == null) {
+                    Log.d("Profile", "getting objects2");
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
                         for (int i = objects.size() - 20; i < objects.size(); i++) {
@@ -141,6 +168,18 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+    //filter that performs basic search call
+    private void filter(String text) {
+        ArrayList<Findings> filteredList = new ArrayList<>();
+
+        for (Findings item : findings) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
     }
 
 

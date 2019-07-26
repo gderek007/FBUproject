@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
@@ -27,12 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SocialFragment extends Fragment {
+    private EditText etSearch;
     private ParseUser User;
     private String tvDescription;
     private ParseFile ivImage;
     private RecyclerView rvFindings;
     private FindingsAdapter adapter;
-    private ArrayList<Findings> arrayFinding;
+    private ArrayList<Findings> findings;
     private SwipeRefreshLayout swipeContainer;
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -50,12 +54,13 @@ public class SocialFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         User = ParseUser.getCurrentUser();
-        arrayFinding = new ArrayList<>();
+        findings = new ArrayList<>();
 
+        etSearch = view.findViewById(R.id.etSearch);
         swipeContainer = view.findViewById(R.id.swipeContainer);
         rvFindings = view.findViewById(R.id.rvFindings);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        adapter = new FindingsAdapter(arrayFinding);
+        adapter = new FindingsAdapter(findings);
         rvFindings.setLayoutManager(linearLayoutManager);
         rvFindings.setAdapter(adapter);
 
@@ -74,9 +79,28 @@ public class SocialFragment extends Fragment {
                 loadMore();
             }
         };
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString() == "") {
+                    filter(s.toString());
+                }
+            }
+        });
         rvFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
     }
+
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
@@ -91,13 +115,13 @@ public class SocialFragment extends Fragment {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
                         for (int i = objects.size() - 20; i < objects.size(); i++) {
-                            arrayFinding.add(0, objects.get(i));
+                            findings.add(0, objects.get(i));
                             adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
                         }
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
-                            arrayFinding.add(0, objects.get(i));
+                            findings.add(0, objects.get(i));
                             adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
                         }
@@ -119,15 +143,15 @@ public class SocialFragment extends Fragment {
                 //adapter.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
-                    if (objects.size() > 20 + arrayFinding.size()) {
-                        for (int i = objects.size() - 20 - arrayFinding.size(); i < objects.size() - 20; i++) {
-                            arrayFinding.add(arrayFinding.size() - 1, objects.get(i));
-                            adapter.notifyItemInserted(arrayFinding.size() - 1);
+                    if (objects.size() > 20 + findings.size()) {
+                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - 20; i++) {
+                            findings.add(findings.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
                         }
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
-                            arrayFinding.add(arrayFinding.size() - 1, objects.get(i));
-                            adapter.notifyItemInserted(arrayFinding.size() - 1);
+                            findings.add(findings.size() - 1, objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
                         }
                     }
                     swipeContainer.setRefreshing(false);
@@ -136,6 +160,16 @@ public class SocialFragment extends Fragment {
                 }
             }
         });
+    }
+    //filter that performs basic search call
+    private void filter(String text) {
+        ArrayList<Findings> filteredList = new ArrayList<>();
+        for (Findings item : findings) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
     }
 
 

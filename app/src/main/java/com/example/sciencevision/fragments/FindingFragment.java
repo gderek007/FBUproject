@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,8 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.camerakit.CameraKitView;
 
-import com.example.sciencevision.DetailActivity;
-import com.example.sciencevision.Models.Finding;
+
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -39,12 +39,13 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -81,13 +82,14 @@ public class FindingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         cameraKitView = view.findViewById(R.id.camera);
-        btnCapture= view.findViewById(R.id.btnCapture);
+        btnCapture = view.findViewById(R.id.btnCapture);
         searchClient = new SearchClient();
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
         btnCapture.setOnClickListener(photoOnClickListener);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -100,16 +102,19 @@ public class FindingFragment extends Fragment {
         super.onStart();
         cameraKitView.onStart();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         cameraKitView.onResume();
     }
+
     @Override
     public void onPause() {
         cameraKitView.onPause();
         super.onPause();
     }
+
     @Override
     public void onStop() {
         cameraKitView.onStop();
@@ -134,13 +139,14 @@ public class FindingFragment extends Fragment {
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
 
                         outputStream.write(capturedImage);
+                        //Stop the Camera to increase processing power
                         onStop();
                         //Converts Photofile to Bitmap for Firebase
                         Bitmap bitmap = BitmapFactory.decodeByteArray(capturedImage, 0, capturedImage.length);
                         // CLOUD : THIS COST MONEY DONT BE DUMB
                         // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
                         // ON-DEVICE : THIS IS FREE, USE A LOT
-                        FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
+                        FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
                         FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
                         labeler.processImage(firebaseVisionImage)
                                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
@@ -172,6 +178,7 @@ public class FindingFragment extends Fragment {
                                                 Findings newFinding = Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
 
                                             }
+
                                             @Override
                                             public void onFailure(Throwable t) {
 
@@ -189,7 +196,7 @@ public class FindingFragment extends Fragment {
                         outputStream.close();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
-                        Log.e("Photo","Error");
+                        Log.e("Photo", "Error");
                     }
                 }
             });

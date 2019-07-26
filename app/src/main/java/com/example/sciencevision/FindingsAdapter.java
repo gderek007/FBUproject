@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sciencevision.Models.Findings;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarException;
 
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
     private List<Findings> mFindings;
@@ -97,6 +95,10 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
 
     public void clear() {
         mFindings.clear();
+        notifyDataSetChanged();
+    }
+    public void filterList(ArrayList<Findings> filteredList) {
+        mFindings = filteredList;
         notifyDataSetChanged();
     }
 }
