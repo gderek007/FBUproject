@@ -32,8 +32,17 @@ public class DetailActivity extends AppCompatActivity {
         description = findViewById(R.id.tvDescription);
         experiment = findViewById(R.id.tvExperiment);
         image = findViewById(R.id.ivImage);
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         Intent intent = getIntent();
-        final Findings[] newFinding = new Findings[1];
+        final Findings newFinding[] = new Findings[1];
         try {
             newFinding[0] = (Findings) (intent.getExtras().get("User"));
             name.setText(newFinding[0].getName());
@@ -60,8 +69,5 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
     }
 }

@@ -170,13 +170,13 @@ public class FindingFragment extends Fragment {
                                                 String experiments = result.get(1);
                                                 String funFacts = result.get(2);
                                                 Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
-                                                Findings newFinding = new Findings();
+                                                /* Findings newFinding = new Findings();
                                                 newFinding.setDescription(description);
                                                 newFinding.setExperiment(experiments);
                                                 newFinding.setName(query);
                                                 newFinding.setImage(new ParseFile(savedPhoto));
                                                 newFinding.setFunFact(funFacts);
-                                                newFinding.setUser(ParseUser.getCurrentUser());
+                                                newFinding.setUser(ParseUser.getCurrentUser()); */
                                                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                                                 getActivity().startActivity(intent);
                                             }
