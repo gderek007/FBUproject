@@ -13,6 +13,7 @@ import com.parse.SaveCallback;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 @ParseClassName("Findings")
 public class Findings extends ParseObject {
@@ -99,25 +100,35 @@ public class Findings extends ParseObject {
     }
     }
 
-    public static Findings createFinding(ParseUser User, String ItemName, String ItemDescription, String FunFact, ParseFile ItemImage, String Experiment) {
-        final Findings newFinding = new Findings();
-        newFinding.setUser(User);
-        newFinding.setName(ItemName);
-        newFinding.setDescription(ItemDescription);
-        newFinding.setFunFact(FunFact);
-        newFinding.setImage(ItemImage);
-        newFinding.setExperiment(Experiment);
-        newFinding.saveInBackground(new SaveCallback() {
+    public static Callable<Findings> createFinding(final ParseUser User, final String ItemName, final String ItemDescription, final String FunFact, final ParseFile ItemImage, final String Experiment) {
+        return new Callable<Findings>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("createFinding", "New Finding Success");
-                } else {
-                    e.printStackTrace();
-                }
+            public Findings call() throws Exception {
+                final Findings newFinding = new Findings();
+                newFinding.setUser(User);
+                newFinding.setName(ItemName);
+                newFinding.setDescription(ItemDescription);
+                newFinding.setFunFact(FunFact);
+                newFinding.setImage(ItemImage);
+                newFinding.setExperiment(Experiment);
+                newFinding.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("createFinding", "New Finding Success");
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return newFinding;
             }
-        });
-        return newFinding;
+        };
+    }
+
+    @Override
+    public String toString(){
+        return getName() + "|" + getUser() + "|" + getDescription();
     }
 }
 
