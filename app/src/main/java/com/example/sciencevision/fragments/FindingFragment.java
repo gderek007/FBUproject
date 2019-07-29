@@ -174,7 +174,6 @@ public class FindingFragment extends Fragment {
                                                     @Override
                                                     public void onSuccess(@NullableDecl Findings result) {
                                                         Intent intent = new Intent(getActivity(), DetailActivity.class);
-                                                        intent.putExtra("User", result);
                                                         getActivity().startActivity(intent);
                                                     }
 
