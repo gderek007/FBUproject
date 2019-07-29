@@ -56,8 +56,15 @@ public class SearchClient {
                 br.close();
                 String jsonString = sb.toString();
                 JSONObject response = new JSONObject(jsonString);
+
                 String firstSentence = clipSentenceFromJSON(response);
-                Log.d("Search Client", searchLabel + ": " + firstSentence);
+
+                if (firstSentence == null) {
+                    firstSentence = "No description found.";
+                    Log.d("Search Client", searchLabel + ": " + firstSentence);
+                } else {
+                    Log.d("Search Client", searchLabel + ": " + firstSentence);
+                }
                 return firstSentence;
             }
         };

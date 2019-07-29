@@ -32,10 +32,6 @@ public class DetailActivity extends AppCompatActivity {
         description = findViewById(R.id.tvDescription);
         experiment = findViewById(R.id.tvExperiment);
         image = findViewById(R.id.ivImage);
-
-
-
-
     }
 
     @Override
@@ -69,5 +65,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         }
+
+
     }
 }
