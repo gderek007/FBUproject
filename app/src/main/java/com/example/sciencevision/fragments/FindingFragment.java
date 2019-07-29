@@ -81,7 +81,7 @@ public class FindingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         cameraKitView = view.findViewById(R.id.camera);
-        btnCapture= view.findViewById(R.id.btnCapture);
+        btnCapture = view.findViewById(R.id.btnCapture);
         searchClient = new SearchClient();
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
@@ -140,7 +140,7 @@ public class FindingFragment extends Fragment {
                         // CLOUD : THIS COST MONEY DONT BE DUMB
                         // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
                         // ON-DEVICE : THIS IS FREE, USE A LOT
-                        FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
+                        FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
                         FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
                         labeler.processImage(firebaseVisionImage)
                                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
@@ -169,17 +169,24 @@ public class FindingFragment extends Fragment {
                                                 String description = result.get(0);
                                                 String experiments = result.get(1);
                                                 String funFacts = result.get(2);
-                                                Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments);
-                                                /* Findings newFinding = new Findings();
-                                                newFinding.setDescription(description);
-                                                newFinding.setExperiment(experiments);
-                                                newFinding.setName(query);
-                                                newFinding.setImage(new ParseFile(savedPhoto));
-                                                newFinding.setFunFact(funFacts);
-                                                newFinding.setUser(ParseUser.getCurrentUser()); */
-                                                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                                                getActivity().startActivity(intent);
+                                                ListenableFuture<Findings> saveFindingToDatabase = service.submit(Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments));
+                                              Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
+                                                    @Override
+                                                    public void onSuccess(@NullableDecl Findings result) {
+                                                        Intent intent = new Intent(getActivity(), DetailActivity.class);
+                                                        intent.putExtra("User", result);
+                                                        getActivity().startActivity(intent);
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Throwable t) {
+                                                        Log.d("FindingFragment", "Failed to save Finding");
+                                                        t.printStackTrace();
+                                                    }
+                                                }, service);
+
                                             }
+
                                             @Override
                                             public void onFailure(Throwable t) {
 
@@ -197,7 +204,7 @@ public class FindingFragment extends Fragment {
                         outputStream.close();
                     } catch (java.io.IOException e) {
                         e.printStackTrace();
-                        Log.e("Photo","Error");
+                        Log.e("Photo", "Error");
                     }
                 }
             });

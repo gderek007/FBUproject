@@ -56,8 +56,15 @@ public class SearchClient {
                 br.close();
                 String jsonString = sb.toString();
                 JSONObject response = new JSONObject(jsonString);
+
                 String firstSentence = clipSentenceFromJSON(response);
-                Log.d("Search Client", searchLabel + ": " + firstSentence);
+
+                if (firstSentence == null) {
+                    firstSentence = "No description found.";
+                    Log.d("Search Client", searchLabel + ": " + firstSentence);
+                } else {
+                    Log.d("Search Client", searchLabel + ": " + firstSentence);
+                }
                 return firstSentence;
             }
         };
@@ -100,8 +107,14 @@ public class SearchClient {
                         String temp = link.attr("href");
                         if (temp.startsWith("/url?q=") && counter < 5) {
                             //use regex to get domain name
-                            result.add(temp);
-                            counter++;
+                            for (int i = 0; i < temp.length(); i++){
+                                if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
+                                    result.add(temp.substring(0, i));
+                                    counter++;
+                                    break;
+                                }
+                            }
+
                         }
                     }
 
