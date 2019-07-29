@@ -86,14 +86,8 @@ public class Findings extends ParseObject {
         getQuery(KEY_CREATED).orderByAscending(KEY_CREATED);
         return this;
     }
-//    public Query getUser(){
-//            whereExists("HBgEs258GT");
-//            return this;
-//    }
 
-//    public
     public Query getUser(ParseUser user){
-//            whereEqualTo(new ParseObject("User"),"3Y1xKvAj9x");
         whereEqualTo("User",user);
             return this;
     }

@@ -11,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,6 +112,7 @@ public class SocialFragment extends Fragment {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 adapter.clear();
+                Log.d("Posts", Integer.toString(objects.size()));
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
