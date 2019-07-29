@@ -100,8 +100,14 @@ public class SearchClient {
                         String temp = link.attr("href");
                         if (temp.startsWith("/url?q=") && counter < 5) {
                             //use regex to get domain name
-                            result.add(temp);
-                            counter++;
+                            for (int i = 0; i < temp.length(); i++){
+                                if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
+                                    result.add(temp.substring(0, i));
+                                    counter++;
+                                    break;
+                                }
+                            }
+
                         }
                     }
 
