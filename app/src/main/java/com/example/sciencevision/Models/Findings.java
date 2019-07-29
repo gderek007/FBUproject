@@ -80,7 +80,7 @@ public class Findings extends ParseObject {
             include(KEY_USER);
             return this; }
     public Query getRecent(){
-        getQuery(KEY_CREATED);
+        getQuery(KEY_CREATED).orderByAscending(KEY_CREATED);
         return this;
     }
     public Query getOlder(int size){

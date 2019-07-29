@@ -114,7 +114,7 @@ public class SocialFragment extends Fragment {
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
-                        for (int i = objects.size() - 20; i < objects.size(); i++) {
+                        for (int i = 0; i < 20; i++) {
                             findings.add(0, objects.get(i));
                             adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
@@ -144,12 +144,12 @@ public class SocialFragment extends Fragment {
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20 + findings.size()) {
-                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - 20; i++) {
+                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - findings.size(); i++) {
                             findings.add(findings.size() - 1, objects.get(i));
                             adapter.notifyItemInserted(findings.size() - 1);
                         }
                     } else {
-                        for (int i = 0; i < objects.size(); i++) {
+                        for (int i = 0; i < objects.size() - findings.size(); i++) {
                             findings.add(findings.size() - 1, objects.get(i));
                             adapter.notifyItemInserted(findings.size() - 1);
                         }
