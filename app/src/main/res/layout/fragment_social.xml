@@ -40,6 +40,7 @@
         android:ems="10"
         android:hint="Search Findings"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/swipeContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"

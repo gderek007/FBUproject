@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,6 +41,7 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -65,6 +69,8 @@ public class FindingFragment extends Fragment {
     private ListeningExecutorService service;
     private CameraKitView cameraKitView;
     private Button btnCapture;
+    private Switch sFirebaseToggle;
+    private boolean useCloudMLKit = false;
 
     public FindingFragment() {
         // Required empty public constructor
@@ -88,8 +94,15 @@ public class FindingFragment extends Fragment {
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
         btnCapture.setOnClickListener(photoOnClickListener);
-
+        sFirebaseToggle = view.findViewById(R.id.sFirebaseToggle);
+        sFirebaseToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                useCloudMLKit = isChecked;
+            }
+        });
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -102,16 +115,19 @@ public class FindingFragment extends Fragment {
         super.onStart();
         cameraKitView.onStart();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         cameraKitView.onResume();
     }
+
     @Override
     public void onPause() {
         cameraKitView.onPause();
         super.onPause();
     }
+
     @Override
     public void onStop() {
         cameraKitView.onStop();
@@ -139,11 +155,18 @@ public class FindingFragment extends Fragment {
                         onStop();
                         //Converts Photofile to Bitmap for Firebase
                         Bitmap bitmap = BitmapFactory.decodeByteArray(capturedImage, 0, capturedImage.length);
-                        // CLOUD : THIS COST MONEY DONT BE DUMB
-                        // FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getCloudImageLabeler();
-                        // ON-DEVICE : THIS IS FREE, USE A LOT
+
                         FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
-                        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+                        FirebaseVisionImageLabeler labeler;
+                        if (useCloudMLKit) {
+                            // CLOUD : THIS COST MONEY DONT BE DUMB
+                            labeler = FirebaseVision.getInstance().getCloudImageLabeler();
+                        } else {
+                            // ON-DEVICE : THIS IS FREE, USE A LOT
+                            labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+                        }
+
+
                         labeler.processImage(firebaseVisionImage)
                                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
                                     @Override
@@ -172,7 +195,7 @@ public class FindingFragment extends Fragment {
                                                 final String experiments = result.get(1);
                                                 final String funFacts = result.get(2);
                                                 ListenableFuture<Findings> saveFindingToDatabase = service.submit(Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments));
-                                              Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
+                                                Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
                                                     @Override
                                                     public void onSuccess(@NullableDecl Findings result) {
                                                         Intent intent = new Intent(getActivity(), DetailActivity.class);
