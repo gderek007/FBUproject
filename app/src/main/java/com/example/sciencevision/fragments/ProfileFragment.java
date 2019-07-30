@@ -90,8 +90,10 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString() == "") {
+                if (!s.toString().equals("")) {
                     filter(s.toString());
+                } else {
+                    filter("");
                 }
             }
         });
