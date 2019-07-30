@@ -108,7 +108,7 @@ public class SocialFragment extends Fragment {
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
 
-        findingsQuery.getRecent().withUser();
+        findingsQuery.withUser().orderByAscending("createdAt");
 
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
@@ -140,28 +140,27 @@ public class SocialFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getOlder(findings.size()).withUser();
+        findingsQuery.withUser().orderByDescending("createdAt").setSkip(findings.size());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 if (e == null) {
                     //brute force method to get top 20 posts
-                    int starting = findings.size() - 1;
-                    if (objects.size() - findings.size() > 20) {
-                        for (int i = objects.size() - 20 - starting; i < objects.size() - starting; i++) {
-                            findings.add(starting, objects.get(i));
-                            adapter.notifyItemInserted(starting);
+                    if (objects.size() > 20) {
+                        for (int i = objects.size() - 20; i < objects.size(); i++) {
+                            findings.add(findings.size(), objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
                         }
                     } else {
-                        for (int i = starting; i < objects.size(); i++) {
-                            findings.add(starting, objects.get(i));
-                            adapter.notifyItemInserted(starting);
+                        for (int i = 0; i < objects.size(); i++) {
+                            findings.add(findings.size(), objects.get(i));
+                            adapter.notifyItemInserted(findings.size() - 1);
                         }
                     }
-
                 } else {
                     e.printStackTrace();
                 }
+
             }
         });
     }

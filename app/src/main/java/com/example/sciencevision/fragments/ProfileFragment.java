@@ -120,23 +120,26 @@ public class ProfileFragment extends Fragment {
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery = findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
+
+        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByAscending("createdAt");
+
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 adapter.clear();
-                Log.d("Profile", "getting objects1");
+                findings.clear();
                 if (e == null) {
-                    Log.d("Profile", "getting objects2");
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
                         for (int i = objects.size() - 20; i < objects.size(); i++) {
                             findings.add(0, objects.get(i));
+                            adapter.notifyItemInserted(0);
                             rvUserFindings.scrollToPosition(0);
                         }
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
                             findings.add(0, objects.get(i));
+                            adapter.notifyItemInserted(0);
                             rvUserFindings.scrollToPosition(0);
                         }
                     }
@@ -149,27 +152,27 @@ public class ProfileFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
+        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByDescending("createdAt").setSkip(findings.size());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
-                //adapter.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
-                    if (objects.size() > 20 + findings.size()) {
-                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - 20; i++) {
-                            findings.add(findings.size() - 1, objects.get(i));
+                    if (objects.size() > 20) {
+                        for (int i = objects.size() - 20; i < objects.size(); i++) {
+                            findings.add(findings.size(), objects.get(i));
                             adapter.notifyItemInserted(findings.size() - 1);
                         }
                     } else {
                         for (int i = 0; i < objects.size(); i++) {
-                            findings.add(findings.size() - 1, objects.get(i));
+                            findings.add(findings.size(), objects.get(i));
                             adapter.notifyItemInserted(findings.size() - 1);
                         }
                     }
                 } else {
                     e.printStackTrace();
                 }
+
             }
         });
     }
