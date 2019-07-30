@@ -48,13 +48,20 @@ public class DetailActivity extends AppCompatActivity {
             newFinding[0] = (Findings) (intent.getExtras().get("User"));
             name.setText(newFinding[0].getName());
             description.setText(newFinding[0].getDescription());
-            tvFunFact.setText(newFinding[0].getFunFact());
-            tvExperiment.setText(newFinding[0].getExperiment());
+            tvFunFact.setText("Fun Facts: " + newFinding[0].getFunFact());
+            tvExperiment.setText("Fun " + newFinding[0].getName() + " Experiment: " + newFinding[0].getExperiment());
             wvExperiment.loadUrl(newFinding[0].getExperiment());
             wvFunFact.loadUrl(newFinding[0].getFunFact());
             Glide.with(this).load(newFinding[0].getImage().getUrl()).into(image);
         } catch (Exception e) {
-            Findings.Query findingsQuery = new Findings.Query();
+            name.setText((String) intent.getExtras().get("Name"));
+            description.setText((String) intent.getExtras().get("Description"));
+            tvFunFact.setText((String) intent.getExtras().get("FunFact"));
+            wvFunFact.loadUrl((String) intent.getExtras().get("FunFact"));
+            tvExperiment.setText((String) intent.getExtras().get("Experiment"));
+            wvExperiment.loadUrl((String) intent.getExtras().get("Experiment"));
+            Glide.with(this).load((String) intent.getExtras().get("ImageUrl")).into(image);
+            /*Findings.Query findingsQuery = new Findings.Query();
             findingsQuery = findingsQuery.getRecent().getUser(ParseUser.getCurrentUser());
             findingsQuery.findInBackground(new FindCallback<Findings>() {
                 @Override
@@ -63,8 +70,8 @@ public class DetailActivity extends AppCompatActivity {
                         newFinding[0] = objects.get(objects.size() - 1);
                         name.setText(newFinding[0].getName());
                         description.setText(newFinding[0].getDescription());
-                        tvFunFact.setText(newFinding[0].getFunFact());
-                        tvExperiment.setText(newFinding[0].getExperiment());
+                        tvFunFact.setText("Fun Facts: "+ newFinding[0].getFunFact());
+                        tvExperiment.setText("Fun " + newFinding[0].getName() + " Experiment: " + newFinding[0].getExperiment());
                         wvExperiment.loadUrl(newFinding[0].getExperiment());
                         wvFunFact.loadUrl(newFinding[0].getFunFact());
                         Glide.with(getApplicationContext()).load(newFinding[0].getImage().getUrl()).into(image);
@@ -72,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            });
+            });*/
         }
 
 

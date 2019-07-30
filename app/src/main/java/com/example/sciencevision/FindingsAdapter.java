@@ -51,8 +51,8 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         }
         holder.tvName.setText(finding.getName());
         holder.tvDescription.setText(finding.getDescription());
-        holder.tvFunFact.setText(finding.getFunFact());
-        holder.tvExperiment.setText(finding.getExperiment());
+        holder.tvFunFact.setText("Fun Facts: " + finding.getFunFact());
+        holder.tvExperiment.setText("Fun " + finding.getName() +" Experiment: " + finding.getExperiment());
         Glide.with(context).load(finding.getImage().getUrl()).into(holder.ivImage);
     }
 
