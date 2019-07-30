@@ -109,7 +109,7 @@ public class SearchClient {
                             //use regex to get domain name
                             for (int i = 0; i < temp.length(); i++){
                                 if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
-                                    result.add(temp.substring(0, i));
+                                    result.add(temp.substring(7, i));
                                     counter++;
                                     break;
                                 }
@@ -126,7 +126,7 @@ public class SearchClient {
                     e.printStackTrace();
                 }
 
-                return result.toString();
+                return result.get(0);
             }
         };
     }

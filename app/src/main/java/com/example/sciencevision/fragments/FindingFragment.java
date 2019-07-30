@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.parceler.Parcels;
 
@@ -55,7 +57,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class FindingFragment extends Fragment {
 
     private static final String TAG = FindingFragment.class.getSimpleName();
-    private String photoFileName = "photo.jpg";
+
     private File photoFile;
     private TextView tvDescription;
     private SearchClient searchClient;
@@ -128,7 +130,7 @@ public class FindingFragment extends Fragment {
                 @Override
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
                     Log.d("onClick", "enters camera click");
-                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
+                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10));
                     try {
                         Log.d("onClick", "Photo taken");
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
@@ -166,15 +168,19 @@ public class FindingFragment extends Fragment {
                                             @Override
                                             public void onSuccess(@NullableDecl List<String> result) {
                                                 Log.d("FINAL", result.toString());
-                                                String description = result.get(0);
-                                                String experiments = result.get(1);
-                                                String funFacts = result.get(2);
+                                                final String description = result.get(0);
+                                                final String experiments = result.get(1);
+                                                final String funFacts = result.get(2);
                                                 ListenableFuture<Findings> saveFindingToDatabase = service.submit(Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments));
                                               Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
                                                     @Override
                                                     public void onSuccess(@NullableDecl Findings result) {
                                                         Intent intent = new Intent(getActivity(), DetailActivity.class);
-                                                        intent.putExtra("User", result);
+                                                        intent.putExtra("FunFact", funFacts);
+                                                        intent.putExtra("Experiment", experiments);
+                                                        intent.putExtra("Description", description);
+                                                        intent.putExtra("Name", query);
+                                                        intent.putExtra("ImageUrl", savedPhoto.getAbsolutePath());
                                                         getActivity().startActivity(intent);
                                                     }
 
