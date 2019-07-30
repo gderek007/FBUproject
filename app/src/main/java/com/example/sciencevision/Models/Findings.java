@@ -84,7 +84,7 @@ public class Findings extends ParseObject {
         return this;
     }
     public Query getOlder(int size){
-        getQuery(KEY_CREATED).orderByAscending(KEY_CREATED);
+        getQuery(KEY_CREATED).orderByAscending(KEY_CREATED).setSkip(size);
         return this;
     }
 

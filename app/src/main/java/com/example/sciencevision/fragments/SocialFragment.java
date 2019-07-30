@@ -114,11 +114,11 @@ public class SocialFragment extends Fragment {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 adapter.clear();
-//                Log.d("Posts", Integer.toString(objects.size()));
+                findings.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
-                        for (int i = 0; i < 20; i++) {
+                        for (int i = objects.size() - 20; i < objects.size(); i++) {
                             findings.add(0, objects.get(i));
                             adapter.notifyItemInserted(0);
                             rvFindings.scrollToPosition(0);
@@ -140,31 +140,32 @@ public class SocialFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getRecent();
+        findingsQuery.getOlder(findings.size()).withUser();
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
-                //adapter.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
-                    if (objects.size() > 20 + findings.size()) {
-                        for (int i = objects.size() - 20 - findings.size(); i < objects.size() - findings.size(); i++) {
-                            findings.add(findings.size() - 1, objects.get(i));
-                            adapter.notifyItemInserted(findings.size() - 1);
+                    int starting = findings.size() - 1;
+                    if (objects.size() - findings.size() > 20) {
+                        for (int i = objects.size() - 20 - starting; i < objects.size() - starting; i++) {
+                            findings.add(starting, objects.get(i));
+                            adapter.notifyItemInserted(starting);
                         }
                     } else {
-                        for (int i = 0; i < objects.size() - findings.size(); i++) {
-                            findings.add(findings.size() - 1, objects.get(i));
-                            adapter.notifyItemInserted(findings.size() - 1);
+                        for (int i = starting; i < objects.size(); i++) {
+                            findings.add(starting, objects.get(i));
+                            adapter.notifyItemInserted(starting);
                         }
                     }
-                    swipeContainer.setRefreshing(false);
+
                 } else {
                     e.printStackTrace();
                 }
             }
         });
     }
+
     //filter that performs basic search call
     private void filter(String text) {
         ArrayList<Findings> filteredList = new ArrayList<>();

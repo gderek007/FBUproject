@@ -20,6 +20,7 @@ import java.util.List;
 
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
     private List<Findings> mFindings;
+    private  List<Findings> unfilteredFindings;
     private ParseUser user = ParseUser.getCurrentUser();
     Context context;
 
@@ -98,7 +99,14 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         notifyDataSetChanged();
     }
     public void filterList(ArrayList<Findings> filteredList) {
-        mFindings = filteredList;
-        notifyDataSetChanged();
+        if (filteredList.size() != 0) {
+            notifyDataSetChanged();
+            mFindings = filteredList;
+        }
+
+    }
+
+    public void add() {
+
     }
 }
