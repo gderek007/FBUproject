@@ -81,7 +81,7 @@ public class SearchClient {
             return firstsentence;
         } catch (JSONException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -106,12 +106,15 @@ public class SearchClient {
                     for (Element link : links) {
                         String temp = link.attr("href");
                         if (temp.startsWith("/url?q=") && counter < 5) {
-                            //use regex to get domain name
-                            for (int i = 0; i < temp.length(); i++){
+                            int starting = 7;
+                            if (temp.contains("google")) {
+                                starting = 48;
+                            }
+                            for (int i = starting; i < temp.length(); i++) {
                                 if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
-                                    result.add(temp.substring(7, i));
-                                    counter++;
-                                    break;
+                                        result.add(temp.substring(starting, i));
+                                        counter++;
+                                        break;
                                 }
                             }
 
@@ -124,6 +127,7 @@ public class SearchClient {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return "Experiment not found";
                 }
 
                 return result.get(0);
