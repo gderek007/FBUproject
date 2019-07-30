@@ -1,74 +1,91 @@
 package com.example.sciencevision;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.sciencevision.Models.Findings;
+import com.example.sciencevision.Models.ProfilePictures;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-
-    private List<Integer> mViewColors;
+    public static String result;
+    private List<ProfilePictures> mProfilePictures;
+    private ItemClickListener mItemClickListener;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    Context context;
+
 
     // data is passed into the constructor
-    ProfileAdapter(Context context, List<Integer> colors) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mViewColors = colors;
-
+    ProfileAdapter(List<ProfilePictures> profilePictures, ItemClickListener itemClickListener) {
+        this.mProfilePictures = profilePictures;
+        this.mItemClickListener = itemClickListener;
     }
 
     // inflates the row layout from xml when needed
     @Override
     @NonNull
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.individual_profile, parent, false);
-        return new ViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View findingView = inflater.inflate(R.layout.individual_profile, parent, false);
+        ViewHolder viewHolder = new ViewHolder(findingView, mItemClickListener);
+        return viewHolder;
     }
 
-    // binds the data to the view and textview in each row
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int color = mViewColors.get(position);
-//        holder.myView.setBackgroundColor(color);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        ParseObject picture = mProfilePictures.get(position);
+        Glide.with(context).load(picture.getParseFile("Avatar").getUrl()).into(holder.ivAvatar);
     }
 
-    // total number of rows
-    @Override
-    public int getItemCount() {
-        return mViewColors.size();
-    }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        View myView;
-        TextView myTextView;
+        ImageView ivAvatar;
+        ItemClickListener itemClickListener;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView);
-            myView = itemView.findViewById(R.id.ivProfile);
+            ivAvatar = (ImageView) itemView.findViewById(R.id.ivAvatar);
+            this.itemClickListener = itemClickListener;
+
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            itemClickListener.onItemClick(getAdapterPosition());
         }
+
     }
 
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
+    public void clear() {
+        mProfilePictures.clear();
+        notifyDataSetChanged();
+    }
+
+    // total number of rows
+    @Override
+    public int getItemCount() {
+        return mProfilePictures.size();
     }
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 }

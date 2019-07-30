@@ -112,7 +112,7 @@ public class SocialFragment extends Fragment {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 adapter.clear();
-                Log.d("Posts", Integer.toString(objects.size()));
+//                Log.d("Posts", Integer.toString(objects.size()));
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {

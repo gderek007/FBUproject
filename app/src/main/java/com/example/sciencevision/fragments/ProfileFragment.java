@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
 import com.example.sciencevision.LaunchActivity;
@@ -67,6 +68,7 @@ public class ProfileFragment extends Fragment {
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
         tvUser.setText(User.getUsername());
+        Glide.with(this).load(User.getParseFile("ProfilePicture").getUrl()).into(ivProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
