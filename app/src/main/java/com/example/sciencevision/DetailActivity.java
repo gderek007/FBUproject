@@ -23,7 +23,6 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvFunFact;
     TextView tvExperiment;
     ImageView image;
-    WebView wvFunFact;
     WebView wvExperiment;
 
     @Override
@@ -32,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         name = findViewById(R.id.tvName);
         tvFunFact = findViewById(R.id.tvFunFact);
-        wvFunFact = findViewById(R.id.wvFunFact);
         description = findViewById(R.id.tvDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
         wvExperiment = findViewById(R.id.wvExperiment);
@@ -51,13 +49,11 @@ public class DetailActivity extends AppCompatActivity {
             tvFunFact.setText("Fun Facts: " + newFinding[0].getFunFact());
             tvExperiment.setText("Fun " + newFinding[0].getName() + " Experiment: " + newFinding[0].getExperiment());
             wvExperiment.loadUrl(newFinding[0].getExperiment());
-            wvFunFact.loadUrl(newFinding[0].getFunFact());
             Glide.with(this).load(newFinding[0].getImage().getUrl()).into(image);
         } catch (Exception e) {
             name.setText((String) intent.getExtras().get("Name"));
             description.setText((String) intent.getExtras().get("Description"));
-            tvFunFact.setText((String) intent.getExtras().get("FunFact"));
-            wvFunFact.loadUrl((String) intent.getExtras().get("FunFact"));
+            tvFunFact.setText("Fun Facts: " + (String) intent.getExtras().get("FunFact"));
             tvExperiment.setText((String) intent.getExtras().get("Experiment"));
             wvExperiment.loadUrl((String) intent.getExtras().get("Experiment"));
             Glide.with(this).load((String) intent.getExtras().get("ImageUrl")).into(image);

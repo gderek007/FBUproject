@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import de.l3s.boilerpipe.extractors.ArticleExtractor;
 
 public class SearchClient {
     private AsyncHttpClient client;
@@ -124,9 +123,16 @@ public class SearchClient {
                     }
                     if(request.contains("facts")) {
                         try {
-                            String body = ArticleExtractor.INSTANCE.getText(result.get(0));
+                            String request2 = "http://boilerpipe-web.appspot.com/extract?url=" + result.get(0) + "output=htmlFragment";
+                            Document doc2 = Jsoup
+                                    .connect(result.get(0))
+                                    .timeout(5000).get();
                             Log.d(SearchClient.class.getSimpleName(), "It worked!");
-                            System.out.println(body);
+                            String allText = doc2.body().text();
+                            if ((doc2.body().getElementsByTag("p").text().trim() != null) && (doc2.body().getElementsByTag("p").text().trim() != "")) {
+                                allText = doc2.body().getElementsByTag("p").text();
+                            }
+                            return allText.substring(0, allText.indexOf(".") + 1);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.d(SearchClient.class.getSimpleName(), "Failure extracting fun fact");

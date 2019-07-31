@@ -27,6 +27,7 @@ android {
 }
 
 dependencies {
+
     //Parceler
     implementation 'org.parceler:parceler-api:1.1.12'
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -82,10 +83,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
     //Apache Commons
     implementation 'org.apache.commons:commons-configuration2:2.5'
-    //Boilerpipe
-    implementation 'de.l3s.boilerpipe:boilerpipe:1.1.0'
-    implementation 'xerces:xercesImpl:2.12.0'
-    androidTestImplementation 'net.sourceforge.nekohtml:nekohtml:1.9.13'
+
 
 }
 
