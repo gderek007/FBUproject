@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import de.l3s.boilerpipe.extractors.ArticleExtractor;
+
 public class SearchClient {
     private AsyncHttpClient client;
 
@@ -119,6 +121,17 @@ public class SearchClient {
                             }
 
                         }
+                    }
+                    if(request.contains("facts")) {
+                        try {
+                            String body = ArticleExtractor.INSTANCE.getText(result.get(0));
+                            Log.d(SearchClient.class.getSimpleName(), "It worked!");
+                            System.out.println(body);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d(SearchClient.class.getSimpleName(), "Failure extracting fun fact");
+                        }
+
                     }
 
                     for (String s : result) {
