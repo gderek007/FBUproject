@@ -1,27 +1,27 @@
 package com.example.sciencevision.fragments;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.camerakit.CameraKitView;
 
 import com.example.sciencevision.DetailActivity;
@@ -30,6 +30,8 @@ import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -70,7 +72,10 @@ public class FindingFragment extends Fragment {
     private CameraKitView cameraKitView;
     private Button btnCapture;
     private Switch sFirebaseToggle;
+
+    private ChipGroup cgLabels;
     private boolean useCloudMLKit = false;
+
 
     public FindingFragment() {
         // Required empty public constructor
@@ -94,6 +99,7 @@ public class FindingFragment extends Fragment {
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
         btnCapture.setOnClickListener(photoOnClickListener);
+        cgLabels = view.findViewById(R.id.cgLabels);
         sFirebaseToggle = view.findViewById(R.id.sFirebaseToggle);
         sFirebaseToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -140,11 +146,11 @@ public class FindingFragment extends Fragment {
 
         public void onClick(View v) {
             Log.d("onClick", "Button Pressed");
-
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
 
                 @Override
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
+
                     Log.d("onClick", "enters camera click");
                     final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10));
                     try {
@@ -171,56 +177,21 @@ public class FindingFragment extends Fragment {
                                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
                                     @Override
                                     public void onSuccess(List<FirebaseVisionImageLabel> labels) {
-                                        // Task completed successfully
-                                        // This function sets the text of the TextView given as the parameter
-                                        // to be the definition of the object in the image.
-                                        Toast.makeText(getContext(), labels.get(0).getText(), LENGTH_SHORT).show();
-                                        final String query = labels.get(0).getText();
+                                        // TODO: stuff with adding chips to cgLabels
 
-                                        ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
-                                        ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
-                                        ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
+                                        for (FirebaseVisionImageLabel label : labels){
+                                            Chip chip = new Chip(getContext());
 
-                                        List<ListenableFuture<String>> networkCalls = new ArrayList<>();
-                                        networkCalls.add(getWiki);
-                                        networkCalls.add(getExperiments);
-                                        networkCalls.add(getFunFacts);
-
-                                        ListenableFuture<List<String>> successfulNetworkCalls = Futures.successfulAsList(networkCalls);
-                                        Futures.addCallback(successfulNetworkCalls, new FutureCallback<List<String>>() {
-                                            @Override
-                                            public void onSuccess(@NullableDecl List<String> result) {
-                                                Log.d("FINAL", result.toString());
-                                                final String description = result.get(0);
-                                                final String experiments = result.get(1);
-                                                final String funFacts = result.get(2);
-                                                ListenableFuture<Findings> saveFindingToDatabase = service.submit(Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments));
-                                                Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
-                                                    @Override
-                                                    public void onSuccess(@NullableDecl Findings result) {
-                                                        Intent intent = new Intent(getActivity(), DetailActivity.class);
-                                                        intent.putExtra("FunFact", funFacts);
-                                                        intent.putExtra("Experiment", experiments);
-                                                        intent.putExtra("Description", description);
-                                                        intent.putExtra("Name", query);
-                                                        intent.putExtra("ImageUrl", savedPhoto.getAbsolutePath());
-                                                        getActivity().startActivity(intent);
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Throwable t) {
-                                                        Log.d("FindingFragment", "Failed to save Finding");
-                                                        t.printStackTrace();
-                                                    }
-                                                }, service);
-
-                                            }
-
-                                            @Override
-                                            public void onFailure(Throwable t) {
-
-                                            }
-                                        }, service);
+                                            chip.setText(label.getText());
+                                            chip.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    postFirebaseCalls(chip.getText().toString(), savedPhoto);
+                                                    cgLabels.removeAllViews();
+                                                }
+                                            });
+                                            cgLabels.addView(chip);
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -239,5 +210,60 @@ public class FindingFragment extends Fragment {
             });
         }
     };
+
+
+
+
+    public void postFirebaseCalls(String query, File savedPhoto){
+        ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
+        ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
+        ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
+
+        List<ListenableFuture<String>> networkCalls = new ArrayList<>();
+        networkCalls.add(getWiki);
+        networkCalls.add(getExperiments);
+        networkCalls.add(getFunFacts);
+
+        ListenableFuture<List<String>> successfulNetworkCalls = Futures.successfulAsList(networkCalls);
+        Futures.addCallback(successfulNetworkCalls, new FutureCallback<List<String>>() {
+            @Override
+            public void onSuccess(@NullableDecl List<String> result) {
+                Log.d("FINAL", result.toString());
+                final String description = result.get(0);
+                final String experiments = result.get(1);
+                final String funFacts = result.get(2);
+                ListenableFuture<Findings> saveFindingToDatabase = service.submit(Findings.createFinding(ParseUser.getCurrentUser(), query, description, funFacts, new ParseFile(savedPhoto), experiments));
+                Futures.addCallback(saveFindingToDatabase, new FutureCallback<Findings>() {
+                    @Override
+                    public void onSuccess(@NullableDecl Findings result) {
+                        Intent intent = new Intent(getActivity(), DetailActivity.class);
+                        intent.putExtra("FunFact", funFacts);
+                        intent.putExtra("Experiment", experiments);
+                        intent.putExtra("Description", description);
+                        intent.putExtra("Name", query);
+                        intent.putExtra("ImageUrl", savedPhoto.getAbsolutePath());
+                        getActivity().startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.d("FindingFragment", "Failed to save Finding");
+                        t.printStackTrace();
+                    }
+                }, service);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        }, service);
+    }
+
+
+
+
+
 
 }
