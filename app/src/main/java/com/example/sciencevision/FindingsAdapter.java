@@ -2,13 +2,13 @@ package com.example.sciencevision;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,11 +18,13 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
     private List<Findings> mFindings;
-    private  List<Findings> unfilteredFindings;
+    private List<Findings> unfilteredFindings;
     private ParseUser user = ParseUser.getCurrentUser();
-    Context context;
+    private Context context;
 
     // pass in the tweets array in the constructor
     public FindingsAdapter(List<Findings> findings) {
@@ -31,12 +33,12 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
 
     // for each row, inflate the layout and cache references into View
     @Override
+    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View findingView = inflater.inflate(R.layout.individual_finding, parent, false);
-        ViewHolder viewHolder = new ViewHolder(findingView);
-        return viewHolder;
+        return new ViewHolder(findingView);
     }
 
     // bind the values based on the position of the element
@@ -46,15 +48,19 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         //populate the views according to this data
         try {
             holder.tvUser.setText(finding.getUser().getUsername());
-        }
-        catch(java.lang.Exception e){
+        } catch (java.lang.Exception e) {
             holder.tvUser.setText(user.getUsername());
         }
         holder.tvName.setText(finding.getName());
         holder.tvDescription.setText(finding.getDescription());
-        holder.tvFunFact.setText("Fun Facts: " + finding.getFunFact());
-        holder.tvExperiment.setText("Fun " + finding.getName() +" Experiment: " + finding.getExperiment());
-        Glide.with(context).load(finding.getImage().getUrl()).into(holder.ivImage);
+        holder.tvFunFact.setText(String.format("Fun Facts: %s", finding.getFunFact()));
+        holder.tvExperiment.setText(String.format("Fun %s Experiment: %s", finding.getName(), finding.getExperiment()));
+        int radius = 30;
+        int margin = 10;
+        Glide.with(context).load(finding.getImage().getUrl())
+                .fitCenter()
+                .transform(new RoundedCornersTransformation(radius, margin))
+                .into(holder.ivImage);
     }
 
     @Override
@@ -64,23 +70,23 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
 
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tvUser;
-        public TextView tvName;
-        public TextView tvDescription;
-        public TextView tvFunFact;
-        public TextView tvExperiment;
-        public ImageView ivImage;
+        TextView tvUser;
+        TextView tvName;
+        TextView tvDescription;
+        TextView tvFunFact;
+        TextView tvExperiment;
+        ImageView ivImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             // perform findViewById lookups
-            tvUser = (TextView) itemView.findViewById(R.id.tvUser);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            ivImage = (ImageView) itemView.findViewById(R.id.ivImage);
-            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
-            tvFunFact = (TextView) itemView.findViewById(R.id.tvFunFact);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvExperiment = (TextView) itemView.findViewById(R.id.tvExperiment);
+            tvUser = itemView.findViewById(R.id.tvUser);
+            tvName = itemView.findViewById(R.id.tvName);
+            ivImage = itemView.findViewById(R.id.ivImage);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvFunFact = itemView.findViewById(R.id.tvFunFact);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvExperiment = itemView.findViewById(R.id.tvExperiment);
             itemView.setOnClickListener(this);
         }
 
@@ -90,6 +96,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             Findings finding = mFindings.get(position);
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("User", finding);
+            intent.putExtra("fromCamera", false);
             context.startActivity(intent);
         }
     }
@@ -98,6 +105,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         mFindings.clear();
         notifyDataSetChanged();
     }
+
     public void filterList(ArrayList<Findings> filteredList) {
         if (filteredList.size() != 0) {
             notifyDataSetChanged();

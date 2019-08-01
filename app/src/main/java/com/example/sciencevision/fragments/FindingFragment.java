@@ -1,27 +1,24 @@
 package com.example.sciencevision.fragments;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.camerakit.CameraKitView;
 
 import com.example.sciencevision.DetailActivity;
@@ -47,15 +44,12 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
-import org.parceler.Parcels;
 
-import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +76,7 @@ public class FindingFragment extends Fragment {
     }
 
     @Override
+    @NonNull
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -179,7 +174,7 @@ public class FindingFragment extends Fragment {
                                     public void onSuccess(List<FirebaseVisionImageLabel> labels) {
                                         // TODO: stuff with adding chips to cgLabels
 
-                                        for (FirebaseVisionImageLabel label : labels){
+                                        for (FirebaseVisionImageLabel label : labels) {
                                             Chip chip = new Chip(getContext());
 
                                             chip.setText(label.getText());
@@ -212,9 +207,7 @@ public class FindingFragment extends Fragment {
     };
 
 
-
-
-    public void postFirebaseCalls(String query, File savedPhoto){
+     private void postFirebaseCalls(String query, File savedPhoto) {
         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
         ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
         ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
@@ -242,6 +235,7 @@ public class FindingFragment extends Fragment {
                         intent.putExtra("Description", description);
                         intent.putExtra("Name", query);
                         intent.putExtra("ImageUrl", savedPhoto.getAbsolutePath());
+                        intent.putExtra("fromCamera", true);
                         getActivity().startActivity(intent);
                     }
 
@@ -260,10 +254,6 @@ public class FindingFragment extends Fragment {
             }
         }, service);
     }
-
-
-
-
 
 
 }

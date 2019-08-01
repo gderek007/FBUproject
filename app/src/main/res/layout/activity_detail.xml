@@ -87,5 +87,17 @@
         app:layout_constraintTop_toBottomOf="@+id/tvExperiment"
         app:layout_constraintVertical_bias="0.125" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="40dp"
+        android:clickable="true"
+        app:backgroundTint="@color/darkSkyBlue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_share" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

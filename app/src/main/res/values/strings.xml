@@ -4,6 +4,6 @@
     <string name="username">Username</string>
     <string name="log_in">Log In</string>
     <string name="signup">SignUp</string>
-
+    <string name="emailBody"></string>
 
 </resources>
