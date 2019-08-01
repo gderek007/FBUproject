@@ -65,6 +65,7 @@ public class FindingFragment extends Fragment {
     private ListeningExecutorService service;
     private CameraKitView cameraKitView;
     private Button btnCapture;
+    private Button btnBack;
     private Switch sFirebaseToggle;
 
     private ChipGroup cgLabels;
@@ -90,6 +91,8 @@ public class FindingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         cameraKitView = view.findViewById(R.id.camera);
         btnCapture = view.findViewById(R.id.btnCapture);
+        btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setVisibility(View.GONE);
         searchClient = new SearchClient();
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
@@ -187,6 +190,18 @@ public class FindingFragment extends Fragment {
                                             });
                                             cgLabels.addView(chip);
                                         }
+                                        btnBack.setVisibility(View.VISIBLE);
+                                        btnBack.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                cgLabels.removeAllViews();
+                                                btnCapture.setOnClickListener(photoOnClickListener);
+                                                btnBack.setVisibility(View.GONE);
+                                                cameraKitView.onStop();
+                                                cameraKitView.onStart();
+                                                cameraKitView.onResume();
+                                            }
+                                        });
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
