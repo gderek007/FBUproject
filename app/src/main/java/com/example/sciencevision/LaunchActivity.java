@@ -1,12 +1,18 @@
 package com.example.sciencevision;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,7 +53,6 @@ public class LaunchActivity extends AppCompatActivity {
         }
 
 
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,23 +81,61 @@ public class LaunchActivity extends AppCompatActivity {
                 user.setUsername(String.valueOf(etUsername.getText()));
                 user.setPassword(String.valueOf(etPassword.getText()));
 
-                // Invoke signUpInBackground
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Toast.makeText(getApplicationContext(), "Welcome, new user!", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), ProfilePicture.class);
-                            startActivity(i);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
+                LinearLayout parentEmailLayout = new LinearLayout(getApplicationContext());
+                parentEmailLayout.setOrientation(LinearLayout.VERTICAL);
+
+                TextView tvEmailPrompt = new TextView(getApplicationContext());
+                tvEmailPrompt.setText("Enter your parent's email address.");
+                EditText etEmailInput = new EditText(getApplicationContext());
+                etEmailInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                Button btSubmit = new Button(getApplicationContext());
+                btSubmit.setText("SUBMIT");
+
+
+                btSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isValidEmail(etEmailInput.getText().toString())) { //email text validated
+                            // Invoke signUpInBackground
+                            user.setEmail(etEmailInput.getText().toString());
+                            user.signUpInBackground(new SignUpCallback() {
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Toast.makeText(getApplicationContext(), "Welcome, new user!", Toast.LENGTH_LONG).show();
+                                        Intent i = new Intent(getApplicationContext(), ProfilePicture.class);
+                                        startActivity(i);
+                                    } else {
+                                        // Sign up didn't succeed. Look at the ParseException
+                                        // to figure out what went wrong
+                                    }
+                                }
+                            });
                         } else {
-                            // Sign up didn't succeed. Look at the ParseException
-                            // to figure out what went wrong
+                            Toast.makeText(getApplicationContext(), "Please enter a valid email address!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+
+
+                parentEmailLayout.addView(tvEmailPrompt, 0);
+                parentEmailLayout.addView(etEmailInput, 1);
+                parentEmailLayout.addView(btSubmit, 2);
+
+
+                builder.setView(parentEmailLayout);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
 
             }
 
 
         });
+    }
+
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }
