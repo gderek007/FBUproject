@@ -1,8 +1,11 @@
 package com.example.sciencevision;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.sciencevision.Models.Findings;
 import com.loopj.android.http.AsyncHttpClient;
+import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,17 +25,14 @@ import java.util.concurrent.Callable;
 
 
 public class SearchClient {
-    private AsyncHttpClient client;
 
     public SearchClient() {
-        client = new AsyncHttpClient();
     }
 
     public Callable<String> getWiki(final String searchLabel) {
         return new Callable<String>() {
             @Override
             public String call() throws Exception {
-                HttpURLConnection urlConnection = null;
                 URL url = new URL("https://simple.wikipedia.org/w/api.php?&format=json" +
                         "&action=query" +
                         "&prop=extracts" +
@@ -40,7 +40,7 @@ public class SearchClient {
                         "&explaintext=" +
                         "&redirects=1" +
                         "&titles=" + searchLabel);
-                urlConnection = (HttpURLConnection) url.openConnection();
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(10000 /* milliseconds */);
                 urlConnection.setConnectTimeout(15000 /* milliseconds */);
@@ -113,15 +113,15 @@ public class SearchClient {
                             }
                             for (int i = starting; i < temp.length(); i++) {
                                 if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
-                                        result.add(temp.substring(starting, i));
-                                        counter++;
-                                        break;
+                                    result.add(temp.substring(starting, i));
+                                    counter++;
+                                    break;
                                 }
                             }
 
                         }
                     }
-                    if(request.contains("facts")) {
+                    if (request.contains("facts")) {
                         try {
                             String request2 = "http://boilerpipe-web.appspot.com/extract?url=" + result.get(0) + "output=htmlFragment";
                             Document doc2 = Jsoup
@@ -153,6 +153,7 @@ public class SearchClient {
             }
         };
     }
+
 
 
 }
