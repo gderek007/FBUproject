@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="279dp"
-        android:layout_height="224dp"
+        android:layout_width="209dp"
+        android:layout_height="171dp"
         android:layout_marginStart="66dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="66dp"
@@ -50,8 +50,8 @@
     <TextView
         android:id="@+id/tvFunFact"
         android:layout_width="395dp"
-        android:layout_height="76dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:hint="FunFact"
@@ -62,30 +62,31 @@
 
     <TextView
         android:id="@+id/tvExperiment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="395dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"
         android:hint="Experiment"
+        app:layout_constraintBottom_toTopOf="@+id/wvExperiment"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFunFact" />
 
     <WebView
         android:id="@+id/wvExperiment"
-        android:layout_width="389dp"
-        android:layout_height="116dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="299dp"
+        android:layout_height="189dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.275"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvExperiment"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintTop_toBottomOf="@+id/tvExperiment" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabShare"
