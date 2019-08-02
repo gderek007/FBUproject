@@ -70,14 +70,14 @@ public class DetailActivity extends AppCompatActivity {
             name.setText(newFinding[0].getName());
             description.setText(newFinding[0].getDescription());
             tvFunFact.setText(String.format("Fun Facts: %s", newFinding[0].getFunFact()));
-            tvExperiment.setText(String.format("Fun %s Experiment: %s", newFinding[0].getName(), newFinding[0].getExperiment()));
+            tvExperiment.setText(String.format("Fun %s Experiment:", newFinding[0].getName()));
             wvExperiment.loadUrl(newFinding[0].getExperiment());
             Glide.with(this).load(newFinding[0].getImage().getUrl()).into(image);
         } else {
             name.setText((String) intent.getExtras().get("Name"));
             description.setText((String) intent.getExtras().get("Description"));
             tvFunFact.setText(String.format("Fun Facts: %s", (String) intent.getExtras().get("FunFact")));
-            tvExperiment.setText((String) intent.getExtras().get("Experiment"));
+            tvExperiment.setText(String.format("Fun %s Experiment:", (String) intent.getExtras().get("Name")));
             wvExperiment.loadUrl((String) intent.getExtras().get("Experiment"));
             Glide.with(this).load((String) intent.getExtras().get("ImageUrl")).into(image);
         }
