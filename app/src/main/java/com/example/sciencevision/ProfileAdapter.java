@@ -57,6 +57,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         public ViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView);
             ivAvatar = (ImageView) itemView.findViewById(R.id.ivAvatar);
+            ivAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onItemClick(getAdapterPosition());
+                }
+            });
             this.itemClickListener = itemClickListener;
 
             itemView.setOnClickListener(this);
