@@ -23,11 +23,16 @@ import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
 import com.example.sciencevision.LaunchActivity;
 import com.example.sciencevision.MainActivity;
+import com.example.sciencevision.Models.Badge;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
+import com.example.sciencevision.SearchClient;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +44,16 @@ public class ProfileFragment extends Fragment {
     private EditText etSearch;
     private ParseUser User;
     private TextView tvUser;
+    private TextView tvNumberOfFindings;
     private ImageButton btnLogout;
     private ImageView ivProfile;
     private RecyclerView rvUserFindings;
     private FindingsAdapter adapter;
     private ArrayList<Findings> findings;
+    private ArrayList<Integer> badges;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private SearchClient searchClient;
+    private int numberOfFindings = 0;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -63,11 +72,16 @@ public class ProfileFragment extends Fragment {
         User = ParseUser.getCurrentUser();
 
         tvUser = view.findViewById(R.id.tvUser);
+        tvNumberOfFindings = view.findViewById(R.id.tvNumberOfFindings);
         etSearch = view.findViewById(R.id.etSearch);
         ivProfile = view.findViewById(R.id.ivProfile);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
+        searchClient = new SearchClient();
+        badges = (ArrayList<Integer>) User.get("Badges");
+
         tvUser.setText(User.getUsername());
+        tvNumberOfFindings.setText("You have "+User.get("NumberOfFindings")+" Findings!");
         Glide.with(this).load(User.getParseFile("ProfilePicture").getUrl()).into(ivProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
         findings = new ArrayList<>();
@@ -126,6 +140,27 @@ public class ProfileFragment extends Fragment {
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
+                if (objects != null) {
+                    numberOfFindings = objects.size();
+                }
+
+                Integer numberOfBadge = Badge.getBadge(numberOfFindings);
+                if (!badges.contains(numberOfBadge) && numberOfBadge != null) {
+                    badges.add(numberOfBadge);
+                    User.put("Badges", badges);
+                    User.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("Badges", "Saved badge");
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+//                    Glide.with(getActivity()).load("https://thumbs.gfycat.com/GrotesqueShockedBirdofparadise-size_restricted.gif").into(ivBadge);
+                }
+
                 adapter.clear();
                 findings.clear();
                 if (e == null) {

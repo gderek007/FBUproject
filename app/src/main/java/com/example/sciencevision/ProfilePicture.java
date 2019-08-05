@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.sciencevision.Models.Badge;
 import com.example.sciencevision.Models.ProfilePictures;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -34,6 +35,8 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
     private ImageView ivPreview;
     private Button btnProfile;
     private ParseObject picture;
+    private ArrayList<Integer> badges;
+
 
 
     @Override
@@ -42,6 +45,8 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
         setContentView(R.layout.profile_picture);
 
         mProfilePictures = new ArrayList<>();
+        badges = new ArrayList<>();
+
 
         // set up the RecyclerView
         rvProfile = findViewById(R.id.rvProfile);
@@ -60,6 +65,8 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
             public void onClick(View v) {
                 if(picture!=null) {
                     ParseUser.getCurrentUser().put("ProfilePicture", picture.getParseFile("Avatar"));
+                    ParseUser.getCurrentUser().put("Badges", badges);
+                    ParseUser.getCurrentUser().put("NumberOfFindings", 0);
                     ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

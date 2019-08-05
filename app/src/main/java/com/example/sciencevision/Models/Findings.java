@@ -125,6 +125,18 @@ public class Findings extends ParseObject {
                 newFinding.setFunFact(FunFact);
                 newFinding.setImage(ItemImage);
                 newFinding.setExperiment(Experiment);
+                User.increment("NumberOfFindings");
+                User.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Log.d("increasingFindings", "Incrememnted findings");
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
                 newFinding.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
