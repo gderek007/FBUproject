@@ -33,7 +33,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        name = findViewById(R.id.tvName);
+        name = findViewById(R.id.tvCreatedAt);
         tvFunFact = findViewById(R.id.tvFunFact);
         description = findViewById(R.id.tvDescription);
         tvExperiment = findViewById(R.id.tvExperiment);

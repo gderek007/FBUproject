@@ -77,7 +77,7 @@ public class Findings extends ParseObject {
 
 
     public String getNiceTime() {
-        Date date = getParseUser(KEY_USER).getCreatedAt();
+        Date date = getCreatedAt();
         PrettyTime time = new PrettyTime();
         return time.format(date).toString();
     }
