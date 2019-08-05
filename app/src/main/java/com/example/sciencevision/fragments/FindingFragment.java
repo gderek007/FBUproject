@@ -150,7 +150,7 @@ public class FindingFragment extends Fragment {
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
 
                     Log.d("onClick", "enters camera click");
-                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10));
+                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10) + ".jpg");
                     try {
                         Log.d("onClick", "Photo taken");
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
