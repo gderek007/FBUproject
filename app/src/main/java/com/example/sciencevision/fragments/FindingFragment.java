@@ -40,7 +40,6 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -150,7 +149,7 @@ public class FindingFragment extends Fragment {
                 public void onImage(CameraKitView cameraKitView, byte[] capturedImage) {
 
                     Log.d("onClick", "enters camera click");
-                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10));
+                    final File savedPhoto = new File(Environment.getExternalStorageDirectory(), RandomStringUtils.randomAlphabetic(10) + ".jpg");
                     try {
                         Log.d("onClick", "Photo taken");
                         FileOutputStream outputStream = new FileOutputStream(savedPhoto.getPath());
@@ -222,7 +221,7 @@ public class FindingFragment extends Fragment {
     };
 
 
-     private void postFirebaseCalls(String query, File savedPhoto) {
+    private void postFirebaseCalls(String query, File savedPhoto) {
         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
         ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
         ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
@@ -245,12 +244,14 @@ public class FindingFragment extends Fragment {
                     @Override
                     public void onSuccess(@NullableDecl Findings result) {
                         Intent intent = new Intent(getActivity(), DetailActivity.class);
-                        intent.putExtra("FunFact", funFacts);
-                        intent.putExtra("Experiment", experiments);
-                        intent.putExtra("Description", description);
-                        intent.putExtra("Name", query);
-                        intent.putExtra("ImageUrl", savedPhoto.getAbsolutePath());
+                        Findings finding = new Findings();
+                        finding.setFunFact(funFacts);
+                        finding.setExperiment(experiments);
+                        finding.setDescription(description);
+                        finding.setName(query);
                         intent.putExtra("fromCamera", true);
+                        intent.putExtra("Url", savedPhoto.getAbsolutePath());
+                        intent.putExtra("Finding", finding);
                         getActivity().startActivity(intent);
                     }
 
@@ -260,7 +261,6 @@ public class FindingFragment extends Fragment {
                         t.printStackTrace();
                     }
                 }, service);
-
             }
 
             @Override

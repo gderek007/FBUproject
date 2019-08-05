@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sciencevision.Models.Findings;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -95,7 +96,9 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             int position = getAdapterPosition();
             Findings finding = mFindings.get(position);
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("User", finding);
+
+            intent.putExtra("Url", finding.getImage().getUrl());
+            intent.putExtra("Finding", finding);
             intent.putExtra("fromCamera", false);
             context.startActivity(intent);
         }
