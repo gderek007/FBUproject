@@ -222,7 +222,7 @@ public class FindingFragment extends Fragment {
     };
 
 
-     private void postFirebaseCalls(String query, File savedPhoto) {
+    private void postFirebaseCalls(String query, File savedPhoto) {
         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
         ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
         ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
