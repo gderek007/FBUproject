@@ -12,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.sciencevision.Models.Findings;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
@@ -47,15 +49,12 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         Findings finding = mFindings.get(position);
         //populate the views according to this data
         try {
-            holder.tvUser.setText(finding.getUser().getUsername());
+            holder.tvUser.setText(finding.getUser().getUsername() + " explored ");
         } catch (java.lang.Exception e) {
             holder.tvUser.setText(user.getUsername());
         }
         holder.tvName.setText(finding.getName());
         holder.tvCreatedAt.setText(finding.getNiceTime());
-        holder.tvDescription.setText(finding.getDescription());
-        holder.tvFunFact.setText(String.format("Fun Facts: %s", finding.getFunFact()));
-        holder.tvExperiment.setText(String.format("Fun %s Experiment: %s", finding.getName(), finding.getExperiment()));
         int radius = 30;
         int margin = 10;
         Glide.with(context).load(finding.getImage().getUrl())
@@ -73,9 +72,6 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvUser;
         TextView tvName;
-        TextView tvDescription;
-        TextView tvFunFact;
-        TextView tvExperiment;
         TextView tvCreatedAt;
         ImageView ivImage;
 
@@ -85,10 +81,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             tvUser = itemView.findViewById(R.id.tvUser);
             tvName = itemView.findViewById(R.id.tvName);
             ivImage = itemView.findViewById(R.id.ivImage);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvFunFact = itemView.findViewById(R.id.tvFunFact);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
-            tvExperiment = itemView.findViewById(R.id.tvExperiment);
             itemView.setOnClickListener(this);
         }
 
