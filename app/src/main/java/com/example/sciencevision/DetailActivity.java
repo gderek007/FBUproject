@@ -25,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView description;
     TextView tvFunFact;
     TextView tvExperiment;
+    TextView createdAt;
     ImageView image;
     WebView wvExperiment;
     FloatingActionButton fabShare;
@@ -33,9 +34,11 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        name = findViewById(R.id.tvCreatedAt);
+
+        name = findViewById(R.id.tvBadgeName);
+        createdAt = findViewById(R.id.tvCreatedAt);
         tvFunFact = findViewById(R.id.tvFunFact);
-        description = findViewById(R.id.tvDescription);
+        description = findViewById(R.id.tvBadgeDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
         wvExperiment = findViewById(R.id.wvExperiment);
         image = findViewById(R.id.ivImage);
