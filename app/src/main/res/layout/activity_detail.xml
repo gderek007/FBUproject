@@ -95,7 +95,6 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="40dp"
         android:clickable="true"
-        app:backgroundTint="@color/darkSkyBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_share" />
