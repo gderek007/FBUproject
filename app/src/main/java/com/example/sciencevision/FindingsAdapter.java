@@ -52,6 +52,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             holder.tvUser.setText(user.getUsername());
         }
         holder.tvName.setText(finding.getName());
+        holder.tvCreatedAt.setText(finding.getNiceTime());
         holder.tvDescription.setText(finding.getDescription());
         holder.tvFunFact.setText(String.format("Fun Facts: %s", finding.getFunFact()));
         holder.tvExperiment.setText(String.format("Fun %s Experiment: %s", finding.getName(), finding.getExperiment()));
@@ -75,17 +76,18 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         TextView tvDescription;
         TextView tvFunFact;
         TextView tvExperiment;
+        TextView tvCreatedAt;
         ImageView ivImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             // perform findViewById lookups
             tvUser = itemView.findViewById(R.id.tvUser);
-            tvName = itemView.findViewById(R.id.tvBadgeName);
+            tvName = itemView.findViewById(R.id.tvName);
             ivImage = itemView.findViewById(R.id.ivImage);
-            tvDescription = itemView.findViewById(R.id.tvBadgeDescription);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
             tvFunFact = itemView.findViewById(R.id.tvFunFact);
-            tvName = itemView.findViewById(R.id.tvBadgeName);
+            tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             tvExperiment = itemView.findViewById(R.id.tvExperiment);
             itemView.setOnClickListener(this);
         }
@@ -95,7 +97,9 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             int position = getAdapterPosition();
             Findings finding = mFindings.get(position);
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("User", finding);
+
+            intent.putExtra("Url", finding.getImage().getUrl());
+            intent.putExtra("Finding", finding);
             intent.putExtra("fromCamera", false);
             context.startActivity(intent);
         }

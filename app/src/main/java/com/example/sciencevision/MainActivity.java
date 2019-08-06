@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         final Fragment fragmentSocial = new SocialFragment();
 
         // handle navigation selection
-        bottomNavigationView.setItemBackgroundResource(R.color.skyBlue);
+        bottomNavigationView.setItemBackgroundResource(R.color.colorPrimaryDark);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
