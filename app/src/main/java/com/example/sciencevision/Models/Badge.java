@@ -58,10 +58,10 @@ public class Badge implements Parcelable {
         ArrayList<Badge> badges = new ArrayList<>();
         badges.add(new Badge("New Account!", "Congratulations on creating an account!", R.drawable.badge, 0));
         badges.add(new Badge("First Finding", "Congratulations on your first finding!", R.drawable.badge, 1));
-        badges.add(new Badge("Second Finding", "Congratulations on your first finding!", R.drawable.badge, 2));
-        badges.add(new Badge("Third Finding", "Congratulations on your first finding!", R.drawable.badge, 3));
-        badges.add(new Badge("Fourth Finding", "Congratulations on your first finding!", R.drawable.badge, 4));
-        badges.add(new Badge("Fifth Finding", "Congratulations on your first finding!", R.drawable.badge, 5));
+        badges.add(new Badge("Tenth Finding", "Congratulations on your first finding!", R.drawable.badge, 10));
+        badges.add(new Badge("Twenty-Fifth Finding", "Congratulations on your first finding!", R.drawable.badge, 25));
+        badges.add(new Badge("Seventy-Fifth Finding", "Congratulations on your first finding!", R.drawable.badge, 75));
+        badges.add(new Badge("Hundreadth Finding", "Congratulations on your first finding!", R.drawable.badge, 100));
 
         return badges;
     }

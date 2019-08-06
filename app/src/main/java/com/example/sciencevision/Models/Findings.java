@@ -1,6 +1,8 @@
 package com.example.sciencevision.Models;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -15,6 +17,8 @@ import org.ocpsoft.prettytime.PrettyTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Callable;
+
+import static com.parse.Parse.getApplicationContext;
 
 @ParseClassName("Findings")
 public class Findings extends ParseObject {
@@ -117,6 +121,8 @@ public class Findings extends ParseObject {
 
 
     public static Callable<Findings> createFinding(final ParseUser User, final String ItemName, final String ItemDescription, final String FunFact, final ParseFile ItemImage, final String Experiment) {
+
+
         return new Callable<Findings>() {
             @Override
             public Findings call() throws Exception {
@@ -134,7 +140,6 @@ public class Findings extends ParseObject {
                 if (!badges.contains(numberOfBadge) && numberOfBadge != null) {
                     badges.add(numberOfBadge);
                     User.put("Badges", badges);
-
                 }
 
                 User.saveInBackground(new SaveCallback() {
