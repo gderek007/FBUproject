@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.ViewHolder> {
     private Activity mContext;
     private ArrayList<Badge> mBadges;
-    private Object BadgeAdapter;
 
     public BadgeAdapter(Activity context, ArrayList<Badge> badges) {
         mContext = context;
@@ -38,7 +37,9 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.ViewHolder> 
         Badge badge = mBadges.get(position);
         holder.rootView.setTag(badge);
         holder.tvName.setText(badge.getName());
-        Glide.with(mContext).load(badge.getThumbnail()).into(holder.ivProfile);
+        holder.ivBadge.setImageResource(R.drawable.badge);
+
+//        Glide.with(mContext).load(badge.getThumbnail()).into(holder.ivProfile);
     }
 
     @Override
@@ -49,14 +50,14 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.ViewHolder> 
     // Provide a reference to the views for each contact item
     public class ViewHolder extends RecyclerView.ViewHolder {
         final View rootView;
-        final ImageView ivProfile;
+        final ImageView ivBadge;
         final TextView tvName;
         final View vPalette;
 
         public ViewHolder(View itemView, final Context context) {
             super(itemView);
             rootView = itemView;
-            ivProfile = (ImageView) itemView.findViewById(R.id.ivBadge);
+            ivBadge = (ImageView) itemView.findViewById(R.id.ivBadge);
             tvName = (TextView) itemView.findViewById(R.id.tvBadgeName);
             vPalette = itemView.findViewById(R.id.vPalette);
 

@@ -35,10 +35,10 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        name = findViewById(R.id.tvBadgeName);
+        name = findViewById(R.id.tvName);
         createdAt = findViewById(R.id.tvCreatedAt);
         tvFunFact = findViewById(R.id.tvFunFact);
-        description = findViewById(R.id.tvBadgeDescription);
+        description = findViewById(R.id.tvDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
         wvExperiment = findViewById(R.id.wvExperiment);
         image = findViewById(R.id.ivImage);
