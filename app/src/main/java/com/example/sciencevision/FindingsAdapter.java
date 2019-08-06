@@ -82,6 +82,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             tvName = itemView.findViewById(R.id.tvName);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
+            tvCreatedAt = itemView.findViewById(R.id.tvName);
             itemView.setOnClickListener(this);
         }
 

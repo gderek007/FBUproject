@@ -8,7 +8,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="8dp">
+    card_view:cardElevation="8dp"
+    android:background="@drawable/mygradient">
 
     <LinearLayout
         android:orientation="vertical"
