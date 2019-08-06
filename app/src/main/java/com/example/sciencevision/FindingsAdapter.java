@@ -81,11 +81,11 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             super(itemView);
             // perform findViewById lookups
             tvUser = itemView.findViewById(R.id.tvUser);
-            tvName = itemView.findViewById(R.id.tvName);
+            tvName = itemView.findViewById(R.id.tvBadgeName);
             ivImage = itemView.findViewById(R.id.ivImage);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDescription = itemView.findViewById(R.id.tvBadgeDescription);
             tvFunFact = itemView.findViewById(R.id.tvFunFact);
-            tvName = itemView.findViewById(R.id.tvName);
+            tvName = itemView.findViewById(R.id.tvBadgeName);
             tvExperiment = itemView.findViewById(R.id.tvExperiment);
             itemView.setOnClickListener(this);
         }

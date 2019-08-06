@@ -12,6 +12,7 @@ import com.parse.SaveCallback;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -113,6 +114,7 @@ public class Findings extends ParseObject {
         }
     }
 
+
     public static Callable<Findings> createFinding(final ParseUser User, final String ItemName, final String ItemDescription, final String FunFact, final ParseFile ItemImage, final String Experiment) {
         return new Callable<Findings>() {
             @Override
@@ -124,7 +126,16 @@ public class Findings extends ParseObject {
                 newFinding.setFunFact(FunFact);
                 newFinding.setImage(ItemImage);
                 newFinding.setExperiment(Experiment);
+
                 User.increment("NumberOfFindings");
+                ArrayList<Integer> badges = (ArrayList<Integer>) User.get("Badges");
+                Integer numberOfBadge = Badge.getBadge((Integer) User.get("NumberOfFindings"));
+                if (!badges.contains(numberOfBadge) && numberOfBadge != null) {
+                    badges.add(numberOfBadge);
+                    User.put("Badges", badges);
+
+                }
+
                 User.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {

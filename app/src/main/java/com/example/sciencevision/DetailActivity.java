@@ -5,15 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
@@ -36,9 +33,9 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        name = findViewById(R.id.tvName);
+        name = findViewById(R.id.tvBadgeName);
         tvFunFact = findViewById(R.id.tvFunFact);
-        description = findViewById(R.id.tvDescription);
+        description = findViewById(R.id.tvBadgeDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
         wvExperiment = findViewById(R.id.wvExperiment);
         image = findViewById(R.id.ivImage);

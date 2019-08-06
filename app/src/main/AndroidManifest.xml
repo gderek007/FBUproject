@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".BadgeDetail"></activity>
         <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DisplayBadges"></activity>
         <activity android:name=".ProfilePicture"></activity>
         <activity android:name=".LaunchActivity">
             <intent-filter>

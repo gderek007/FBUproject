@@ -57,6 +57,7 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
         adapter = new ProfileAdapter(mProfilePictures, this);
         rvProfile.setLayoutManager(horizontalLayoutManager);
         rvProfile.setAdapter(adapter);
+        badges.add(0);
 
         loadTopPosts();
 
