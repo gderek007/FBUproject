@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
-import static com.parse.Parse.getApplicationContext;
+
 
 @ParseClassName("Findings")
 public class Findings extends ParseObject {

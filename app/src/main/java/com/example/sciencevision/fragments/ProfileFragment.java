@@ -24,10 +24,12 @@ import com.example.sciencevision.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
+import com.kosalgeek.android.caching.FileCacher;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,8 @@ public class ProfileFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private SearchClient searchClient;
     private int numberOfFindings = 0;
-    private boolean smartNetwork = true;
+    private FileCacher<ArrayList<Findings>> findingsCacher;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -84,6 +87,7 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserFindings.setLayoutManager(linearLayoutManager);
         rvUserFindings.setAdapter(adapter);
+        findingsCacher = new FileCacher<>(getContext(), "FindingsArray.txt");
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,16 +119,25 @@ public class ProfileFragment extends Fragment {
             }
         };
         rvUserFindings.addOnScrollListener(scrollListener);
-        loadTopPosts();
+
+//        if(findingsCacher.hasCache()){
+//            try {
+//                ArrayList<Findings> cachedArray =findingsCacher.readCache();
+//                Log.d("Read",cachedArray.get(0).getName());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (ClassCastException e){
+//                e.printStackTrace();
+//            }
+//        }
+
+        if ((!findingsCacher.hasCache()) || (findingsCacher.getSize() != (Integer) User.get("NumberOfFindings"))) {
+            loadTopPosts();
+        }
+
 
     }
 
-
-    public void onResumeView() {
-        Log.d("Resume","You will never forget of  me");
-        super.onResume();
-
-    }
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
@@ -135,7 +148,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(List<Findings> objects, ParseException e) {
                 Log.d("Amount", Integer.toString(adapter.getItemCount()));
-
 //                adapter.clear();
 //                findings.clear();
                 if (e == null) {
@@ -153,11 +165,19 @@ public class ProfileFragment extends Fragment {
                             rvUserFindings.scrollToPosition(0);
                         }
                     }
+
                 } else {
                     e.printStackTrace();
                 }
+
             }
         });
+        try {
+            findingsCacher.writeCache(findings);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadMore() {
