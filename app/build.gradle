@@ -96,6 +96,7 @@ dependencies {
     // Folding Cells
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
 
+
 }
 
 // More Firebase
