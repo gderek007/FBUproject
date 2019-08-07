@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="10dp"
     android:visibility="visible"
-    android:background="@drawable/mygradient">
+    >
 
     <ImageView
         android:id="@+id/ivAvatar"
