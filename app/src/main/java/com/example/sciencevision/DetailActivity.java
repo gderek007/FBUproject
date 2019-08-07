@@ -20,6 +20,8 @@ import com.parse.ParseUser;
 
 import java.util.Calendar;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class DetailActivity extends AppCompatActivity {
     TextView name;
     TextView description;
@@ -56,7 +58,14 @@ public class DetailActivity extends AppCompatActivity {
         tvFunFact.setText(String.format("Fun Facts: %s", newFinding.getFunFact()));
         tvExperiment.setText(String.format("Fun %s Experiment: %s", newFinding.getName(), newFinding.getExperiment()));
         wvExperiment.loadUrl(newFinding.getExperiment());
-        Glide.with(this).load(intent.getExtras().getString("Url")).into(image);
+        Glide.with(this).
+                load(intent.getExtras().getString("Url"))
+                .override(200, 200)
+                .circleCrop()
+                //.fitCenter()
+                //.centerCrop()
+                //.transform(new RoundedCornersTransformation(10, 5, RoundedCornersTransformation.CornerType.ALL))
+                .into(image);
 
         fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
