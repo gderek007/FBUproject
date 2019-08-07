@@ -93,12 +93,14 @@ public class Badge implements Parcelable {
             return 0;
         } else if (numberForBadge == 1) {
             return 1;
-        } else if (numberForBadge == 2) {
-            return 2;
-        }else if (numberForBadge == 3) {
-            return 3;
-        }else if (numberForBadge == 4) {
-            return 4;
+        } else if (numberForBadge == 10) {
+            return 10;
+        }else if (numberForBadge == 25) {
+            return 25;
+        }else if (numberForBadge == 75) {
+            return 75;
+        }else if (numberForBadge == 100) {
+            return 100;
         }else {
             return null;
         }
