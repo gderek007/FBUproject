@@ -108,7 +108,7 @@ public class SocialFragment extends Fragment {
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
 
-        findingsQuery.withUser().orderByAscending("createdAt");
+        findingsQuery.include("User").orderByAscending("createdAt");
 
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
@@ -140,7 +140,7 @@ public class SocialFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.withUser().orderByDescending("createdAt").setSkip(findings.size());
+        findingsQuery.include("User").orderByDescending("createdAt").setSkip(findings.size());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
