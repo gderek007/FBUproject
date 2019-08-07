@@ -1,6 +1,7 @@
 package com.example.sciencevision;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.sciencevision.fragments.ProfileFragment;
 import com.example.sciencevision.fragments.SocialFragment;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,15 +25,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton floatingActionButton=findViewById(R.id.logout);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabLogout = findViewById(R.id.logout);
+        FloatingActionButton fabProfilePicture = findViewById(R.id.changeProfile);
+        FloatingActionButton fabBadges = findViewById(R.id.fabBadges);
+        fabLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this, LaunchActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
+        fabProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChangeProfilePicture.class);
+                startActivity(intent);
+                finish();
 
-//        FloatingActionButton floatingActionButton=findViewById(R.id.logout);
+            }
+        });
+        fabBadges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DisplayBadges.class);
+                startActivity(intent);
+
+
+            }
+        });
 
 
         final FragmentManager fragmentManager = getSupportFragmentManager();

@@ -1,7 +1,6 @@
 package com.example.sciencevision.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,10 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.sciencevision.DisplayBadges;
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
-import com.example.sciencevision.LaunchActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -75,14 +72,12 @@ public class ProfileFragment extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
         ivProfile = view.findViewById(R.id.ivBadge);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
-        btnBadge = view.findViewById(R.id.btnBadge);
 
         searchClient = new SearchClient();
 
         tvUser.setText(User.getUsername());
         tvNumberOfFindings.setText("You have " + User.get("NumberOfFindings") + " Findings!");
         Glide.with(this).load(User.getParseFile("ProfilePicture").getUrl()).into(ivProfile);
-        btnLogout = view.findViewById(R.id.btnLogout);
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
@@ -119,21 +114,6 @@ public class ProfileFragment extends Fragment {
                 loadMore();
             }
         };
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(getContext(), LaunchActivity.class);
-                startActivity(intent);
-            }
-        });
-        btnBadge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DisplayBadges.class);
-                startActivity(intent);
-            }
-        });
         rvUserFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
 
@@ -147,7 +127,7 @@ public class ProfileFragment extends Fragment {
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
-                Log.d("Amount",Integer.toString(adapter.getItemCount()));
+                Log.d("Amount", Integer.toString(adapter.getItemCount()));
 
 //                adapter.clear();
 //                findings.clear();
