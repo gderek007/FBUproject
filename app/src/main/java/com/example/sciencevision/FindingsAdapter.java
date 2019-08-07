@@ -49,11 +49,10 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         Findings finding = mFindings.get(position);
         //populate the views according to this data
         try {
-            holder.tvUser.setText(finding.getUser().getUsername() + " explored ");
+            holder.tvName.setText(finding.getUser().getUsername() + " explored " + finding.getName());
         } catch (java.lang.Exception e) {
-            holder.tvUser.setText(user.getUsername());
+            holder.tvName.setText(finding.getName());
         }
-        holder.tvName.setText(finding.getName());
         holder.tvCreatedAt.setText(finding.getNiceTime());
         int radius = 30;
         int margin = 10;
