@@ -48,6 +48,7 @@ public class LaunchActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Welcome, " + currentUser.getUsername(), Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+            finish();
         } else {
             // show the login screen
         }
@@ -64,6 +65,7 @@ public class LaunchActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "logged in", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
+                            finish();
                         } else {
                             // Signup failed. Look at the ParseException to see what happened.
                         }

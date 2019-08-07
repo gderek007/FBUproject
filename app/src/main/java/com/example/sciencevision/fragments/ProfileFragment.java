@@ -119,6 +119,13 @@ public class ProfileFragment extends Fragment {
 
     }
 
+
+    public void onResumeView() {
+        Log.d("Resume","You will never forget of  me");
+        super.onResume();
+
+    }
+
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
 
