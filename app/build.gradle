@@ -86,10 +86,12 @@ dependencies {
     //Apache Commons
     implementation 'org.apache.commons:commons-configuration2:2.5'
     // Mail
-    //defining retrofit version
     implementation 'com.github.yesidlazaro:GmailBackground:1.2.0'
     //FAB
     implementation 'com.getbase:floatingactionbutton:1.10.1'
+
+    // Animated Floating Action Button
+    implementation 'konifar:fab-transformation:1.0.0'
 
 }
 
