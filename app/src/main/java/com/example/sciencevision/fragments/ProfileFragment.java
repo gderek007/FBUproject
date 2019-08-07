@@ -1,10 +1,10 @@
 package com.example.sciencevision.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.sciencevision.DisplayBadges;
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.FindingsAdapter;
-import com.example.sciencevision.LaunchActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -51,6 +49,7 @@ public class ProfileFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private SearchClient searchClient;
     private int numberOfFindings = 0;
+    private boolean smartNetwork = true;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -73,14 +72,12 @@ public class ProfileFragment extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
         ivProfile = view.findViewById(R.id.ivBadge);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
-        btnBadge = view.findViewById(R.id.btnBadge);
 
         searchClient = new SearchClient();
 
         tvUser.setText(User.getUsername() + "'s Profile");
         tvNumberOfFindings.setText("You have " + User.get("NumberOfFindings") + " Findings!");
         Glide.with(this).load(User.getParseFile("ProfilePicture").getUrl()).into(ivProfile);
-        btnLogout = view.findViewById(R.id.btnLogout);
         findings = new ArrayList<>();
         adapter = new FindingsAdapter(findings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
@@ -117,36 +114,23 @@ public class ProfileFragment extends Fragment {
                 loadMore();
             }
         };
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(getContext(), LaunchActivity.class);
-                startActivity(intent);
-            }
-        });
-        btnBadge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DisplayBadges.class);
-                startActivity(intent);
-            }
-        });
         rvUserFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
+
     }
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
 
-        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByAscending("createdAt");
+        findingsQuery.getUser(User).orderByAscending("createdAt");
 
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
+                Log.d("Amount", Integer.toString(adapter.getItemCount()));
 
-                adapter.clear();
-                findings.clear();
+//                adapter.clear();
+//                findings.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
@@ -171,7 +155,7 @@ public class ProfileFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByDescending("createdAt").setSkip(findings.size());
+        findingsQuery.getUser(User).orderByDescending("createdAt").setSkip(findings.size());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {

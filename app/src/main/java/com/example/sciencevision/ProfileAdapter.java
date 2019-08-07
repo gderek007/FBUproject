@@ -17,11 +17,8 @@ import com.parse.ParseObject;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-    public static String result;
     private List<ProfilePictures> mProfilePictures;
     private ItemClickListener mItemClickListener;
-    private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
     Context context;
 
 

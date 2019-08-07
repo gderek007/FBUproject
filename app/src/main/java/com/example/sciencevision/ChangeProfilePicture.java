@@ -13,12 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.sciencevision.Models.Badge;
 import com.example.sciencevision.Models.ProfilePictures;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -27,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.ItemClickListener {
+public class ChangeProfilePicture extends AppCompatActivity implements ProfileAdapter.ItemClickListener {
 
     private ProfileAdapter adapter;
     private ArrayList<ProfilePictures> mProfilePictures;
@@ -36,6 +33,7 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
     private Button btnProfile;
     private ParseObject picture;
     private ArrayList<Integer> badges;
+    private ParseUser User;
 
 
 
@@ -43,6 +41,8 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_picture);
+
+        User=ParseUser.getCurrentUser();
 
         mProfilePictures = new ArrayList<>();
         badges = new ArrayList<>();
@@ -65,20 +65,20 @@ public class ProfilePicture extends AppCompatActivity implements ProfileAdapter.
             @Override
             public void onClick(View v) {
                 if(picture!=null) {
-                    ParseUser.getCurrentUser().put("ProfilePicture", picture.getParseFile("Avatar"));
-                    ParseUser.getCurrentUser().put("Badges", badges);
-                    ParseUser.getCurrentUser().put("NumberOfFindings", 0);
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    User.put("ProfilePicture", picture.getParseFile("Avatar"));
+                    User.put("Badges", badges);
+                    User.put("NumberOfFindings", 0);
+                    User.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Log.d("ProfilePicture", "Uploaded Profile Picture");
+                                Log.d("ChangeProfilePicture", "Uploaded Profile Picture");
                             } else {
                                 e.printStackTrace();
                             }
                         }
                     });
-                    Intent intent = new Intent(ProfilePicture.this,MainActivity.class);
+                    Intent intent = new Intent(ChangeProfilePicture.this,MainActivity.class);
                     startActivity(intent);
                     finish();
                 }

@@ -1,11 +1,9 @@
 package com.example.sciencevision.Models;
 
-import com.example.sciencevision.ProfilePicture;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 @ParseClassName("ProfilePictures")
 public class ProfilePictures extends ParseObject{

@@ -49,7 +49,7 @@ public class LaunchActivity extends AppCompatActivity {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         } else {
-            // show the signup or login screen
+            // show the login screen
         }
 
 
@@ -103,7 +103,7 @@ public class LaunchActivity extends AppCompatActivity {
                                 public void done(ParseException e) {
                                     if (e == null) {
                                         Toast.makeText(getApplicationContext(), "Welcome, new user!", Toast.LENGTH_LONG).show();
-                                        Intent i = new Intent(getApplicationContext(), ProfilePicture.class);
+                                        Intent i = new Intent(getApplicationContext(), ChangeProfilePicture.class);
                                         startActivity(i);
                                     } else {
                                         // Sign up didn't succeed. Look at the ParseException

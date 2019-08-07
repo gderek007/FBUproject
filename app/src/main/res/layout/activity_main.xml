@@ -10,14 +10,57 @@
         android:layout_height="match_parent">
     <FrameLayout
         android:id="@+id/flContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_above="@id/bottom_navigation"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"></FrameLayout>
     </androidx.viewpager.widget.ViewPager>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="254dp"
+        android:layout_height="266dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="20dp"
+        app:fab_addButtonColorNormal="@color/colorAccent"
+        app:fab_addButtonColorPressed="@color/white"
+        app:fab_addButtonPlusIconColor="@color/colorPrimaryDark"
+        app:fab_labelStyle="@style/customFab"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_logoff_blue"
+            app:fab_size="mini"
+            app:fab_title="Logout" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/changeProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_profile_picture"
+            app:fab_size="mini"
+            app:fab_title="Change Profile Picture" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBadges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/badge"
+            app:fab_size="mini"
+            app:fab_title="Badges" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
