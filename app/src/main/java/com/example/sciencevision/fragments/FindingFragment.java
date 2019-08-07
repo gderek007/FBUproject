@@ -110,6 +110,10 @@ public class FindingFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        cameraKitView.onPause();
+        cameraKitView.onStop();
+        cameraKitView.onStart();
+        cameraKitView.onResume();
 
     }
 

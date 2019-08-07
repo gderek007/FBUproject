@@ -20,6 +20,8 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment fragment;
                         switch (item.getItemId()) {
                             case R.id.action_finding:
                                 fragment = fragmentFinding;
@@ -94,7 +95,16 @@ public class MainActivity extends AppCompatActivity {
                 });
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
+
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
+
 
 
 }

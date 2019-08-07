@@ -93,6 +93,9 @@ dependencies {
     // Animated Floating Action Button
     implementation 'konifar:fab-transformation:1.0.0'
 
+    // Folding Cells
+    implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+
 }
 
 // More Firebase
