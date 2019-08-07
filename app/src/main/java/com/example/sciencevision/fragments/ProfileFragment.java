@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class ProfileFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private SearchClient searchClient;
     private int numberOfFindings = 0;
+    private boolean smartNetwork = true;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -134,19 +136,21 @@ public class ProfileFragment extends Fragment {
         });
         rvUserFindings.addOnScrollListener(scrollListener);
         loadTopPosts();
+
     }
 
     private void loadTopPosts() {
         Findings.Query findingsQuery = new Findings.Query();
 
-        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByAscending("createdAt");
+        findingsQuery.getUser(User).orderByAscending("createdAt");
 
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {
+                Log.d("Amount",Integer.toString(adapter.getItemCount()));
 
-                adapter.clear();
-                findings.clear();
+//                adapter.clear();
+//                findings.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
                     if (objects.size() > 20) {
@@ -171,7 +175,7 @@ public class ProfileFragment extends Fragment {
 
     private void loadMore() {
         Findings.Query findingsQuery = new Findings.Query();
-        findingsQuery.getUser(ParseUser.getCurrentUser()).orderByDescending("createdAt").setSkip(findings.size());
+        findingsQuery.getUser(User).orderByDescending("createdAt").setSkip(findings.size());
         findingsQuery.findInBackground(new FindCallback<Findings>() {
             @Override
             public void done(List<Findings> objects, ParseException e) {

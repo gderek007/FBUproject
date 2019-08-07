@@ -178,6 +178,7 @@ public class FindingFragment extends Fragment {
 
                                         for (FirebaseVisionImageLabel label : labels) {
                                             Chip chip = new Chip(getContext());
+                                            chip.setChipBackgroundColorResource(R.color.colorPrimary);
 
                                             chip.setText(label.getText());
                                             chip.setOnClickListener(new View.OnClickListener() {

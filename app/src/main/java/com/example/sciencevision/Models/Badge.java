@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.sciencevision.R;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 
 import java.util.ArrayList;

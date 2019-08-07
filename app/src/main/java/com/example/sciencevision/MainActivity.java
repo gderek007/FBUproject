@@ -1,19 +1,19 @@
 package com.example.sciencevision;
 
 
-import android.Manifest;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.sciencevision.fragments.FindingFragment;
 import com.example.sciencevision.fragments.ProfileFragment;
 import com.example.sciencevision.fragments.SocialFragment;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +22,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FloatingActionButton floatingActionButton=findViewById(R.id.logout);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+//        FloatingActionButton floatingActionButton=findViewById(R.id.logout);
+
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 

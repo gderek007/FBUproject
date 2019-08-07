@@ -1,11 +1,6 @@
 package com.example.sciencevision;
 
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.sciencevision.Models.Findings;
-import com.loopj.android.http.AsyncHttpClient;
-import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;

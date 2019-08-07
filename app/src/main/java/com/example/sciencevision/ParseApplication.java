@@ -39,28 +39,6 @@ public class ParseApplication extends Application {
                 .server("https://fbu-science-vision.herokuapp.com/parse")
                 .build());
 
-
-
-
-        /*// Create the ParseUser
-        ParseUser user = new ParseUser();
-        // Set core properties
-        user.setUsername("joestevens");
-        user.setPassword("secret123");
-        user.setEmail("email@example.com");
-        // Set custom properties
-        user.put("phone", "650-253-0000");
-        // Invoke signUpInBackground
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(com.parse.ParseException e) {
-                if (e == null) {
-                   return;
-                } else {
-                    return;
-                }
-            }
-        });*/
     }
 
 }

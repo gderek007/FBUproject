@@ -49,7 +49,7 @@ public class LaunchActivity extends AppCompatActivity {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         } else {
-            // show the signup or login screen
+            // show the login screen
         }
 
 

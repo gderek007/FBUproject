@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.sciencevision.Models.Badge;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.ViewHolder> 
         holder.rootView.setTag(badge);
         holder.tvName.setText(badge.getName());
         holder.ivBadge.setImageResource(R.drawable.badge);
-
 //        Glide.with(mContext).load(badge.getThumbnail()).into(holder.ivProfile);
     }
 
