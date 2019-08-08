@@ -186,13 +186,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-       /*tvExperiment.setOnClickListener(new View.OnClickListener() {
+       tvExperiment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getBaseContext());
+                AlertDialog.Builder alert = new AlertDialog.Builder(DetailActivity.this);
                 alert.setTitle("Title here");
 
-                WebView wv = new WebView(getBaseContext());
+                WebView wv = new WebView(DetailActivity.this);
                 wv.loadUrl(experimentUrl);
                 wv.setWebViewClient(new WebViewClient() {
                     @Override
@@ -212,7 +212,7 @@ public class DetailActivity extends AppCompatActivity {
                 });
                 alert.show();
             }
-        });*/
+        });
 
 
     }
