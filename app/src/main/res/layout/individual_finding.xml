@@ -15,7 +15,7 @@
         android:id="@+id/fcFinding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:backSideColor="#F1D156"
+        app:backSideColor="#87B3AA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,7 +25,7 @@
             android:id="@+id/cell_content_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFEFC9"
+            android:background="#C9E7A4"
             android:visibility="gone">
 
 

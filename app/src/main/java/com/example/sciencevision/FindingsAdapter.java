@@ -1,10 +1,14 @@
 package com.example.sciencevision;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -85,7 +89,39 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         // EXPAND
         holder.tvDescription.setText(finding.getDescription());
         holder.tvFunFact.setText(finding.getFunFact());
-        holder.tvExperiment.setText(finding.getExperiment());
+        holder.tvExperiment.setText("Click to see experiment!");
+
+        holder.tvExperiment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                alert.setTitle("Experiment");
+
+                WebView wv = new WebView(context);
+                wv.setInitialScale(1);
+                wv.getSettings().setLoadWithOverviewMode(true);
+                wv.getSettings().setUseWideViewPort(true);
+                wv.getSettings().setJavaScriptEnabled(true);
+                wv.loadUrl(finding.getExperiment());
+                wv.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        view.loadUrl(url);
+
+                        return true;
+                    }
+                });
+
+                alert.setView(wv);
+                alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+            }
+        });
 
     }
 
@@ -134,14 +170,6 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         @Override
         public void onClick(View v) {
             fcFinding.toggle(false);
-//            int position = getAdapterPosition();
-//            Findings finding = mFindings.get(position);
-//            Intent intent = new Intent(context, DetailActivity.class);
-//
-//            intent.putExtra("Url", finding.getImage().getUrl());
-//            intent.putExtra("Finding", finding);
-//            intent.putExtra("fromCamera", false);
-//            context.startActivity(intent);
 
         }
     }
