@@ -127,6 +127,7 @@ public class FindingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         cameraKitView.onResume();
+        btnBack.setVisibility(View.GONE);
     }
 
     @Override
