@@ -49,23 +49,44 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Findings finding = mFindings.get(position);
         //populate the views according to this data
+
+
         try {
             holder.tvName.setText(finding.getUser().getUsername() + " explored " + finding.getName());
+            holder.tvNameExpand.setText(finding.getName()); //EXPAND
             holder.ivProPic.setVisibility(View.VISIBLE);
-           Glide.with(context).load(finding.getProPic().getUrl())
+            Glide.with(context).load(finding.getProPic().getUrl())
                     .circleCrop()
                     .into(holder.ivProPic);
         } catch (java.lang.Exception e) {
             holder.tvName.setText(finding.getName());
+            holder.tvNameExpand.setText(finding.getName()); //EXPAND
             holder.ivProPic.setVisibility(View.GONE);
+            //TODO: Expand profile pic
         }
+
+
         holder.tvCreatedAt.setText(finding.getNiceTime());
+        holder.tvCreatedAtExpand.setText(finding.getNiceTime()); //EXPAND
         int radius = 30;
         int margin = 10;
         Glide.with(context).load(finding.getImage().getUrl())
                 .circleCrop()
                 .override(600, 600)
                 .into(holder.ivImage);
+
+
+        // EXPAND
+        Glide.with(context).load(finding.getImage().getUrl())
+                .circleCrop()
+                .override(800, 800)
+                .into(holder.ivImageExpand);
+
+        // EXPAND
+        holder.tvDescription.setText(finding.getDescription());
+        holder.tvFunFact.setText(finding.getFunFact());
+        holder.tvExperiment.setText(finding.getExperiment());
+
     }
 
     @Override
@@ -80,7 +101,15 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         TextView tvCreatedAt;
         ImageView ivImage;
         ImageView ivProPic;
+
         FoldingCell fcFinding;
+
+        TextView tvNameExpand;
+        TextView tvCreatedAtExpand;
+        ImageView ivImageExpand;
+        TextView tvDescription;
+        TextView tvFunFact;
+        TextView tvExperiment;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -91,6 +120,14 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             ivProPic = itemView.findViewById(R.id.ivProPic);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             fcFinding = itemView.findViewById(R.id.fcFinding);
+
+            tvNameExpand = itemView.findViewById(R.id.tvNameExpand);
+            tvCreatedAtExpand = itemView.findViewById(R.id.tvCreatedAtExpand);
+            ivImageExpand = itemView.findViewById(R.id.ivImageExpand);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvFunFact = itemView.findViewById(R.id.tvFunFact);
+            tvExperiment = itemView.findViewById(R.id.tvExperiment);
+
             itemView.setOnClickListener(this);
         }
 
