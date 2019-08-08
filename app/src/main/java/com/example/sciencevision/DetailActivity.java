@@ -58,6 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         newFinding = (Findings) (intent.getExtras().get("Finding"));
         name.setText(newFinding.getName());
         description.setText(newFinding.getDescription());
+        createdAt.setText(newFinding.getNiceTime());
         tvFunFact.setText(String.format("Fun Facts: %s", newFinding.getFunFact()));
         tvExperiment.setText(String.format("Fun %s Experiment: %s", newFinding.getName(), newFinding.getExperiment()));
         wvExperiment.loadUrl(newFinding.getExperiment());
