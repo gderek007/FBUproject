@@ -183,6 +183,8 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        //tvExperiment.setOnClickListener();
+
 
     }
 }
