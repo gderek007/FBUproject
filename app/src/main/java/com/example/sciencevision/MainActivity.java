@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            fragmentFinding.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void setupViewPager(ViewPager viewPager) {
