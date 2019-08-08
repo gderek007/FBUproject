@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Fabs
         FloatingActionButton fabLogout = findViewById(R.id.logout);
         FloatingActionButton fabProfilePicture = findViewById(R.id.changeProfile);
         FloatingActionButton fabBadges = findViewById(R.id.fabBadges);
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.action_profile);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -171,7 +173,5 @@ public class MainActivity extends AppCompatActivity {
             mFragmentList.add(fragment);
         }
     }
-
-
 
 }

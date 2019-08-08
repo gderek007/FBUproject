@@ -75,7 +75,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
         fabShare.setOnClickListener(new View.OnClickListener() {
-//            Log.d("Fab","Pressed");
+            //            Log.d("Fab","Pressed");
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
@@ -182,10 +182,6 @@ public class DetailActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
 
 
     }
