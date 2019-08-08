@@ -3,11 +3,14 @@ package com.example.sciencevision;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -32,7 +35,6 @@ public class DetailActivity extends AppCompatActivity {
     TextView createdAt;
     ImageView image;
     String experimentUrl;
-    WebView wvExperiment;
     FloatingActionButton fabShare;
     FloatingActionButton fabReport;
 
@@ -46,7 +48,6 @@ public class DetailActivity extends AppCompatActivity {
         tvFunFact = findViewById(R.id.tvFunFact);
         description = findViewById(R.id.tvDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
-        wvExperiment = findViewById(R.id.wvExperiment);
         image = findViewById(R.id.ivImage);
         fabShare = findViewById(R.id.fabShare);
         fabReport = findViewById(R.id.fabReport);
@@ -62,9 +63,8 @@ public class DetailActivity extends AppCompatActivity {
         description.setText(newFinding.getDescription());
         createdAt.setText(newFinding.getNiceTime());
         tvFunFact.setText(String.format("Fun Facts: %s", newFinding.getFunFact()));
-        tvExperiment.setText(String.format("Fun %s Experiment: %s", newFinding.getName(), newFinding.getExperiment()));
+        tvExperiment.setText("Click to see experiment!");
         experimentUrl = newFinding.getExperiment();
-        wvExperiment.loadUrl(newFinding.getExperiment());
         Glide.with(this).
                 load(intent.getExtras().getString("Url"))
                 .override(200, 200)
@@ -190,9 +190,13 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(DetailActivity.this);
-                alert.setTitle("Title here");
+                alert.setTitle("Experiment");
 
                 WebView wv = new WebView(DetailActivity.this);
+                wv.setInitialScale(1);
+                wv.getSettings().setLoadWithOverviewMode(true);
+                wv.getSettings().setUseWideViewPort(true);
+                wv.getSettings().setJavaScriptEnabled(true);
                 wv.loadUrl(experimentUrl);
                 wv.setWebViewClient(new WebViewClient() {
                     @Override
@@ -216,4 +220,5 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
+
 }
