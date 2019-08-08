@@ -11,14 +11,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
-import com.example.sciencevision.FindingsAdapter;
+import com.example.sciencevision.Adapters.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.parse.FindCallback;

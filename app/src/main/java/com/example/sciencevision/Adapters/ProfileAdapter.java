@@ -1,4 +1,4 @@
-package com.example.sciencevision;
+package com.example.sciencevision.Adapters;
 
 import android.content.Context;
 
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sciencevision.Models.ProfilePictures;
+import com.example.sciencevision.R;
 import com.parse.ParseObject;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
 
     // data is passed into the constructor
-    ProfileAdapter(List<ProfilePictures> profilePictures, ItemClickListener itemClickListener) {
+    public ProfileAdapter(List<ProfilePictures> profilePictures, ItemClickListener itemClickListener) {
         this.mProfilePictures = profilePictures;
         this.mItemClickListener = itemClickListener;
     }

@@ -1,9 +1,8 @@
-package com.example.sciencevision;
+package com.example.sciencevision.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.sciencevision.Models.Findings;
+import com.example.sciencevision.R;
 import com.parse.ParseUser;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.CropTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHolder> {
     private List<Findings> mFindings;

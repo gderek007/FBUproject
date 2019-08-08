@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,8 +74,6 @@ public class DetailActivity extends AppCompatActivity {
                 //.centerCrop()
                 //.transform(new RoundedCornersTransformation(10, 5, RoundedCornersTransformation.CornerType.ALL))
                 .into(image);
-
-//        FloatingActionButton fabShare = findViewById(R.id.fabShare);
 
 
         fabShare.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +217,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 

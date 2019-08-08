@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
-import com.example.sciencevision.FindingsAdapter;
+import com.example.sciencevision.Adapters.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;

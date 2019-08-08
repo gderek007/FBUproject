@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.sciencevision.Models.Badge;
+import com.example.sciencevision.Adapters.BadgeAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
