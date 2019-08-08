@@ -191,6 +191,7 @@ public class FindingFragment extends Fragment {
                                                 public void onClick(View v) {
                                                     postFirebaseCalls(chip.getText().toString(), savedPhoto);
                                                     cgLabels.removeAllViews();
+                                                    btnBack.setVisibility(View.GONE);
                                                 }
                                             });
                                             cgLabels.addView(chip);
