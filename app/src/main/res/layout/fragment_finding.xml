@@ -24,6 +24,7 @@
     <Button
         android:id="@+id/btnCapture"
         style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="@color/blue"
         android:layout_width="201dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
