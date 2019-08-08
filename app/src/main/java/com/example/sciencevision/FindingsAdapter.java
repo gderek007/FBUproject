@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.example.sciencevision.Models.Findings;
 import com.parse.ParseUser;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         int margin = 10;
         Glide.with(context).load(finding.getImage().getUrl())
                 .circleCrop()
+                .override(600, 600)
                 .into(holder.ivImage);
     }
 
@@ -78,6 +80,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         TextView tvCreatedAt;
         ImageView ivImage;
         ImageView ivProPic;
+        FoldingCell fcFinding;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -87,19 +90,22 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
             ivImage = itemView.findViewById(R.id.ivImage);
             ivProPic = itemView.findViewById(R.id.ivProPic);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
+            fcFinding = itemView.findViewById(R.id.fcFinding);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            Findings finding = mFindings.get(position);
-            Intent intent = new Intent(context, DetailActivity.class);
+            fcFinding.toggle(false);
+//            int position = getAdapterPosition();
+//            Findings finding = mFindings.get(position);
+//            Intent intent = new Intent(context, DetailActivity.class);
+//
+//            intent.putExtra("Url", finding.getImage().getUrl());
+//            intent.putExtra("Finding", finding);
+//            intent.putExtra("fromCamera", false);
+//            context.startActivity(intent);
 
-            intent.putExtra("Url", finding.getImage().getUrl());
-            intent.putExtra("Finding", finding);
-            intent.putExtra("fromCamera", false);
-            context.startActivity(intent);
         }
     }
 

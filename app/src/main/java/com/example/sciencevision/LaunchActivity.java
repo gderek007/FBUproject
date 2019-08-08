@@ -101,6 +101,7 @@ public class LaunchActivity extends AppCompatActivity {
                         if (isValidEmail(etEmailInput.getText().toString())) { //email text validated
                             // Invoke signUpInBackground
                             user.setEmail(etEmailInput.getText().toString());
+                            user.put("NumberOfFindings", 0);
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {

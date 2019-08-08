@@ -36,13 +36,12 @@ public class ChangeProfilePicture extends AppCompatActivity implements ProfileAd
     private ParseUser User;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_picture);
 
-        User=ParseUser.getCurrentUser();
+        User = ParseUser.getCurrentUser();
 
         mProfilePictures = new ArrayList<>();
         badges = new ArrayList<>();
@@ -64,10 +63,9 @@ public class ChangeProfilePicture extends AppCompatActivity implements ProfileAd
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(picture!=null) {
+                if (picture != null) {
                     User.put("ProfilePicture", picture.getParseFile("Avatar"));
                     User.put("Badges", badges);
-                    User.put("NumberOfFindings", 0);
                     User.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -78,11 +76,10 @@ public class ChangeProfilePicture extends AppCompatActivity implements ProfileAd
                             }
                         }
                     });
-                    Intent intent = new Intent(ChangeProfilePicture.this,MainActivity.class);
+                    Intent intent = new Intent(ChangeProfilePicture.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Choose a Profile Picture!", Toast.LENGTH_LONG).show();
                 }
             }
