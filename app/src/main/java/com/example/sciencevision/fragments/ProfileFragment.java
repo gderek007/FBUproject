@@ -23,13 +23,10 @@ import com.example.sciencevision.EndlessRecyclerViewScrollListener;
 import com.example.sciencevision.Adapters.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
-import com.example.sciencevision.SearchClient;
-import com.kosalgeek.android.caching.FileCacher;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

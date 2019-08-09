@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.camerakit.CameraKitView;
 
 import com.example.sciencevision.DetailActivity;
@@ -63,6 +65,7 @@ public class FindingFragment extends Fragment {
     private ParseUser currUser;
     private ListeningExecutorService service;
     private CameraKitView cameraKitView;
+    private ImageView ivLoading;
     private Button btnCapture;
     private Button btnBack;
     private Switch sFirebaseToggle;
@@ -92,6 +95,7 @@ public class FindingFragment extends Fragment {
         btnCapture = view.findViewById(R.id.btnCapture);
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setVisibility(View.GONE);
+        ivLoading= view.findViewById(R.id.ivLoading);
         searchClient = new SearchClient();
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
@@ -148,12 +152,6 @@ public class FindingFragment extends Fragment {
 
         public void onClick(View v) {
             Log.d("onClick", "Button Pressed");
-
-
-
-
-
-
 
 
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
@@ -238,8 +236,8 @@ public class FindingFragment extends Fragment {
 
     private void postFirebaseCalls(String query, File savedPhoto) {
         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
-        ListenableFuture<String> getExperiments = service.submit(searchClient.getExperimentUrl(query ));
-        ListenableFuture<String> getFunFacts = service.submit(searchClient.getFactsFromGoogle(query));
+        ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
+        ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
 
         List<ListenableFuture<String>> networkCalls = new ArrayList<>();
         networkCalls.add(getWiki);
