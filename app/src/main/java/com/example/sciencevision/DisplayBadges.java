@@ -1,5 +1,6 @@
 package com.example.sciencevision;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,5 +48,11 @@ public class DisplayBadges extends AppCompatActivity {
 
         // Bind adapter to list
         rvBadges.setAdapter(adapter);
+    }
+
+    public void onBackPressed(){
+        Intent intent = new Intent(DisplayBadges.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
