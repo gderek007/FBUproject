@@ -81,12 +81,12 @@ public class SearchClient {
         }
     }
 
-    public Callable<String> getDataFromGoogle(final String query) {
+    public Callable<String> getFactsFromGoogle(final String query) {
         return new Callable<String>() {
             @Override
             public String call() throws Exception {
                 List<String> result = new ArrayList<>();
-                String request = "https://www.google.com/search?q=" + query + "&num=5";
+                String request = "https://www.google.com/search?q=" + query + "+fun+facts" + "&num=5";
                 System.out.println("Sending request..." + request);
                 try {
                     // need http protocol, set this as a Google bot agent :)
@@ -120,23 +120,77 @@ public class SearchClient {
 
                         }
                     }
-                    if (request.contains("facts")) {
-                        try {
-                            String request2 = "http://boilerpipe-web.appspot.com/extract?url=" + result.get(0) + "output=htmlFragment";
-                            Document doc2 = Jsoup
-                                    .connect(result.get(0))
-                                    .timeout(5000).get();
-                            Log.d(SearchClient.class.getSimpleName(), "It worked!");
-                            String allText = doc2.body().text();
-                            if ((doc2.body().getElementsByTag("p").text().trim() != null) && (doc2.body().getElementsByTag("p").text().trim() != "")) {
-                                allText = doc2.body().getElementsByTag("p").text();
-                            }
-                            return allText.substring(0, allText.indexOf(".") + 1);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.d(SearchClient.class.getSimpleName(), "Failure extracting fun fact");
+                    //if (request.contains("facts")) {
+                    try {
+                        //String request2 = "http://boilerpipe-web.appspot.com/extract?url=" + result.get(0) + "output=htmlFragment";
+                        Document doc2 = Jsoup
+                                .connect(result.get(0))
+                                .timeout(5000).get();
+                        Log.d(SearchClient.class.getSimpleName(), "It worked!");
+                        String allText = doc2.body().text();
+                        if ((doc2.body().getElementsByTag("p").text().trim() != null) && (doc2.body().getElementsByTag("p").text().trim() != "")) {
+                            allText = doc2.body().getElementsByTag("p").text();
                         }
+                        if (allText.substring(0, allText.indexOf(".") + 1).length() > 5) {
+                            return allText.substring(0, allText.indexOf(".") + 1);
+                        } else {
+                            return "No fun facts found.";
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(SearchClient.class.getSimpleName(), "Failure extracting fun fact");
+                    }
 
+                    //}
+
+                    for (String s : result) {
+                        Log.d("SearchClient", s);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "No fun facts found.";
+                }
+
+                return result.get(0);
+            }
+        };
+    }
+
+    public Callable<String> getExperimentUrl(final String query) {
+        return new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                List<String> result = new ArrayList<>();
+                String request = "https://www.google.com/search?q=" + query + "+kids+science+experiments" + "&num=5";
+                System.out.println("Sending request..." + request);
+                try {
+                    // need http protocol, set this as a Google bot agent :)
+                    Document doc = Jsoup
+                            .connect(request)
+                            .ignoreHttpErrors(true)
+                            .userAgent(
+                                    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+                            .timeout(5000).get();
+
+                    Elements links = doc.select("a[href]");
+                    int counter = 0;
+                    for (Element link : links) {
+                        String temp = link.attr("href");
+                        if (temp.startsWith("/url?q=") && counter < 5) {
+                            int starting = 7;
+                            if (temp.contains("google")) {
+                                starting = 48;
+                            }
+                            for (int i = starting; i < temp.length(); i++) {
+                                if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
+                                    result.add(temp.substring(starting, i));
+                                    counter++;
+                                    break;
+                                }
+                            }
+
+                        }
                     }
 
                     for (String s : result) {
@@ -152,8 +206,6 @@ public class SearchClient {
             }
         };
     }
-
-
 
 
 }
