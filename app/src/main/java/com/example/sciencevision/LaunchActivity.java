@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -29,6 +31,8 @@ public class LaunchActivity extends AppCompatActivity {
     EditText etPassword;
     Button btnLogin;
     Button btnSignUp;
+    LinearLayout llLogin;
+    TextView tvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,17 @@ public class LaunchActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+        llLogin = findViewById(R.id.llLogin);
+        tvTitle = findViewById(R.id.tvTitle);
+
+        YoYo.with(Techniques.FadeIn)
+                .duration(2100)
+                .repeat(0)
+                .playOn(llLogin);
+        YoYo.with(Techniques.FadeIn)
+                .duration(2000)
+                .repeat(0)
+                .playOn(tvTitle);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {

@@ -148,6 +148,14 @@ public class FindingFragment extends Fragment {
 
         public void onClick(View v) {
             Log.d("onClick", "Button Pressed");
+
+
+
+
+
+
+
+
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
 
                 @Override
@@ -230,8 +238,8 @@ public class FindingFragment extends Fragment {
 
     private void postFirebaseCalls(String query, File savedPhoto) {
         ListenableFuture<String> getWiki = service.submit(searchClient.getWiki(query));
-        ListenableFuture<String> getExperiments = service.submit(searchClient.getDataFromGoogle(query + "+kids+science+experiments"));
-        ListenableFuture<String> getFunFacts = service.submit(searchClient.getDataFromGoogle(query + "+fun+facts"));
+        ListenableFuture<String> getExperiments = service.submit(searchClient.getExperimentUrl(query ));
+        ListenableFuture<String> getFunFacts = service.submit(searchClient.getFactsFromGoogle(query));
 
         List<ListenableFuture<String>> networkCalls = new ArrayList<>();
         networkCalls.add(getWiki);
