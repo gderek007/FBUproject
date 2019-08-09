@@ -74,7 +74,7 @@ public class DetailActivity extends AppCompatActivity {
         ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this, R.style.AlertDialogCustom);
                 builder.setMessage("Are you sure you wish to share Finding with your parents?")
                         .setTitle("Confirm Finding Share")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -129,7 +129,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this, R.style.AlertDialogCustom);
                 builder.setMessage("Are you sure you wish to report this Finding for being too dangerous?")
                         .setTitle("Confirm Reporting Finding")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -182,7 +182,7 @@ public class DetailActivity extends AppCompatActivity {
         tvExperiment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(DetailActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(DetailActivity.this, R.style.AlertDialogCustom);
                 alert.setTitle("Experiment");
 
                 WebView wv = new WebView(DetailActivity.this);

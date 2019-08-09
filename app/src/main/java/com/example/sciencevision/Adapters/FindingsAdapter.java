@@ -96,7 +96,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         holder.tvExperiment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                AlertDialog.Builder alert = new AlertDialog.Builder(context, R.style.AlertDialogCustom);
                 alert.setTitle("Experiment");
 
                 WebView wv = new WebView(context);
@@ -128,7 +128,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         holder.ivReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogCustom);
                 builder.setMessage("Are you sure you wish to report this Finding for being too dangerous?")
                         .setTitle("Confirm Reporting Finding")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -181,7 +181,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
         holder.ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogCustom);
                 builder.setMessage("Are you sure you wish to share Finding with your parents?")
                         .setTitle("Confirm Finding Share")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
