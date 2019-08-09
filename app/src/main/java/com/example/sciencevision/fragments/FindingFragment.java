@@ -196,6 +196,7 @@ public class FindingFragment extends Fragment {
                                             chip.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
+                                                    Glide.with(getContext()).load("https://i.imgur.com/VHJZxUy.gif").into(ivLoading);
                                                     postFirebaseCalls(chip.getText().toString(), savedPhoto);
                                                     cgLabels.removeAllViews();
                                                     btnBack.setVisibility(View.GONE);
