@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,20 +73,40 @@ public class LaunchActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseUser.logInInBackground(String.valueOf(etUsername.getText()), String.valueOf(etPassword.getText()), new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, com.parse.ParseException e) {
-
-                        if (user != null) {
-                            Toast.makeText(getApplicationContext(), "logged in", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(i);
-                            finish();
-                        } else {
-                            // Signup failed. Look at the ParseException to see what happened.
+                if (etUsername.getText().toString().length() < 1){
+                    Toast.makeText(getApplicationContext(), "Please enter a username!", Toast.LENGTH_LONG).show();
+                    YoYo.with(Techniques.Shake)
+                            .duration(500)
+                            .playOn(etUsername);
+                }
+                else if (etPassword.getText().toString().length() < 1){
+                    Toast.makeText(getApplicationContext(), "Please enter a password!", Toast.LENGTH_LONG).show();
+                    YoYo.with(Techniques.Shake)
+                            .duration(500)
+                            .playOn(etPassword);
+                } else{
+                    ParseUser.logInInBackground(String.valueOf(etUsername.getText()), String.valueOf(etPassword.getText()), new LogInCallback() {
+                        @Override
+                        public void done(ParseUser user, com.parse.ParseException e) {
+                            if (user != null) {
+                                Toast.makeText(getApplicationContext(), "logged in", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                // Signup failed. Look at the ParseException to see what happened.
+                                Toast.makeText(getApplicationContext(), "Username or password is incorrect!", Toast.LENGTH_LONG).show();
+                                YoYo.with(Techniques.Shake)
+                                        .duration(500)
+                                        .playOn(etUsername);
+                                YoYo.with(Techniques.Shake)
+                                        .duration(500)
+                                        .playOn(etPassword);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 
@@ -149,6 +170,26 @@ public class LaunchActivity extends AppCompatActivity {
             }
 
 
+        });
+
+        etPassword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            return btnLogin.callOnClick();
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
         });
     }
 
