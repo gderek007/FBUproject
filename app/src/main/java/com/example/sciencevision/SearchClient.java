@@ -15,13 +15,32 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 
 public class SearchClient {
 
+    HashMap<String, String> funFacts;
+
     public SearchClient() {
+        funFacts = new HashMap<String, String>();
+        funFacts.put("Plastic bottle", "It takes about 450 years just for one plastic bottle to break down in the ground.");
+        funFacts.put("Bottle", "It takes about 450 years just for one plastic bottle to break down in the ground.");
+        funFacts.put("Skin", "The average person’s skin covers an area of 2 square meters.");
+        funFacts.put("Hand", "The hand has 27 bones.");
+        funFacts.put("Handbag", "The Average Handbag Weighs 6.7 Pounds");
+        funFacts.put("Banana", "Bananas can help lower blood pressure and protect heart health due to high potassium and low salt content");
+        funFacts.put("Food", "Honey is the only edible food that never goes bad.");
+        funFacts.put("Desk", "The average workplace desk can be 100x less hygienic than your kitchen table, and 400x filthier than the average toilet seat!");
+        funFacts.put("Water", "There is the same amount of water on Earth as there was when the Earth was formed.");
+        funFacts.put("Apple", "Apples are made of 25% air, which is why they float.");
+        funFacts.put("Tableware", "According to recent food science, tableware (plates, cups, and cutlery) affect the taste of food as do other factors like color, smell, sound, and weight.");
+        funFacts.put("Computer", "RAM stands for Random Access Memory, and this is the place on a computer where everything that’s used all the time is stored and can be found quickly.");
+
+
+
     }
 
     public Callable<String> getWiki(final String searchLabel) {
@@ -85,6 +104,9 @@ public class SearchClient {
         return new Callable<String>() {
             @Override
             public String call() throws Exception {
+                if (funFacts.get(query) != null) {
+                    return funFacts.get(query);
+                }
                 List<String> result = new ArrayList<>();
                 String request = "https://www.google.com/search?q=" + query + "+fun+facts" + "&num=5";
                 System.out.println("Sending request..." + request);
@@ -101,17 +123,14 @@ public class SearchClient {
                     int counter = 0;
                     for (Element link : links) {
                         String temp = link.attr("href");
-
                         if (temp.startsWith("/url?q=") && counter < 5) {
                             int starting = 7;
-                            if (temp.contains("youtube")) {
-                                result.add(temp.substring(starting));
-                            }
+
                             if (temp.contains("google")) {
                                 starting = 48;
                             }
                             for (int i = starting; i < temp.length(); i++) {
-                                if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
+                                if ((temp.charAt(i) == '&' || temp.charAt(i) == '%') && !(temp.contains("youtube"))) {
                                     result.add(temp.substring(starting, i));
                                     counter++;
                                     break;
@@ -183,7 +202,7 @@ public class SearchClient {
                                 starting = 48;
                             }
                             for (int i = starting; i < temp.length(); i++) {
-                                if (temp.charAt(i) == '&' || temp.charAt(i) == '%') {
+                                if ((temp.charAt(i) == '&' || temp.charAt(i) == '%') && !(temp.contains("youtube"))) {
                                     result.add(temp.substring(starting, i));
                                     counter++;
                                     break;
