@@ -206,6 +206,7 @@ public class FindingFragment extends Fragment {
                                                 cameraKitView.onStop();
                                                 cameraKitView.onStart();
                                                 cameraKitView.onResume();
+
                                             }
                                         });
                                     }

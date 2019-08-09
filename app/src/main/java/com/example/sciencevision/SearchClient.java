@@ -101,8 +101,12 @@ public class SearchClient {
                     int counter = 0;
                     for (Element link : links) {
                         String temp = link.attr("href");
+
                         if (temp.startsWith("/url?q=") && counter < 5) {
                             int starting = 7;
+                            if (temp.contains("youtube")) {
+                                result.add(temp.substring(starting));
+                            }
                             if (temp.contains("google")) {
                                 starting = 48;
                             }
