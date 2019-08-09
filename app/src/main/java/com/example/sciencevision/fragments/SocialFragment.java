@@ -11,14 +11,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.sciencevision.EndlessRecyclerViewScrollListener;
-import com.example.sciencevision.FindingsAdapter;
+import com.example.sciencevision.Adapters.FindingsAdapter;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.parse.FindCallback;
@@ -32,9 +31,6 @@ import java.util.List;
 
 public class SocialFragment extends Fragment {
     private EditText etSearch;
-    private ParseUser User;
-    private String tvDescription;
-    private ParseFile ivImage;
     private RecyclerView rvFindings;
     private FindingsAdapter adapter;
     private ArrayList<Findings> findings;
@@ -54,14 +50,13 @@ public class SocialFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User = ParseUser.getCurrentUser();
         findings = new ArrayList<>();
 
         etSearch = view.findViewById(R.id.etSearch);
         swipeContainer = view.findViewById(R.id.swipeContainer);
         rvFindings = view.findViewById(R.id.rvFindings);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        adapter = new FindingsAdapter(findings);
+        adapter = new FindingsAdapter(findings, rvFindings);
         rvFindings.setLayoutManager(linearLayoutManager);
         rvFindings.setAdapter(adapter);
 

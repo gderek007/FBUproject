@@ -71,3 +71,17 @@
         app:layout_constraintTop_toBottomOf="@+id/tvUser" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--holder.ivReport.setOnClickListener(new View.OnClickListener() {-->
+    <!--@Override-->
+    <!--public void onClick(View v) {-->
+
+    <!--}-->
+    <!--});-->
+    <!--holder.ivShare.setOnClickListener(new View.OnClickListener() {-->
+    <!--@Override-->
+    <!--public void onClick(View v) {-->
+    <!--Log.d("HAHA","hoho");-->
+    <!--}-->
+    <!--});-->

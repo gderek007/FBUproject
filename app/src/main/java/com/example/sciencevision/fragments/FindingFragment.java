@@ -261,6 +261,7 @@ public class FindingFragment extends Fragment {
                         intent.putExtra("Url", savedPhoto.getAbsolutePath());
                         intent.putExtra("Finding", finding);
                         getActivity().startActivity(intent);
+                        getActivity().finish();
                     }
 
                     @Override

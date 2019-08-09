@@ -1,4 +1,4 @@
-package com.example.sciencevision;
+package com.example.sciencevision.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sciencevision.BadgeDetail;
 import com.example.sciencevision.Models.Badge;
+import com.example.sciencevision.R;
 
 import java.util.ArrayList;
 
