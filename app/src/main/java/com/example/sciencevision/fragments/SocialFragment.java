@@ -56,7 +56,7 @@ public class SocialFragment extends Fragment {
         swipeContainer = view.findViewById(R.id.swipeContainer);
         rvFindings = view.findViewById(R.id.rvFindings);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        adapter = new FindingsAdapter(findings);
+        adapter = new FindingsAdapter(findings, rvFindings);
         rvFindings.setLayoutManager(linearLayoutManager);
         rvFindings.setAdapter(adapter);
 

@@ -32,10 +32,12 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
     private List<Findings> unfilteredFindings;
     private ParseUser user = ParseUser.getCurrentUser();
     private Context context;
+    private RecyclerView recyclerView;
 
     // pass in the tweets array in the constructor
-    public FindingsAdapter(List<Findings> findings) {
+    public FindingsAdapter(List<Findings> findings, RecyclerView recyclerView) {
         mFindings = findings;
+        this.recyclerView = recyclerView;
     }
 
     // for each row, inflate the layout and cache references into View
@@ -282,6 +284,7 @@ public class FindingsAdapter extends RecyclerView.Adapter<FindingsAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
+            recyclerView.smoothScrollToPosition(recyclerView.getChildLayoutPosition(v));
             fcFinding.toggle(false);
 
         }

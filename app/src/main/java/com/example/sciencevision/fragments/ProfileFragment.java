@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment {
         tvNumberOfFindings.setText("You have " + User.get("NumberOfFindings") + " Findings!");
         Glide.with(this).load(User.getParseFile("ProfilePicture").getUrl()).into(ivProfile);
         findings = new ArrayList<>();
-        adapter = new FindingsAdapter(findings);
+        adapter = new FindingsAdapter(findings, rvUserFindings);
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserFindings.setLayoutManager(linearLayoutManager);
