@@ -3,17 +3,13 @@ package com.example.sciencevision;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,8 +22,6 @@ import com.parse.ParseUser;
 
 import java.util.Calendar;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-
 public class DetailActivity extends AppCompatActivity {
     TextView name;
     TextView description;
@@ -35,9 +29,10 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvExperiment;
     TextView createdAt;
     ImageView image;
+    ImageView ivShare;
+    ImageView ivReport;
     String experimentUrl;
-    FloatingActionButton fabShare;
-    FloatingActionButton fabReport;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +45,8 @@ public class DetailActivity extends AppCompatActivity {
         description = findViewById(R.id.tvDescription);
         tvExperiment = findViewById(R.id.tvExperiment);
         image = findViewById(R.id.ivImage);
-        fabShare = findViewById(R.id.fabShare);
-        fabReport = findViewById(R.id.fabReport);
+        ivShare = findViewById(R.id.ivShare);
+        ivReport = findViewById(R.id.ivReport);
     }
 
     @Override
@@ -76,8 +71,7 @@ public class DetailActivity extends AppCompatActivity {
                 .into(image);
 
 
-        fabShare.setOnClickListener(new View.OnClickListener() {
-            //            Log.d("Fab","Pressed");
+        ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
@@ -131,7 +125,7 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-        fabReport.setOnClickListener(new View.OnClickListener() {
+        ivReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -185,7 +179,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-       tvExperiment.setOnClickListener(new View.OnClickListener() {
+        tvExperiment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(DetailActivity.this);

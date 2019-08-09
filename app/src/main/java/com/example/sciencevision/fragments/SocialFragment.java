@@ -31,9 +31,6 @@ import java.util.List;
 
 public class SocialFragment extends Fragment {
     private EditText etSearch;
-    private ParseUser User;
-    private String tvDescription;
-    private ParseFile ivImage;
     private RecyclerView rvFindings;
     private FindingsAdapter adapter;
     private ArrayList<Findings> findings;
@@ -53,7 +50,6 @@ public class SocialFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User = ParseUser.getCurrentUser();
         findings = new ArrayList<>();
 
         etSearch = view.findViewById(R.id.etSearch);

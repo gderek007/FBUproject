@@ -41,17 +41,12 @@ public class ProfileFragment extends Fragment {
     private ParseUser User;
     private TextView tvUser;
     private TextView tvNumberOfFindings;
-    private ImageButton btnLogout;
     private ImageView ivProfile;
-    private Button btnBadge;
+
     private RecyclerView rvUserFindings;
     private FindingsAdapter adapter;
     private ArrayList<Findings> findings;
-    private ArrayList<Integer> badges;
     private EndlessRecyclerViewScrollListener scrollListener;
-    private SearchClient searchClient;
-    private int numberOfFindings = 0;
-    private FileCacher<ArrayList<Findings>> findingsCacher;
 
 
     public ProfileFragment() {
@@ -74,9 +69,9 @@ public class ProfileFragment extends Fragment {
         tvNumberOfFindings = view.findViewById(R.id.tvNumberOfFindings);
         etSearch = view.findViewById(R.id.etSearch);
         ivProfile = view.findViewById(R.id.ivBadge);
+
         rvUserFindings = view.findViewById(R.id.rvUserFindings);
 
-        searchClient = new SearchClient();
 
         tvUser.setText(User.getUsername() + "'s Profile");
         tvNumberOfFindings.setText("You have " + User.get("NumberOfFindings") + " Findings!");
@@ -87,7 +82,6 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserFindings.setLayoutManager(linearLayoutManager);
         rvUserFindings.setAdapter(adapter);
-        findingsCacher = new FileCacher<>(getContext(), "FindingsArray.txt");
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,21 +113,7 @@ public class ProfileFragment extends Fragment {
             }
         };
         rvUserFindings.addOnScrollListener(scrollListener);
-
-//        if(findingsCacher.hasCache()){
-//            try {
-//                ArrayList<Findings> cachedArray =findingsCacher.readCache();
-//                Log.d("Read",cachedArray.get(0).getName());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (ClassCastException e){
-//                e.printStackTrace();
-//            }
-//        }
-
-        if ((!findingsCacher.hasCache()) || (findingsCacher.getSize() != (Integer) User.get("NumberOfFindings"))) {
-            loadTopPosts();
-        }
+        loadTopPosts();
 
 
     }
@@ -172,11 +152,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        try {
-            findingsCacher.writeCache(findings);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 

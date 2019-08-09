@@ -129,42 +129,65 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvFunFact" />
 
-            <com.getbase.floatingactionbutton.FloatingActionsMenu
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="13dp"
-                app:fab_addButtonColorNormal="@color/colorPrimaryDark"
-                app:fab_addButtonColorPressed="@color/white"
-                app:fab_addButtonPlusIconColor="@color/colorAccent"
-                app:fab_labelStyle="@style/customFab"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/ivReport"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_error_outline" />
+
+            <ImageView
+                android:id="@+id/ivShare"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_share" />
+
+            <!--<com.getbase.floatingactionbutton.FloatingActionsMenu-->
+                <!--android:layout_width="80dp"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_marginEnd="13dp"-->
+                <!--app:fab_addButtonColorNormal="@color/colorPrimaryDark"-->
+                <!--app:fab_addButtonColorPressed="@color/white"-->
+                <!--app:fab_addButtonPlusIconColor="@color/colorAccent"-->
+                <!--app:fab_labelStyle="@style/customFab"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent">-->
 
 
-                <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabReport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_colorNormal="@color/colorAccent"
-                    app:fab_colorPressed="@color/white"
-                    app:fab_icon="@drawable/ic_error_outline"
-                    app:fab_size="mini"
-                    app:fab_title="Report" />
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/fabReport"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:fab_colorNormal="@color/colorAccent"-->
+                    <!--app:fab_colorPressed="@color/white"-->
+                    <!--app:fab_icon="@drawable/ic_error_outline"-->
+                    <!--app:fab_size="mini"-->
+                    <!--app:fab_title="Report" />-->
 
-                <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabShare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_colorNormal="@color/colorAccent"
-                    app:fab_colorPressed="@color/white"
-                    app:fab_icon="@drawable/ic_share"
-                    app:fab_size="mini"
-                    app:fab_title="Share" />
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/fabShare"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:fab_colorNormal="@color/colorAccent"-->
+                    <!--app:fab_colorPressed="@color/white"-->
+                    <!--app:fab_icon="@drawable/ic_share"-->
+                    <!--app:fab_size="mini"-->
+                    <!--app:fab_title="Share" />-->
 
 
-            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            <!--</com.getbase.floatingactionbutton.FloatingActionsMenu>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
