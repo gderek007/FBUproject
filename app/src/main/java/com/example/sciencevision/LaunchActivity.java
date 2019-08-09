@@ -138,6 +138,7 @@ public class LaunchActivity extends AppCompatActivity {
                             // Invoke signUpInBackground
                             user.setEmail(etEmailInput.getText().toString());
                             user.put("NumberOfFindings", 0);
+                            user.put("EarnBadge",Boolean.parseBoolean("True"));
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {

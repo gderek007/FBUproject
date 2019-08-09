@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.example.sciencevision.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +81,22 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvUserFindings.setLayoutManager(linearLayoutManager);
         rvUserFindings.setAdapter(adapter);
+
+        if((Boolean) User.get("EarnBadge"))
+        {
+            Toast.makeText(getContext(),"You got a Badge!",Toast.LENGTH_LONG).show();
+            User.put("EarnBadge",Boolean.parseBoolean("False"));
+            User.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d("Badge", "CheckedBadges");
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override

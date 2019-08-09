@@ -1,9 +1,13 @@
 package com.example.sciencevision.Models;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.sciencevision.R;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -30,6 +34,7 @@ public class Findings extends ParseObject {
     private static final String KEY_IMAGE = "ItemImage";
     private static final String KEY_EXPERIMENT = "Experiment";
     private static final String KEY_CREATED = "createdAt";
+
 
     //Methods to get and set attributes for Findings
     public ParseUser getUser() {
@@ -144,6 +149,7 @@ public class Findings extends ParseObject {
                 if (!badges.contains(numberOfBadge) && numberOfBadge != null) {
                     badges.add(numberOfBadge);
                     User.put("Badges", badges);
+                    User.put("EarnBadge",Boolean.parseBoolean("True"));
                 }
 
                 User.saveInBackground(new SaveCallback() {
@@ -176,5 +182,9 @@ public class Findings extends ParseObject {
     public String toString() {
         return getName() + "|" + getUser() + "|" + getDescription();
     }
+
+
+
+
 }
 

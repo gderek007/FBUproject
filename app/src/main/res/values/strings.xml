@@ -5,5 +5,7 @@
     <string name="log_in">Log In</string>
     <string name="signup">SignUp</string>
     <string name="emailBody"></string>
+    <string name="channel_name">Name</string>
+    <string name="channel_description">Description</string>
 
 </resources>
