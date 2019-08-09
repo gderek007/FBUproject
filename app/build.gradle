@@ -113,8 +113,7 @@ dependencies {
 
     // Folding Cells
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
-    //FileCacher
-    implementation files('libs/FileCacher.jar')
+
 
 }
 
