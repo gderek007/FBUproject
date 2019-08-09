@@ -42,6 +42,7 @@ import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;

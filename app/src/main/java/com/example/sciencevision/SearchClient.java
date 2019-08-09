@@ -55,7 +55,7 @@ public class SearchClient {
 
                 String firstSentence = clipSentenceFromJSON(response);
 
-                if (firstSentence == null) {
+                if (firstSentence == null || firstSentence.length() < 12) {
                     firstSentence = "No description found.";
                     Log.d("Search Client", searchLabel + ": " + firstSentence);
                 } else {
