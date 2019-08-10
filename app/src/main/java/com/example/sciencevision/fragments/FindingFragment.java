@@ -1,8 +1,12 @@
 package com.example.sciencevision.fragments;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -23,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.camerakit.CameraKitView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.sciencevision.DetailActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
@@ -96,12 +102,15 @@ public class FindingFragment extends Fragment {
         btnCapture = view.findViewById(R.id.btnCapture);
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setVisibility(View.GONE);
+        cgLabels = view.findViewById(R.id.cgLabels);
+        cgLabels.setChipSpacingHorizontal(10);
+        cgLabels.setChipSpacingVertical(10);
+        cgLabels.setVisibility(View.GONE);
         ivLoading = view.findViewById(R.id.ivLoading);
         searchClient = new SearchClient();
         currUser = ParseUser.getCurrentUser();
         service = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
         btnCapture.setOnClickListener(photoOnClickListener);
-        cgLabels = view.findViewById(R.id.cgLabels);
         sFirebaseToggle = view.findViewById(R.id.sFirebaseToggle);
         sFirebaseToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -187,7 +196,10 @@ public class FindingFragment extends Fragment {
                                     @Override
                                     public void onSuccess(List<FirebaseVisionImageLabel> labels) {
                                         // TODO: stuff with adding chips to cgLabels
-
+                                        cgLabels.setVisibility(View.VISIBLE);
+                                        YoYo.with(Techniques.SlideInDown)
+                                                .duration(300)
+                                                .playOn(cgLabels);
                                         for (FirebaseVisionImageLabel label : labels) {
                                             Chip chip = new Chip(getContext());
                                             chip.setChipBackgroundColorResource(R.color.colorPrimary);
@@ -202,15 +214,49 @@ public class FindingFragment extends Fragment {
                                                     btnBack.setVisibility(View.GONE);
                                                 }
                                             });
+                                            chip.setOnLongClickListener(new View.OnLongClickListener() {
+                                                @Override
+                                                public boolean onLongClick(View v) {
+
+                                                    return false;
+                                                }
+                                            });
                                             cgLabels.addView(chip);
+
                                         }
+
+
+//                                        Chip backBtnChp = new Chip(getContext());
+//                                        backBtnChp.setChipBackgroundColor(ColorStateList.valueOf(Color.BLUE));
+//                                        backBtnChp.setText("BACK");
+//                                        backBtnChp.setTextColor(Color.WHITE);
+//
+//                                        backBtnChp.setChipIcon();
+//                                        backBtnChp.setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View v) {
+//
+//                                            }
+//                                        });
+//
+//                                        cgLabels.addView(backBtnChp);
+
+
                                         btnBack.setVisibility(View.VISIBLE);
+                                        YoYo.with(Techniques.SlideInDown)
+                                                .duration(300)
+                                                .playOn(btnBack);
                                         btnBack.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
                                                 cgLabels.removeAllViews();
+                                                YoYo.with(Techniques.SlideOutUp)
+                                                        .duration(200)
+                                                        .playOn(cgLabels);
                                                 btnCapture.setOnClickListener(photoOnClickListener);
-                                                btnBack.setVisibility(View.GONE);
+                                                YoYo.with(Techniques.SlideOutUp)
+                                                        .duration(200)
+                                                        .playOn(btnBack);
                                                 cameraKitView.onStop();
                                                 cameraKitView.onStart();
                                                 cameraKitView.onResume();
