@@ -1,5 +1,7 @@
 package com.example.sciencevision.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -10,13 +12,16 @@ import android.graphics.drawable.Icon;
 import android.os.Bundle;
 
 import android.os.Environment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -25,11 +30,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.sciencevision.DetailActivity;
+import com.example.sciencevision.LaunchActivity;
+import com.example.sciencevision.MainActivity;
 import com.example.sciencevision.Models.Findings;
 import com.example.sciencevision.R;
 import com.example.sciencevision.SearchClient;
@@ -57,6 +65,8 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
+
+import static com.parse.Parse.getApplicationContext;
 
 
 /**
@@ -99,6 +109,7 @@ public class FindingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         cameraKitView = view.findViewById(R.id.camera);
+        cameraKitView.setFlash(CameraKit.FLASH_OFF);
         btnCapture = view.findViewById(R.id.btnCapture);
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setVisibility(View.GONE);
@@ -205,6 +216,7 @@ public class FindingFragment extends Fragment {
                                             chip.setChipBackgroundColorResource(R.color.colorPrimary);
 
                                             chip.setText(label.getText());
+
                                             chip.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -217,29 +229,39 @@ public class FindingFragment extends Fragment {
                                             chip.setOnLongClickListener(new View.OnLongClickListener() {
                                                 @Override
                                                 public boolean onLongClick(View v) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
+                                                    LinearLayout editChipLayout = new LinearLayout(getApplicationContext());
+                                                    editChipLayout.setOrientation(LinearLayout.VERTICAL);
+                                                    EditText etRename = new EditText(getApplicationContext());
+                                                    etRename.setText(chip.getText());
+                                                    builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            chip.setText(etRename.getText());
+                                                            dialog.dismiss();
+                                                            YoYo.with(Techniques.RubberBand)
+                                                                    .duration(400)
+                                                                    .playOn(chip);
+                                                        }
+                                                    })
+                                                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    dialog.cancel();
+                                                                }
+                                                            });
 
-                                                    return false;
+
+                                                    editChipLayout.addView(etRename);
+                                                    builder.setView(editChipLayout);
+                                                    AlertDialog dialog = builder.create();
+                                                    dialog.show();
+                                                    return true;
                                                 }
                                             });
                                             cgLabels.addView(chip);
 
                                         }
-
-
-//                                        Chip backBtnChp = new Chip(getContext());
-//                                        backBtnChp.setChipBackgroundColor(ColorStateList.valueOf(Color.BLUE));
-//                                        backBtnChp.setText("BACK");
-//                                        backBtnChp.setTextColor(Color.WHITE);
-//
-//                                        backBtnChp.setChipIcon();
-//                                        backBtnChp.setOnClickListener(new View.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(View v) {
-//
-//                                            }
-//                                        });
-//
-//                                        cgLabels.addView(backBtnChp);
 
 
                                         btnBack.setVisibility(View.VISIBLE);

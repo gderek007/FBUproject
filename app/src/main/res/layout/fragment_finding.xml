@@ -30,6 +30,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/blue"
+        android:scaleX="1.15"
+        android:scaleY="1.3"
         android:text="Capture"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
+        android:checked="true"
         android:showText="false"
         android:text="Enable \nCloud"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/btnCapture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -51,11 +55,16 @@
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cgLabels"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="1dp"
+        android:isScrollContainer="true"
+        android:keepScreenOn="true"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
         app:chipSpacingVertical="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

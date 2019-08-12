@@ -27,7 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Fragment fragment;
+    //Fragment fragment;
     Fragment fragmentFinding;
     Fragment fragmentSocial;
     Fragment fragmentProfile;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Fabs
         FloatingActionButton fabLogout = findViewById(R.id.logout);
