@@ -4,19 +4,19 @@
     <item
         android:id="@+id/action_finding"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_camera"
+        android:icon="@drawable/icons8_eyes_cartoon_60"
         android:title="Finding"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:icon="@drawable/icons8_happy_90"
         android:title="Profile"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_social"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/icons8_children_100"
         android:title="Social"
         app:showAsAction="ifRoom" />
 

@@ -94,7 +94,7 @@ public class ChangeProfilePicture extends AppCompatActivity implements ProfileAd
         avatarsQuery.findInBackground(new FindCallback<ProfilePictures>() {
             @Override
             public void done(List<ProfilePictures> objects, ParseException e) {
-                Log.d("Avatar", objects.toString());
+//                Log.d("Avatar", objects.toString());
                 adapter.clear();
                 if (e == null) {
                     //brute force method to get top 20 posts
