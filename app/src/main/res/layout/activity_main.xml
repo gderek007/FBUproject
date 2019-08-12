@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/colorAccent"
             app:fab_colorPressed="@color/white"
-            app:fab_icon="@drawable/ic_logoff_blue"
+            app:fab_icon="@drawable/icons8_sign_out_100"
             app:fab_size="mini"
             app:fab_title="Logout" />
 
