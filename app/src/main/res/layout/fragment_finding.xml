@@ -47,7 +47,7 @@
         android:checked="true"
         android:showText="false"
         android:text="Enable \nCloud"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btnCapture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
