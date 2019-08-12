@@ -193,13 +193,13 @@ public class FindingFragment extends Fragment {
 
                         FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
                         FirebaseVisionImageLabeler labeler;
-                        if (useCloudMLKit) {
+//                        if (useCloudMLKit) {
                             // CLOUD : THIS COST MONEY DONT BE DUMB
                             labeler = FirebaseVision.getInstance().getCloudImageLabeler();
-                        } else {
-                            // ON-DEVICE : THIS IS FREE, USE A LOT
-                            labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
-                        }
+//                        } else {
+//                            // ON-DEVICE : THIS IS FREE, USE A LOT
+//                            labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler();
+//                        }
 
 
                         labeler.processImage(firebaseVisionImage)
